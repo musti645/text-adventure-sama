@@ -1,0 +1,23 @@
+<div class="container-fluid text-adventure-root h-100 w-100">
+  <div class="row output-container-wrapper">
+    <div class="output-container">
+      <table>
+        <tbody>
+          <tr *ngFor="let line of OutputArray; let index = i"
+            [ngClass]="line.Type  === 'input'? 'input-line' : 'output-line'">
+            <td>{{line.Value}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="row input-container-wrapper">
+    <div class="row input-container">
+      <form [formGroup]="InputForm" (ngSubmit)="OnSubmit()">
+        <div class="form-group">
+          <input type="text" class="form-control" #input formControlName="userInput" autofocus>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
