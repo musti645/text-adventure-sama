@@ -1,5 +1,8 @@
 import { EventEmitter } from '@angular/core';
 
+/**
+ * Abstract Base class for all actions
+ */
 export abstract class Action {
     ID: number;
     Trigger: string;
@@ -10,7 +13,7 @@ export abstract class Action {
         this.OnActionTriggeredEvent = new EventEmitter<void>();
     }
 
-    public abstract use(): string;
+    public abstract trigger(): string;
 
     public abstract reset();
 }

@@ -1,5 +1,10 @@
 import { Action } from './action.model';
 
+/**
+ * A MultiTimeAction can be activated multiple times.
+ * The class allows you to pass an array of responses,
+ * which will be returned one by one until the maximum usage count is reached.
+ */
 export class MultiTimeAction extends Action {
     UsageCount: number;
     MaximumUsages: number;
@@ -9,7 +14,7 @@ export class MultiTimeAction extends Action {
         super();
     }
 
-    public use(): string {
+    public trigger(): string {
         this.OnActionTriggeredEvent.emit();
         if (this.UsageCount <= this.MaximumUsages) {
             const responseString =  this.Responses[this.UsageCount];

@@ -1,8 +1,11 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { TextInputType } from '../models/text-input.enum';
-import { TextInput } from '../models/text-input.model';
+import { TextInputType } from '../models/other/text-input.enum';
+import { TextInput } from '../models/other/text-input.model';
 
+/**
+ * Main Component, that contains the input and output of the game.
+ */
 @Component({
   selector: 'tas-text-adventure',
   templateUrl: './text-adventure.component.html',
@@ -16,8 +19,7 @@ export class TextAdventureComponent implements OnInit {
 
   InputForm: FormGroup = new FormGroup(
     {
-      userInput: new FormControl(
-        {
+      userInput: new FormControl({
         value: '',
         disabled: this.IsLoading
       }, [

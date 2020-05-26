@@ -1,5 +1,9 @@
 import { Action } from './action.model';
 
+/**
+ * A OneTimeAction is only triggered once
+ * Each subsequent trigger returns the same response.
+ */
 export class OneTimeAction extends Action {
     WasTriggered: boolean;
     ResponseAfterUse: string;
@@ -8,7 +12,7 @@ export class OneTimeAction extends Action {
         super();
     }
 
-    public use(): string {
+    public trigger(): string {
         this.OnActionTriggeredEvent.emit();
         if (this.WasTriggered) {
             return this.Response;
