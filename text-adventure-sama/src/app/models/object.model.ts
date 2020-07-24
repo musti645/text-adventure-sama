@@ -6,12 +6,14 @@ import { EventEmitter } from '@angular/core';
 export abstract class InGameObject {
     ID: number;
     Name: string;
-    Amount: number;
+    MaximumUsages: number;
+
+    UsagesLeft: number;
 
     /**
      * Called when this Object is to be removed from the inventory
      */
-    OnObjectRemovedFromInventoryEvent: EventEmitter<number>;
+    OnObjectRemovedFromInventoryEvent: EventEmitter<InGameObject>;
 
     /**
      * Called when this Object is added to the inventory.
@@ -19,19 +21,41 @@ export abstract class InGameObject {
     OnObjectAddedToInventoryEvent: EventEmitter<InGameObject>;
 
     constructor() {
-        this.OnObjectRemovedFromInventoryEvent = new EventEmitter<number>();
+        this.OnObjectRemovedFromInventoryEvent = new EventEmitter<InGameObject>();
         this.OnObjectAddedToInventoryEvent = new EventEmitter<InGameObject>();
+
     }
 
     public use(): void {
-        this.Amount--;
-        if (this.Amount > 0){
+        if (this.UsagesLeft >= 1) {
+            this.UsagesLeft--;
             return;
         }
-        this.OnObjectRemovedFromInventoryEvent.emit(this.ID);
+
+        this.OnObjectRemovedFromInventoryEvent.emit(this);
     }
 
-    public addToInventory(): void {
-        this.OnObjectAddedToInventoryEvent.emit(this);
+    public resetUsages(): void {
+        this.UsagesLeft = this.MaximumUsages;
+    }
+
+    public addToInventory(amountOfObjects: number = 1, resetUsages: boolean = true): void {
+        if (resetUsages) {
+            this.resetUsages();
+        }
+
+        for (let i = 0; i < amountOfObjects; i++) {
+            this.OnObjectAddedToInventoryEvent.emit(this);
+        }
+    }
+
+    public removeFromInventory(amountOfObjects: number = 1) {
+        for (let i = 0; i < amountOfObjects; i++) {
+            this.OnObjectRemovedFromInventoryEvent.emit(this);
+        }
+    }
+
+    public isContainedInInventory(): boolean {
+        return true;
     }
 }
