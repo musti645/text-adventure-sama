@@ -2,6 +2,7 @@ import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { TextInputType } from '../models/other/text-input.enum';
 import { TextInput } from '../models/other/text-input.model';
+import { Game } from '../models/game.model';
 
 /**
  * Main Component, that contains the input and output of the game.
@@ -16,6 +17,8 @@ export class TextAdventureComponent implements OnInit {
 
   OutputArray: TextInput[] = [];
   IsLoading: boolean;
+
+  Game: Game;
 
   InputForm: FormGroup = new FormGroup(
     {

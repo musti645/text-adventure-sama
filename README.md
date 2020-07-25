@@ -8,23 +8,23 @@ A Text Adventure consists of the following components:
 
 - Game
 - Player
-- Object
+- Item
 - Scene
 - Action
 
 ### Game ###
 
-A game object contains scenes and the Inventory of the player.
+A game Item contains scenes and the Inventory of the player.
 
-### Objects ###
+### Items ###
 
-The player may have multiple instances of an InGameObjects in her inventory and use them 1+ times.
-This maximum amount of uses and instances is free to choose for each InGameObject.
+The player may have multiple instances of an InGameItems in her inventory and use them 1+ times.
+This maximum amount of uses and instances is free to choose for each InGameItem.
 
 ### Scenes ###
 
 There are Scenes in a game, which may represent certain locations within the adventure.
-A scene has got a certain number of objects it contains, with which the player can interact.
+A scene has got a certain number of Items it contains, with which the player can interact.
 Also a scene contains a certain number of actions, which the player can trigger.
 
 ### Actions ###
@@ -50,16 +50,16 @@ A OneTime Action can only be triggered once and after having been triggered, alw
 
 Triggering a RandomResponse Action returns a random response out of a list of responses.
 
-#### ObjectYielding Action ####
+#### ItemYielding Action ####
 
-Once an ObjectYielding Action is triggered, the player receives an object into her inventory.
+Once an ItemYielding Action is triggered, the player receives an Item into her inventory.
 
-#### ObjectConsuming Action ####
+#### ItemConsuming Action ####
 
-In order to trigger this an ObjectConsuming Action, the player needs to have a certain item in her inventory.
-The object is used once. If it has got one Usage left, it will be removed from the inventory.
+In order to trigger this an ItemConsuming Action, the player needs to have a certain item in her inventory.
+The Item is used once. If it has got one Usage left, it will be removed from the inventory.
 
-#### ObjectRemoving Action ####
+#### ItemRemoving Action ####
 
-In order to trigger this an ObjectConsuming Action, the player needs to have a certain item in her inventory.
-The object is removed from the inventory without being used.
+In order to trigger this an ItemConsuming Action, the player needs to have a certain item in her inventory.
+The Item is removed from the inventory without being used.
