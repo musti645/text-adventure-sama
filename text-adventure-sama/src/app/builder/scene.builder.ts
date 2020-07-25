@@ -14,18 +14,18 @@ export class SceneBuilder extends BaseBuilder implements ItemContainingBuilder, 
     private Game: Game;
     private Scene: Scene;
 
-    constructor(gameBuilder: GameBuilder, game: Game) {
+    constructor(gameBuilder: GameBuilder, game: Game, sceneId: number) {
         super();
         this.GameBuilder = gameBuilder;
         this.Game = game;
-        this.Scene = new Scene();
+        this.Scene = new Scene(sceneId || game.Scenes.length);
     }
 
     addActionToBuilder(action: Action): void {
         this.Scene.Actions.push(action);
     }
 
-    public addAction<T extends Action>(action: T): ActionBuilder<T, ActionContainingBuilder> {
+    public addAction<T extends Action>(action: T): ActionBuilder<T, SceneBuilder> {
         return new ActionBuilder<T, SceneBuilder>(action, this);
     }
 

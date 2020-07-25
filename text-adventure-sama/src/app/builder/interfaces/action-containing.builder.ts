@@ -1,5 +1,5 @@
-import { Action } from '../../models/actions/action.model';
 import { ActionBuilder } from '../action.builder';
+import { Action } from 'src/app/models/actions/action.model';
 
 export interface ActionContainingBuilder {
     addActionToBuilder(action: Action): void;

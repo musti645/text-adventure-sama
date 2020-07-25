@@ -12,7 +12,9 @@ export class Scene {
     Items: InGameItem[];
     Actions: Action[];
 
-    constructor(){
+    constructor(id: number) {
+        this.ID = id;
+
         this.Items = [];
         this.Actions = [];
     }

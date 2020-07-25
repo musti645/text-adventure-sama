@@ -24,8 +24,8 @@ export class GameBuilder extends BaseBuilder{
         return new InventoryBuilder(this, this.Game);
     }
 
-    public addScene(): SceneBuilder {
-        return new SceneBuilder(this, this.Game);
+    public addScene(id?: number): SceneBuilder {
+        return new SceneBuilder(this, this.Game, id);
     }
 
     public finish(): Game {

@@ -9,7 +9,9 @@ export abstract class Action {
     Response: string;
     OnActionTriggeredEvent: EventEmitter<void>;
 
-    constructor() {
+    constructor(id: number) {
+        this.ID = id;
+
         this.OnActionTriggeredEvent = new EventEmitter<void>();
     }
 

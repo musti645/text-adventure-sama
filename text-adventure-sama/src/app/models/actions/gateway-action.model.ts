@@ -10,8 +10,9 @@ export class GatewayAction extends Action {
     OnGatewayActionTriggeredEvent: EventEmitter<number> = new EventEmitter<number>();
 
 
-    constructor() {
-        super();
+    constructor(id: number, sceneId: number) {
+        super(id);
+        this.SceneId = sceneId;
     }
 
     public trigger(): string {

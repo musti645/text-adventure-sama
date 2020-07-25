@@ -9,10 +9,9 @@ export class ItemRemovingAction extends OneTimeAction {
     ItemToRemove: InGameItem;
     ItemNotFoundResponse: string;
 
-    constructor() {
-        super();
+    constructor(id: number) {
+        super(id);
     }
-
     public trigger(): string {
         this.OnActionTriggeredEvent.emit();
 

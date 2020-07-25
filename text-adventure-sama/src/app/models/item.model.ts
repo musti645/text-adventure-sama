@@ -21,7 +21,9 @@ export abstract class InGameItem {
      */
     OnItemAddedToInventoryEvent: EventEmitter<InGameItem>;
 
-    constructor() {
+    constructor(id: number) {
+        this.ID = id;
+
         this.OnItemRemovedFromInventoryEvent = new EventEmitter<InGameItem>();
         this.OnItemAddedToInventoryEvent = new EventEmitter<InGameItem>();
 

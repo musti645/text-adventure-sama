@@ -10,8 +10,9 @@ export class MultiTimeAction extends Action {
     MaximumUsages: number;
     Responses: string[];
 
-    constructor() {
-        super();
+
+    constructor(id: number) {
+        super(id);
     }
 
     public trigger(): string {

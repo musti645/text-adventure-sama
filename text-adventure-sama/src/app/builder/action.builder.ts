@@ -22,7 +22,7 @@ export class ActionBuilder<T extends Action, ReturnBuilderType extends ActionCon
         return this;
     }
 
-    public finish(): ActionContainingBuilder {
+    public finish(): ReturnBuilderType {
         this.Builder.addActionToBuilder(this.Action);
         return this.Builder;
     }

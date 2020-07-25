@@ -9,8 +9,8 @@ export class ItemYieldingAction extends OneTimeAction {
     AmountOfItems: number;
     ItemHasMaximumUsages: boolean;
 
-    constructor() {
-        super();
+    constructor(id: number) {
+        super(id);
     }
 
     public trigger(): string {

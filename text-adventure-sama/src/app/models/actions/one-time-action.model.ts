@@ -8,8 +8,8 @@ export class OneTimeAction extends Action {
     WasTriggered: boolean;
     ResponseAfterUse: string;
 
-    constructor() {
-        super();
+    constructor(id: number) {
+        super(id);
     }
 
     public trigger(): string {

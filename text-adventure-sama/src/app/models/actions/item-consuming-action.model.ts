@@ -9,8 +9,8 @@ export class ItemConsumingAction extends OneTimeAction {
     ItemToConsume: InGameItem;
     ItemNotFoundResponse: string;
 
-    constructor() {
-        super();
+    constructor(id: number) {
+        super(id);
     }
 
     public trigger(): string {
