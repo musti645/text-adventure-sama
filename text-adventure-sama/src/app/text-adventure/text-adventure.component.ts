@@ -3,6 +3,9 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { TextInputType } from '../models/other/text-input.enum';
 import { TextInput } from '../models/other/text-input.model';
 import { Game } from '../models/game.model';
+import { GameBuilder } from '../builder/game.builder';
+import { Builder } from 'protractor';
+import { GatewayAction } from '../models/actions/gateway-action.model';
 
 /**
  * Main Component, that contains the input and output of the game.
@@ -13,7 +16,7 @@ import { Game } from '../models/game.model';
   styleUrls: ['./text-adventure.component.scss']
 })
 export class TextAdventureComponent implements OnInit {
-  @ViewChild('input', {static: true}) inputElement: ElementRef;
+  @ViewChild('input', { static: true }) inputElement: ElementRef;
 
   OutputArray: TextInput[] = [];
   IsLoading: boolean;
@@ -35,6 +38,8 @@ export class TextAdventureComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.startLoading();
+    this.Game = this.buildGame();
   }
 
   OnSubmit() {
@@ -54,7 +59,6 @@ export class TextAdventureComponent implements OnInit {
     return this.InputForm.get('userInput') as FormControl;
   }
 
-
   private startLoading() {
     this.IsLoading = true;
     this.userInput.disable();
@@ -66,6 +70,30 @@ export class TextAdventureComponent implements OnInit {
     setTimeout(() => {
       this.inputElement.nativeElement.focus();
     });
+  }
+
+  private buildGame(): Game {
+    const builder = new GameBuilder();
+
+    builder.addScene(1)
+      .setName('Shed in the Woods')
+      .setDescription('A cozy looking shed surrounded by a lot of trees.')
+      .addAction<GatewayAction>(new GatewayAction(1, 2))
+        .setTrigger('go inside')
+        .setResponse('The door is not locked. You open it and go inside.')
+        .finish()
+      .finish();
+
+    builder.addScene(2)
+      .setName('Inside of the Shed')
+      .setDescription('Wooden floors, wooden doors, wooden walls. Everything seems to be made from the same wood. Probably the one surrounding this shed.')
+      .addAction<GatewayAction>(new GatewayAction(2, 1))
+        .setTrigger('go outside')
+        .setResponse('You walk out the door through which you came in. You find yourself infront of the shed.')
+        .finish()
+      .finish();
+
+    return builder.finish();
   }
 
 }
