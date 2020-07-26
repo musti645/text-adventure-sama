@@ -2,7 +2,7 @@ import { InGameItem } from '../models/Item.model';
 import { ItemContainingBuilder } from './interfaces/item-containing.builder';
 import { BaseBuilder } from './base.builder';
 
-export class ItemBuilder<T extends InGameItem, ReturnBuilderType extends ItemContainingBuilder> extends BaseBuilder{
+export class ItemBuilder<T extends InGameItem, ReturnBuilderType extends ItemContainingBuilder> extends BaseBuilder {
     private Item: T;
     private Builder: ReturnBuilderType;
 
@@ -24,16 +24,26 @@ export class ItemBuilder<T extends InGameItem, ReturnBuilderType extends ItemCon
 
     public setMaximumUsages(maxUsages: number): this {
         if (maxUsages <= 0) {
-            throw new EvalError('MaximumUsages Value has to be larger than 0');
+            throw new EvalError('MaximumUsages Value has to be greater than 0.');
         }
+
+        if (this.Item.UsagesLeft && this.Item.UsagesLeft > maxUsages) {
+            throw new EvalError('MaximumUsages Value has to be greater or equal to the UsagesLeft Value');
+        }
+
         this.Item.MaximumUsages = maxUsages;
         return this;
     }
 
     public setUsagesLeft(usagesLeft: number): this {
-        if (usagesLeft <= 0 || usagesLeft > this.Item.MaximumUsages) {
-            throw new EvalError('UsagesLeft Value has to be larger than 0 and less or equal to the MaximumUsages Value');
+        if (usagesLeft <= 0) {
+            throw new EvalError('UsagesLeft Value has to be greater than 0.');
         }
+
+        if (this.Item.MaximumUsages && usagesLeft > this.Item.MaximumUsages) {
+            throw new EvalError('UsagesLeft Value has to be less or equal to the MaximumUsages Value.');
+        }
+
         this.Item.UsagesLeft = usagesLeft;
         return this;
     }

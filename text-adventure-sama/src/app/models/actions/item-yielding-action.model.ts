@@ -7,7 +7,7 @@ import { InGameItem } from '../Item.model';
 export class ItemYieldingAction extends OneTimeAction {
     ItemToYield: InGameItem;
     AmountOfItems: number;
-    ItemHasMaximumUsages: boolean;
+    ResetItemUsagesToMaximum: boolean;
 
     constructor(id: number) {
         super(id);
@@ -19,7 +19,7 @@ export class ItemYieldingAction extends OneTimeAction {
             return this.Response;
         }
 
-        this.ItemToYield.addToInventory(this.AmountOfItems, this.ItemHasMaximumUsages);
+        this.ItemToYield.addToInventory(this.AmountOfItems, this.ResetItemUsagesToMaximum);
 
         this.WasTriggered = true;
         return this.ResponseAfterUse;

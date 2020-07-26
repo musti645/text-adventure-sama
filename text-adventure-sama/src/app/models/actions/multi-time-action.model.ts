@@ -6,7 +6,7 @@ import { Action } from './action.model';
  * which will be returned one by one until the maximum usage count is reached.
  */
 export class MultiTimeAction extends Action {
-    UsageCount: number;
+    UsagesLeft: number;
     MaximumUsages: number;
     Responses: string[];
 
@@ -17,9 +17,9 @@ export class MultiTimeAction extends Action {
 
     public trigger(): string {
         this.OnActionTriggeredEvent.emit();
-        if (this.UsageCount <= this.MaximumUsages) {
-            const responseString =  this.Responses[this.UsageCount];
-            this.UsageCount++;
+        if (this.UsagesLeft <= this.MaximumUsages) {
+            const responseString =  this.Responses[this.UsagesLeft];
+            this.UsagesLeft++;
             return responseString;
         }
 
@@ -27,6 +27,6 @@ export class MultiTimeAction extends Action {
     }
 
     public reset() {
-        this.UsageCount = 0;
+        this.UsagesLeft = 0;
     }
 }
