@@ -7,7 +7,16 @@ import { ItemContainingBuilder } from './interfaces/item-containing.builder';
 import { BaseBuilder } from './base.builder';
 import { ActionContainingBuilder } from './interfaces/action-containing.builder';
 import { Action } from '../models/actions/action.model';
-import { BaseActionBuilder } from './action.builder';
+import {
+    BaseActionBuilder,
+    GatewayActionBuilder,
+    ItemConsumingActionBuilder,
+    ItemRemovingActionBuilder,
+    ItemYieldingActionBuilder,
+    MultiTimeActionBuilder,
+    OneTimeActionBuilder,
+    RandomResponseActionBuilder
+} from './action.builder';
 
 export class SceneBuilder extends BaseBuilder implements ItemContainingBuilder, ActionContainingBuilder {
     private GameBuilder: GameBuilder;
@@ -27,6 +36,34 @@ export class SceneBuilder extends BaseBuilder implements ItemContainingBuilder, 
 
     public addAction<T extends Action>(action: T): BaseActionBuilder<T, SceneBuilder> {
         return new BaseActionBuilder<T, SceneBuilder>(action, this);
+    }
+
+    public addGatewayAction(id: number): GatewayActionBuilder<SceneBuilder> {
+        return new GatewayActionBuilder<SceneBuilder>(id, this);
+    }
+
+    public addItemConsumingAction(id: number): ItemConsumingActionBuilder<SceneBuilder> {
+        return new ItemConsumingActionBuilder<SceneBuilder>(id, this);
+    }
+
+    public addItemRemovingAction(id: number): ItemRemovingActionBuilder<SceneBuilder> {
+        return new ItemRemovingActionBuilder<SceneBuilder>(id, this);
+    }
+
+    public addItemYieldingAction(id: number): ItemYieldingActionBuilder<SceneBuilder> {
+        return new ItemYieldingActionBuilder<SceneBuilder>(id, this);
+    }
+
+    public addMultiTimeAction(id: number): MultiTimeActionBuilder<SceneBuilder> {
+        return new MultiTimeActionBuilder<SceneBuilder>(id, this);
+    }
+
+    public addOneTimeAction(id: number): OneTimeActionBuilder<SceneBuilder> {
+        return new OneTimeActionBuilder<SceneBuilder>(id, this);
+    }
+
+    public addRandomResponseAction(id: number): RandomResponseActionBuilder<SceneBuilder> {
+        return new RandomResponseActionBuilder<SceneBuilder>(id, this);
     }
 
     addItemToBuilder(item: InGameItem): void {

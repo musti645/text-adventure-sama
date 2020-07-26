@@ -53,12 +53,13 @@ export class GatewayActionBuilder<ReturnBuilderType extends ActionContainingBuil
         super(new GatewayAction(id), builder);
     }
 
-    public setTargetSceneId(id: number) {
+    public setTargetSceneId(id: number): this {
         if (id <= 0) {
             throw new EvalError('TargetSceneId Value has to be greater than 0.');
         }
 
         this.Action.SceneId = id;
+        return this;
     }
 
 }
@@ -78,12 +79,13 @@ export class ItemConsumingActionBuilder<ReturnBuilderType extends ActionContaini
         return new ItemBuilder<T, ItemContainingBuilder>(item, this);
     }
 
-    public setItemNotFoundResponse(response: string) {
+    public setItemNotFoundResponse(response: string): this {
         if (!response || response === '') {
             throw new EvalError('No Response found.');
         }
 
         this.Action.ItemNotFoundResponse = response;
+        return this;
     }
 
 }
@@ -104,12 +106,13 @@ export class ItemRemovingActionBuilder<ReturnBuilderType extends ActionContainin
         return new ItemBuilder<T, ItemContainingBuilder>(item, this);
     }
 
-    public setItemNotFoundResponse(response: string) {
+    public setItemNotFoundResponse(response: string): this {
         if (!response || response === '') {
             throw new EvalError('No Response found.');
         }
 
         this.Action.ItemNotFoundResponse = response;
+        return this;
     }
 
 }
@@ -130,16 +133,18 @@ export class ItemYieldingActionBuilder<ReturnBuilderType extends ActionContainin
         return new ItemBuilder<T, ItemContainingBuilder>(item, this);
     }
 
-    public setAmountOfItems(amount: number) {
+    public setAmountOfItems(amount: number): this {
         if (amount <= 0) {
             throw new EvalError('AmountOfItems Value has to be greater than 0.');
         }
 
         this.Action.AmountOfItems = amount;
+        return this;
     }
 
-    public setResetItemUsagesToMaximum(reset: boolean) {
+    public setResetItemUsagesToMaximum(reset: boolean): this {
         this.Action.ResetItemUsagesToMaximum = reset;
+        return this;
     }
 
 }
@@ -152,7 +157,7 @@ export class MultiTimeActionBuilder<ReturnBuilderType extends ActionContainingBu
         super(new MultiTimeAction(id), builder);
     }
 
-    public setUsagesLeft(count: number) {
+    public setUsagesLeft(count: number): this {
         if (count <= 0) {
             throw new EvalError('UsagesLeft Value has to be greater than 0.');
         }
@@ -162,9 +167,10 @@ export class MultiTimeActionBuilder<ReturnBuilderType extends ActionContainingBu
         }
 
         this.Action.UsagesLeft = count;
+        return this;
     }
 
-    public setMaximumUsages(count: number) {
+    public setMaximumUsages(count: number): this {
         if (count <= 0) {
             throw new EvalError('MaximumUsages Value has to be greater than 0.');
         }
@@ -178,9 +184,10 @@ export class MultiTimeActionBuilder<ReturnBuilderType extends ActionContainingBu
         }
 
         this.Action.MaximumUsages = count;
+        return this;
     }
 
-    public setResponses(responses: string[]) {
+    public setResponses(responses: string[]): this {
         if (!responses) {
             throw new EvalError('Invalid Value for Responses. Has to be an Array of Strings.');
         }
@@ -190,6 +197,7 @@ export class MultiTimeActionBuilder<ReturnBuilderType extends ActionContainingBu
         }
 
         this.Action.Responses = responses;
+        return this;
     }
 
 }
@@ -202,16 +210,18 @@ export class OneTimeActionBuilder<ReturnBuilderType extends ActionContainingBuil
         super(new OneTimeAction(id), builder);
     }
 
-    public setWasTrigered(wasTriggered: boolean) {
+    public setWasTrigered(wasTriggered: boolean): this {
         this.Action.WasTriggered = wasTriggered;
+        return this;
     }
 
-    public setResponseAfterUse(response: string) {
+    public setResponseAfterUse(response: string): this {
         if (!response || response === '') {
             throw new EvalError('No Response found.');
         }
 
         this.Action.ResponseAfterUse = response;
+        return this;
     }
 
 }
@@ -224,7 +234,7 @@ export class RandomResponseActionBuilder<ReturnBuilderType extends ActionContain
         super(new RandomResponseAction(id), builder);
     }
 
-    public setResponses(responses: string[]) {
+    public setResponses(responses: string[]): this {
         if (!responses) {
             throw new EvalError('Invalid Value for Responses. Has to be an Array of Strings.');
         }
@@ -234,6 +244,7 @@ export class RandomResponseActionBuilder<ReturnBuilderType extends ActionContain
         }
 
         this.Action.Responses = responses;
+        return this;
     }
 
 

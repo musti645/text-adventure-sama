@@ -78,18 +78,20 @@ export class TextAdventureComponent implements OnInit {
     builder.addScene(1)
       .setName('Shed in the Woods')
       .setDescription('A cozy looking shed surrounded by a lot of trees.')
-      .addAction<GatewayAction>(new GatewayAction(1, 2))
+      .addGatewayAction(1)
+        .setTargetSceneId(2)
         .setTrigger('go inside')
-        .setResponse('The door is not locked. You open it and go inside.')
+        .setResponse('The door is not locked. You open it and walk inside.')
         .finish()
       .finish();
 
     builder.addScene(2)
       .setName('Inside of the Shed')
       .setDescription('Wooden floors, wooden doors, wooden walls. Everything seems to be made from the same wood. Probably the one surrounding this shed.')
-      .addAction<GatewayAction>(new GatewayAction(2, 1))
-        .setTrigger('go outside')
+      .addGatewayAction(2)
+        .setTrigger('leave')
         .setResponse('You walk out the door through which you came in. You find yourself infront of the shed.')
+        .setTargetSceneId(1)
         .finish()
       .finish();
 
