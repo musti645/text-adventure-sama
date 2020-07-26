@@ -27,7 +27,7 @@ export class SceneBuilder extends BaseBuilder implements ItemContainingBuilder, 
         super();
         this.GameBuilder = gameBuilder;
         this.Game = game;
-        this.Scene = new Scene(sceneId || game.Scenes.length);
+        this.Scene = new Scene(sceneId || game.Stage.getScenesCount());
     }
 
     addActionToBuilder(action: Action): void {
@@ -85,7 +85,7 @@ export class SceneBuilder extends BaseBuilder implements ItemContainingBuilder, 
     }
 
     public finish(): GameBuilder {
-        this.Game.Scenes.push(this.Scene);
+        this.Game.Stage.addScene(this.Scene);
         return this.GameBuilder;
     }
 }

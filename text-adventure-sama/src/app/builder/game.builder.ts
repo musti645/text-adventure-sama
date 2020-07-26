@@ -1,6 +1,6 @@
 import { Game } from '../models/game.model';
 import { InventoryBuilder } from './inventory.builder';
-import { BuilderError } from '../errors/builder-error';
+import { BuilderError } from '../errors/builder.error';
 import { SceneBuilder } from './scene.builder';
 import { BaseBuilder } from './base.builder';
 

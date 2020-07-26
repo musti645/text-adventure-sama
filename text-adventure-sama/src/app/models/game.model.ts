@@ -1,20 +1,22 @@
 import { Scene } from './scene.model';
 import { InGameItem } from './Item.model';
 import { Inventory } from './inventory.model';
+import { Stage } from './stage.model';
 
 /**
  * Represents the Game.
  */
 export class Game {
     Title: string;
-    Scenes: Scene[];
+    Stage: Stage;
     Inventory: Inventory;
 
     constructor() {
-        this.Scenes = [];
+        this.Stage = new Stage();
     }
 
     OnGatewayActionTriggeredEvent(sceneId: number) {
+        this.Stage.goToScene(sceneId);
     }
 
     OnItemRemovedFromInventoryEvent(ItemId: number) {
