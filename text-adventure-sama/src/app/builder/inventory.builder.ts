@@ -15,6 +15,7 @@ export class InventoryBuilder extends BaseBuilder implements ItemContainingBuild
         super();
         this.GameBuilder = gameBuilder;
         this.Game = game;
+        this.Inventory = this.Game.Inventory;
     }
 
     public addItem<T extends InGameItem>(item: T): ItemBuilder<T, InventoryBuilder> {

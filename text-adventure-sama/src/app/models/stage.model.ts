@@ -1,19 +1,27 @@
 import { Scene } from './scene.model';
 import { GameError } from '../errors/game.error';
+import { SceneEventService } from '../services/scene-event.service';
+import { IGatewayActionEventListener, GatewayActionEvent } from '../events/gateway-action.event';
 
 /**
  * The Stage contains all scenes as well as the current scene.
  * It also manages the transition between scenes.
  */
-export class Stage {
+export class Stage implements IGatewayActionEventListener{
     private Scenes: Scene[];
     private CurrentScene: Scene;
     // path the user took through the scenes
     private ScenePath: number[];
 
-    constructor() {
+    constructor(private sceneEventService: SceneEventService) {
         this.ScenePath = [];
         this.Scenes = [];
+
+        sceneEventService.GatewayActionEvent$.subscribe(this.OnSceneChange);
+    }
+
+    OnSceneChange(event: GatewayActionEvent) {
+        this.goToScene(event.TargetSceneID);
     }
 
     public getCurrentScene(): Scene {
@@ -38,5 +46,11 @@ export class Stage {
 
     public getScenesCount(): number {
         return this.Scenes.length;
+    }
+
+    public reset(): void {
+        this.ScenePath = [];
+        this.Scenes = [];
+        this.CurrentScene = undefined;
     }
 }

@@ -6,6 +6,8 @@ import { Game } from '../models/game.model';
 import { GameBuilder } from '../builder/game.builder';
 import { Builder } from 'protractor';
 import { GatewayAction } from '../models/actions/gateway-action.model';
+import { SceneEventService } from '../services/scene-event.service';
+import { ItemEventService } from '../services/item-event.service';
 
 /**
  * Main Component, that contains the input and output of the game.
@@ -22,6 +24,7 @@ export class TextAdventureComponent implements OnInit {
   IsLoading: boolean;
 
   Game: Game;
+  GameBuilder: GameBuilder;
 
   InputForm: FormGroup = new FormGroup(
     {
@@ -34,7 +37,7 @@ export class TextAdventureComponent implements OnInit {
     }
   );
 
-  constructor() {
+  constructor(protected itemEventService: ItemEventService, protected sceneEventService: SceneEventService) {
   }
 
   ngOnInit() {
@@ -55,6 +58,10 @@ export class TextAdventureComponent implements OnInit {
     this.stopLoading();
   }
 
+  OnReset() {
+    this.buildGame();
+  }
+
   get userInput() {
     return this.InputForm.get('userInput') as FormControl;
   }
@@ -73,12 +80,12 @@ export class TextAdventureComponent implements OnInit {
   }
 
   private buildGame(): Game {
-    const builder = new GameBuilder();
+    const builder = new GameBuilder(this.itemEventService, this.sceneEventService);
 
     builder.addScene(1)
       .setName('Shed in the Woods')
       .setDescription('A cozy looking shed surrounded by a lot of trees.')
-      .addGatewayAction(1)
+        .addGatewayAction(1)
         .setTargetSceneId(2)
         .setTrigger('go inside')
         .setResponse('The door is not locked. You open it and walk inside.')
