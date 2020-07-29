@@ -1,5 +1,7 @@
 import { OneTimeAction } from './one-time-action.model';
 import { InGameItem } from '../Item.model';
+import { ItemConsumingActionEvent } from '../events/item-consuming-action.event';
+import { ItemEventService } from 'src/app/services/item-event.service';
 
 /**
  * An ItemConsumingAction is only triggered once and uses an Item (once) in the players inventory.
@@ -7,27 +9,20 @@ import { InGameItem } from '../Item.model';
  */
 export class ItemConsumingAction extends OneTimeAction {
     ItemToConsume: InGameItem;
-    ItemNotFoundResponse: string;
 
-    constructor(id: number) {
+    constructor(id?: number) {
         super(id);
     }
 
     public trigger(): string {
-        this.OnActionTriggeredEvent.emit();
-
         if (this.WasTriggered) {
-            return this.Response;
+            return this.ResponseAfterUse;
         }
 
-        if (!this.ItemToConsume.isContainedInInventory()) {
-            return this.ItemNotFoundResponse;
-        }
-
-        this.ItemToConsume.use();
+        ItemEventService.Instance.consumeItem(new ItemConsumingActionEvent(this));
 
         this.WasTriggered = true;
-        return this.ResponseAfterUse;
+        return this.Response;
     }
 
     public reset() {

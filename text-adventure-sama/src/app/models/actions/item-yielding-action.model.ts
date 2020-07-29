@@ -1,5 +1,7 @@
 import { OneTimeAction } from './one-time-action.model';
 import { InGameItem } from '../Item.model';
+import { ItemYieldingActionEvent } from '../events/item-yielding-action.event';
+import { ItemEventService } from 'src/app/services/item-event.service';
 
 /**
  * An ItemYieldingAction is only triggered once and adds an Item to the players inventory.
@@ -9,20 +11,20 @@ export class ItemYieldingAction extends OneTimeAction {
     AmountOfItems: number;
     ResetItemUsagesToMaximum: boolean;
 
-    constructor(id: number) {
+    constructor(id?: number) {
         super(id);
     }
 
     public trigger(): string {
-        this.OnActionTriggeredEvent.emit();
+        // trigger addition of item to inventory
         if (this.WasTriggered) {
-            return this.Response;
+            return this.ResponseAfterUse;
         }
 
-        this.ItemToYield.addToInventory(this.AmountOfItems, this.ResetItemUsagesToMaximum);
+        ItemEventService.Instance.yieldItem(new ItemYieldingActionEvent(this));
 
         this.WasTriggered = true;
-        return this.ResponseAfterUse;
+        return this.Response;
     }
 
     public reset() {

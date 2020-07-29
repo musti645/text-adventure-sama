@@ -1,20 +1,20 @@
 import { InGameItem } from './Item.model';
 import { ItemEventService } from '../services/item-event.service';
-import { IItemConsumingEventListener, ItemConsumingActionEvent } from '../events/item-consuming-action.event';
-import { IItemRemovingEventListener, ItemRemovingActionEvent } from '../events/item-removing-action.event';
-import { IItemYieldingEventListener, ItemYieldingActionEvent } from '../events/item-yielding-action.event';
+import { IItemConsumingEventListener, ItemConsumingActionEvent } from '../models/events/item-consuming-action.event';
+import { IItemRemovingEventListener, ItemRemovingActionEvent } from '../models/events/item-removing-action.event';
+import { IItemYieldingEventListener, ItemYieldingActionEvent } from '../models/events/item-yielding-action.event';
 
 export class Inventory implements IItemConsumingEventListener,
     IItemRemovingEventListener,
     IItemYieldingEventListener {
     private Items: InGameItem[];
 
-    constructor(private itemEventService: ItemEventService) {
+    constructor() {
         this.Items = [];
 
-        itemEventService.ItemYieldingActionEvent$.subscribe(this.OnItemYield);
-        itemEventService.ItemRemovingActionEvent$.subscribe(this.OnItemRemove);
-        itemEventService.ItemConsumingActionEvent$.subscribe(this.OnItemConsume);
+        ItemEventService.Instance.ItemYieldingActionEvent$.subscribe(this.OnItemYield);
+        ItemEventService.Instance.ItemRemovingActionEvent$.subscribe(this.OnItemRemove);
+        ItemEventService.Instance.ItemConsumingActionEvent$.subscribe(this.OnItemConsume);
     }
 
     OnItemYield(event: ItemYieldingActionEvent) {

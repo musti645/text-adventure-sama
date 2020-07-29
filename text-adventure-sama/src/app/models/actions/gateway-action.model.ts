@@ -1,23 +1,21 @@
 import { Action } from './action.model';
-import { Scene } from '../scene.model';
-import { EventEmitter } from '@angular/core';
+import { SceneEventService } from 'src/app/services/scene-event.service';
+import { GatewayActionEvent } from '../events/gateway-action.event';
 
 /**
  * When a GatewayAction is triggered, the game moves on to another scene.
  */
 export class GatewayAction extends Action {
     SceneId: number;
-    OnGatewayActionTriggeredEvent: EventEmitter<number> = new EventEmitter<number>();
 
 
-    constructor(id: number, sceneId?: number) {
+    constructor(id?: number) {
         super(id);
-        this.SceneId = sceneId;
     }
 
     public trigger(): string {
-        this.OnActionTriggeredEvent.emit();
-        this.OnGatewayActionTriggeredEvent.emit(this.SceneId);
+        // trigger event change
+        SceneEventService.Instance.changeScene(new GatewayActionEvent(this));
         return this.Response;
     }
 

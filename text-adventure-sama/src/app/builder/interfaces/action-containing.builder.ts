@@ -11,6 +11,7 @@ import {
 import { Action } from 'src/app/models/actions/action.model';
 
 export interface ActionContainingBuilder {
+
     addActionToBuilder(action: Action): void;
 
     addAction<T extends Action>(action: T): BaseActionBuilder<T, ActionContainingBuilder>;

@@ -79,15 +79,6 @@ export class ItemConsumingActionBuilder<ReturnBuilderType extends ActionContaini
         return new ItemBuilder<T, ItemContainingBuilder>(item, this);
     }
 
-    public setItemNotFoundResponse(response: string): this {
-        if (!response || response === '') {
-            throw new EvalError('No Response found.');
-        }
-
-        this.Action.ItemNotFoundResponse = response;
-        return this;
-    }
-
 }
 
 
@@ -104,15 +95,6 @@ export class ItemRemovingActionBuilder<ReturnBuilderType extends ActionContainin
 
     public addItem<T extends InGameItem>(item: T): ItemBuilder<T, ItemContainingBuilder> {
         return new ItemBuilder<T, ItemContainingBuilder>(item, this);
-    }
-
-    public setItemNotFoundResponse(response: string): this {
-        if (!response || response === '') {
-            throw new EvalError('No Response found.');
-        }
-
-        this.Action.ItemNotFoundResponse = response;
-        return this;
     }
 
 }

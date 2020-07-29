@@ -17,6 +17,8 @@ import {
     OneTimeActionBuilder,
     RandomResponseActionBuilder
 } from './action.builder';
+import { SceneEventService } from '../services/scene-event.service';
+import { ItemEventService } from '../services/item-event.service';
 
 export class SceneBuilder extends BaseBuilder implements ItemContainingBuilder, ActionContainingBuilder {
     private GameBuilder: GameBuilder;
@@ -81,6 +83,16 @@ export class SceneBuilder extends BaseBuilder implements ItemContainingBuilder, 
 
     public setDescription(description: string): this {
         this.Scene.Description = description;
+        return this;
+    }
+
+    public setActionNotRecognizedResponse(response: string): this {
+        this.Scene.ActionNotRecognizedResponse = response;
+        return this;
+    }
+
+    public setItemNotFoundResponse(response: string): this {
+        this.Scene.ItemNotFoundResponse = response;
         return this;
     }
 

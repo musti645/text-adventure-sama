@@ -8,18 +8,17 @@ export class OneTimeAction extends Action {
     WasTriggered: boolean;
     ResponseAfterUse: string;
 
-    constructor(id: number) {
+    constructor(id?: number) {
         super(id);
     }
 
     public trigger(): string {
-        this.OnActionTriggeredEvent.emit();
         if (this.WasTriggered) {
-            return this.Response;
+            return this.ResponseAfterUse;
         }
 
         this.WasTriggered = true;
-        return this.ResponseAfterUse;
+        return this.Response;
     }
 
     public reset() {

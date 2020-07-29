@@ -5,6 +5,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { TextAdventureModule } from './text-adventure/text-adventure.module';
+import { ItemEventService } from './services/item-event.service';
+import { SceneEventService } from './services/scene-event.service';
 
 @NgModule({
   declarations: [
@@ -15,7 +17,10 @@ import { TextAdventureModule } from './text-adventure/text-adventure.module';
     AppRoutingModule,
     TextAdventureModule
   ],
-  providers: [],
+  providers: [
+    ItemEventService,
+    SceneEventService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

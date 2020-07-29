@@ -11,12 +11,11 @@ export class MultiTimeAction extends Action {
     Responses: string[];
 
 
-    constructor(id: number) {
+    constructor(id?: number) {
         super(id);
     }
 
     public trigger(): string {
-        this.OnActionTriggeredEvent.emit();
         if (this.UsagesLeft <= this.MaximumUsages) {
             const responseString =  this.Responses[this.UsagesLeft];
             this.UsagesLeft++;

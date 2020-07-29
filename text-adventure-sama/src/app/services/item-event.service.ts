@@ -1,31 +1,41 @@
-import { ItemConsumingActionEvent, IItemConsumingEventService } from '../events/item-consuming-action.event';
-import { ItemYieldingActionEvent, IItemYieldingEventService } from '../events/item-yielding-action.event';
-import { ItemRemovingActionEvent, IItemRemovingEventService } from '../events/item-removing-action.event';
+import { ItemConsumingActionEvent, IItemConsumingEventService } from '../models/events/item-consuming-action.event';
+import { ItemYieldingActionEvent, IItemYieldingEventService } from '../models/events/item-yielding-action.event';
+import { ItemRemovingActionEvent, IItemRemovingEventService } from '../models/events/item-removing-action.event';
 import { Subject } from 'rxjs';
+import { Injectable } from '@angular/core';
 
+/**
+ * Singleton Service handling Item Events
+ */
+@Injectable()
 export class ItemEventService implements IItemRemovingEventService,
     IItemYieldingEventService,
     IItemConsumingEventService {
+
+    static Instance: ItemEventService;
+
+    constructor() {
+        ItemEventService.Instance = this;
+    }
 
     private ItemConsumingActionEventSource = new Subject<ItemConsumingActionEvent>();
     private ItemYieldingActionEventSource = new Subject<ItemYieldingActionEvent>();
     private ItemRemovingActionEventSource = new Subject<ItemRemovingActionEvent>();
 
+    public ItemConsumingActionEvent$ = this.ItemConsumingActionEventSource.asObservable();
+    public ItemYieldingActionEvent$ = this.ItemYieldingActionEventSource.asObservable();
+    public ItemRemovingActionEvent$ = this.ItemRemovingActionEventSource.asObservable();
 
-    ItemConsumingActionEvent$ = this.ItemConsumingActionEventSource.asObservable();
-    ItemYieldingActionEvent$ = this.ItemYieldingActionEventSource.asObservable();
-    ItemRemovingActionEvent$ = this.ItemRemovingActionEventSource.asObservable();
 
-
-    consumeItem(event: ItemConsumingActionEvent) {
+    public consumeItem(event: ItemConsumingActionEvent) {
         this.ItemConsumingActionEventSource.next(event);
     }
 
-    yieldItem(event: ItemYieldingActionEvent) {
+    public yieldItem(event: ItemYieldingActionEvent) {
         this.ItemYieldingActionEventSource.next(event);
     }
 
-    removeItem(event: ItemRemovingActionEvent) {
+    public removeItem(event: ItemRemovingActionEvent) {
         this.ItemRemovingActionEventSource.next(event);
     }
 

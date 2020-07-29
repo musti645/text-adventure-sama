@@ -1,4 +1,4 @@
-import { GatewayAction } from '../models/actions/gateway-action.model';
+import { GatewayAction } from '../actions/gateway-action.model';
 
 export class GatewayActionEvent {
     TargetSceneID: number;

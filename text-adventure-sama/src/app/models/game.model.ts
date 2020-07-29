@@ -12,10 +12,9 @@ export class Game {
     Stage: Stage;
     Inventory: Inventory;
 
-    constructor(itemEventService: ItemEventService,
-                sceneEventService: SceneEventService) {
-        this.Stage = new Stage(sceneEventService);
-        this.Inventory = new Inventory(itemEventService);
+    constructor() {
+        this.Stage = new Stage();
+        this.Inventory = new Inventory();
     }
 
     reset() {

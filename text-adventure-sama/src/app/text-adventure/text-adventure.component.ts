@@ -37,7 +37,7 @@ export class TextAdventureComponent implements OnInit {
     }
   );
 
-  constructor(protected itemEventService: ItemEventService, protected sceneEventService: SceneEventService) {
+  constructor() {
   }
 
   ngOnInit() {
@@ -80,11 +80,13 @@ export class TextAdventureComponent implements OnInit {
   }
 
   private buildGame(): Game {
-    const builder = new GameBuilder(this.itemEventService, this.sceneEventService);
+    const builder = new GameBuilder();
 
     builder.addScene(1)
       .setName('Shed in the Woods')
       .setDescription('A cozy looking shed surrounded by a lot of trees.')
+      .setActionNotRecognizedResponse('Doing that in a forrest? You don\'t think so.')
+      .setItemNotFoundResponse('There, beneath the leafs and sticks, you seem to have spotted something. As you get closer, you realize, that it was a useless rock.')
         .addGatewayAction(1)
         .setTargetSceneId(2)
         .setTrigger('go inside')
@@ -95,6 +97,8 @@ export class TextAdventureComponent implements OnInit {
     builder.addScene(2)
       .setName('Inside of the Shed')
       .setDescription('Wooden floors, wooden doors, wooden walls. Everything seems to be made from the same wood. Probably the one surrounding this shed.')
+      .setActionNotRecognizedResponse('You don\'t think, that this is an appropriate thing to do here.')
+      .setItemNotFoundResponse('The place is too messy. You can\'t seem to find what you\'re looking for.')
       .addGatewayAction(2)
         .setTrigger('leave')
         .setResponse('You walk out the door through which you came in. You find yourself infront of the shed.')

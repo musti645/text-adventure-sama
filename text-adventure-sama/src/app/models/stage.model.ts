@@ -1,7 +1,7 @@
 import { Scene } from './scene.model';
-import { GameError } from '../errors/game.error';
+import { GameError } from '../models/errors/game.error';
 import { SceneEventService } from '../services/scene-event.service';
-import { IGatewayActionEventListener, GatewayActionEvent } from '../events/gateway-action.event';
+import { IGatewayActionEventListener, GatewayActionEvent } from '../models/events/gateway-action.event';
 
 /**
  * The Stage contains all scenes as well as the current scene.
@@ -13,11 +13,11 @@ export class Stage implements IGatewayActionEventListener{
     // path the user took through the scenes
     private ScenePath: number[];
 
-    constructor(private sceneEventService: SceneEventService) {
+    constructor() {
         this.ScenePath = [];
         this.Scenes = [];
 
-        sceneEventService.GatewayActionEvent$.subscribe(this.OnSceneChange);
+        SceneEventService.Instance.GatewayActionEvent$.subscribe(this.OnSceneChange);
     }
 
     OnSceneChange(event: GatewayActionEvent) {
