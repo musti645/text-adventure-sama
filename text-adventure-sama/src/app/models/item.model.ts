@@ -23,7 +23,11 @@ export abstract class InGameItem {
         this.UsagesLeft = this.MaximumUsages;
     }
 
-    public setID(id: number){
+    public setID(id: number): void {
         this.ID = id;
+    }
+
+    public getID(): number {
+        return this.ID;
     }
 }

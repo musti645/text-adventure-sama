@@ -7,7 +7,7 @@ import { ItemEventService } from 'src/app/services/item-event.service';
  * An ItemYieldingAction is only triggered once and adds an Item to the players inventory.
  */
 export class ItemYieldingAction extends OneTimeAction {
-    ItemToYield: InGameItem;
+    Item: InGameItem;
     AmountOfItems: number;
     ResetItemUsagesToMaximum: boolean;
 

@@ -7,6 +7,7 @@ import { GatewayActionEvent } from '../events/gateway-action.event';
  */
 export class GatewayAction extends Action {
     SceneId: number;
+    TargetSceneName: string;
 
 
     constructor(id?: number) {

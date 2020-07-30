@@ -3,14 +3,13 @@ import { InventoryBuilder } from './inventory.builder';
 import { BuilderError } from '../models/errors/builder.error';
 import { SceneBuilder } from './scene.builder';
 import { BaseBuilder } from './base.builder';
-import { ItemEventService } from '../services/item-event.service';
-import { SceneEventService } from '../services/scene-event.service';
+import { IDGeneratorService } from '../services/id-generator.service';
 
 /**
  * Use this class to chain the game building process.
  * Once your Game is build completely, call the 'build' method.
  */
-export class GameBuilder extends BaseBuilder{
+export class GameBuilder extends BaseBuilder {
     private Game: Game;
 
     constructor() {
@@ -26,8 +25,14 @@ export class GameBuilder extends BaseBuilder{
         return new SceneBuilder(this, this.Game, id);
     }
 
-    public reset(){
+    public reset() {
         this.Game.reset();
+    }
+
+    public generateIds(): this {
+        const service: IDGeneratorService = new IDGeneratorService();
+        service.generateIDs(this.Game);
+        return this;
     }
 
     public finish(): Game {

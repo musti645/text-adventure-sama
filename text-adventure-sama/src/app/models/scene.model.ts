@@ -22,7 +22,19 @@ export class Scene {
         this.Actions = [];
     }
 
-    public setID(id: number){
+    public setID(id: number) {
         this.ID = id;
+    }
+
+    public getID(): number {
+        return this.ID;
+    }
+
+    public getActions(): Action[] {
+        return this.Actions;
+    }
+
+    public getItems(): InGameItem[] {
+        return this.Items;
     }
 }

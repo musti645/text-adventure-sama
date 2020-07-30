@@ -16,9 +16,13 @@ export abstract class Action {
 
     public abstract trigger(): string;
 
-    public abstract reset();
+    public abstract reset(): void;
 
-    public setID(id: number){
+    public setID(id: number): void {
         this.ID = id;
+    }
+
+    public getID(): number {
+        return this.ID;
     }
 }

@@ -63,3 +63,24 @@ The Item is used once. If it has got one Usage left, it will be removed from the
 
 In order to trigger this an ItemConsuming Action, the player needs to have a certain item in her inventory.
 The Item is removed from the inventory without being used.
+
+## From Input to Output ##
+
+input -> InputParserService
+-> InputType and Parameters found
+-> Get Scene From Stage
+-> Look for Action in Scene that matches the InputType and the Parameters
+    -> If not found, return Scene's ActionNotFoundResponse
+    -> If found, but InputType or parameter don't match, return Actions WrongInteractionTypeResponse
+-> Check Action's preconditions
+    -> If not successful return corresponding Response
+-> Trigger the Action and receive the response
+-> Trigger EventListeners (Item related Events & Scene related Events)
+
+## In Depth Look ##
+
+### ID Generator ##
+
+The idea behind the ID Generator is to be able to outsource the ID assignment to an automated service.
+It goes ahead and holds a counter for each type of object, that it comes across and uses that
+counter to return the new ID of the created object. It is also supposed to track already assigned IDs.

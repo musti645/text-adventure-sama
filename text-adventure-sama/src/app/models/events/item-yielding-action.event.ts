@@ -2,7 +2,7 @@ import { InGameItem } from '../Item.model';
 import { ItemYieldingAction } from '../actions/item-yielding-action.model';
 
 export class ItemYieldingActionEvent {
-    ItemToYield: InGameItem;
+    Item: InGameItem;
     AmountOfItems: number;
     ResetItemUsagesToMaximum: boolean;
     Response: string;
@@ -10,7 +10,7 @@ export class ItemYieldingActionEvent {
     WasTriggered: boolean;
 
     constructor(action: ItemYieldingAction){
-        this.ItemToYield = action.ItemToYield;
+        this.Item = action.Item;
         this.AmountOfItems = action.AmountOfItems;
         this.ResetItemUsagesToMaximum = action.ResetItemUsagesToMaximum;
         this.Response = action.Response;

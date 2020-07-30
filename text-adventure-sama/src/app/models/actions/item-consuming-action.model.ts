@@ -8,7 +8,7 @@ import { ItemEventService } from 'src/app/services/item-event.service';
  * It can only be triggered, if the user has got the Item in her inventory.
  */
 export class ItemConsumingAction extends OneTimeAction {
-    ItemToConsume: InGameItem;
+    Item: InGameItem;
 
     constructor(id?: number) {
         super(id);

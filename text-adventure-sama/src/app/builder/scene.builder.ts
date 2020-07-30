@@ -17,19 +17,17 @@ import {
     OneTimeActionBuilder,
     RandomResponseActionBuilder
 } from './action.builder';
-import { SceneEventService } from '../services/scene-event.service';
-import { ItemEventService } from '../services/item-event.service';
 
 export class SceneBuilder extends BaseBuilder implements ItemContainingBuilder, ActionContainingBuilder {
     private GameBuilder: GameBuilder;
     private Game: Game;
     private Scene: Scene;
 
-    constructor(gameBuilder: GameBuilder, game: Game, sceneId: number) {
+    constructor(gameBuilder: GameBuilder, game: Game, sceneId: number = null) {
         super();
         this.GameBuilder = gameBuilder;
         this.Game = game;
-        this.Scene = new Scene(sceneId || game.Stage.getScenesCount());
+        this.Scene = new Scene(sceneId);
     }
 
     addActionToBuilder(action: Action): void {
@@ -40,32 +38,32 @@ export class SceneBuilder extends BaseBuilder implements ItemContainingBuilder, 
         return new BaseActionBuilder<T, SceneBuilder>(action, this);
     }
 
-    public addGatewayAction(id: number): GatewayActionBuilder<SceneBuilder> {
-        return new GatewayActionBuilder<SceneBuilder>(id, this);
+    public addGatewayAction(): GatewayActionBuilder<SceneBuilder> {
+        return new GatewayActionBuilder<SceneBuilder>(this);
     }
 
-    public addItemConsumingAction(id: number): ItemConsumingActionBuilder<SceneBuilder> {
-        return new ItemConsumingActionBuilder<SceneBuilder>(id, this);
+    public addItemConsumingAction(): ItemConsumingActionBuilder<SceneBuilder> {
+        return new ItemConsumingActionBuilder<SceneBuilder>(this);
     }
 
-    public addItemRemovingAction(id: number): ItemRemovingActionBuilder<SceneBuilder> {
-        return new ItemRemovingActionBuilder<SceneBuilder>(id, this);
+    public addItemRemovingAction(): ItemRemovingActionBuilder<SceneBuilder> {
+        return new ItemRemovingActionBuilder<SceneBuilder>(this);
     }
 
-    public addItemYieldingAction(id: number): ItemYieldingActionBuilder<SceneBuilder> {
-        return new ItemYieldingActionBuilder<SceneBuilder>(id, this);
+    public addItemYieldingAction(): ItemYieldingActionBuilder<SceneBuilder> {
+        return new ItemYieldingActionBuilder<SceneBuilder>(this);
     }
 
-    public addMultiTimeAction(id: number): MultiTimeActionBuilder<SceneBuilder> {
-        return new MultiTimeActionBuilder<SceneBuilder>(id, this);
+    public addMultiTimeAction(id?: number): MultiTimeActionBuilder<SceneBuilder> {
+        return new MultiTimeActionBuilder<SceneBuilder>(this);
     }
 
-    public addOneTimeAction(id: number): OneTimeActionBuilder<SceneBuilder> {
-        return new OneTimeActionBuilder<SceneBuilder>(id, this);
+    public addOneTimeAction(): OneTimeActionBuilder<SceneBuilder> {
+        return new OneTimeActionBuilder<SceneBuilder>(this);
     }
 
-    public addRandomResponseAction(id: number): RandomResponseActionBuilder<SceneBuilder> {
-        return new RandomResponseActionBuilder<SceneBuilder>(id, this);
+    public addRandomResponseAction(): RandomResponseActionBuilder<SceneBuilder> {
+        return new RandomResponseActionBuilder<SceneBuilder>(this);
     }
 
     addItemToBuilder(item: InGameItem): void {

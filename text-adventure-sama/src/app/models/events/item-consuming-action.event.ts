@@ -2,7 +2,7 @@ import { InGameItem } from '../Item.model';
 import { ItemConsumingAction } from '../actions/item-consuming-action.model';
 
 export class ItemConsumingActionEvent {
-    ItemToConsume: InGameItem;
+    Item: InGameItem;
     ItemNotFoundResponse: string;
     Response: string;
     ResponseAfterUse: string;
@@ -10,8 +10,7 @@ export class ItemConsumingActionEvent {
 
 
     constructor(action: ItemConsumingAction){
-        this.ItemToConsume = action.ItemToConsume;
-        this.ItemNotFoundResponse = action.ItemNotFoundResponse;
+        this.Item = action.Item;
         this.Response = action.Response;
         this.ResponseAfterUse = action.ResponseAfterUse;
         this.WasTriggered = action.WasTriggered;

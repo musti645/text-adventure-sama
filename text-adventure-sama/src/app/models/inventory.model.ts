@@ -19,26 +19,30 @@ export class Inventory implements IItemConsumingEventListener,
 
     OnItemYield(event: ItemYieldingActionEvent) {
         if (event.ResetItemUsagesToMaximum) {
-            event.ItemToYield.resetUsages();
+            event.Item.resetUsages();
         }
 
         for (let i = 0; i < event.AmountOfItems; i++) {
             // create a shallow copy of the item (ES6 only)
-            this.addItem(Object.assign({}, event.ItemToYield));
+            this.addItem(Object.assign({}, event.Item));
         }
     }
 
     OnItemRemove(event: ItemRemovingActionEvent) {
-        this.removeItemFromInventory(event.ItemToRemove.ID);
+        this.removeItemFromInventory(event.Item.ID);
     }
 
     OnItemConsume(event: ItemConsumingActionEvent) {
-        const items = this.findItemsById(event.ItemToConsume.ID);
+        const items = this.findItemsById(event.Item.ID);
         items[0].use();
     }
 
     public findItemsById(id: number): InGameItem[] {
         return this.Items.filter(o => o.ID === id);
+    }
+
+    public findItemsByName(name: string): InGameItem[] {
+        return this.Items.filter(o => o.Name === name);
     }
 
     public removeItemFromInventory(id: number): void {
