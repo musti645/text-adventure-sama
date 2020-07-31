@@ -11,10 +11,12 @@ import { IDGeneratorService } from '../services/id-generator.service';
  */
 export class GameBuilder extends BaseBuilder {
     private Game: Game;
+    public IdGeneratorService: IDGeneratorService;
 
     constructor() {
         super();
         this.Game = new Game();
+        this.IdGeneratorService = new IDGeneratorService();
     }
 
     public addInventory(): InventoryBuilder {
@@ -29,13 +31,12 @@ export class GameBuilder extends BaseBuilder {
         this.Game.reset();
     }
 
-    public generateIds(): this {
-        const service: IDGeneratorService = new IDGeneratorService();
-        service.generateIDs(this.Game);
-        return this;
+    generateUnassignedIds(): void {
+        this.IdGeneratorService.generateIDs(this.Game);
     }
 
     public finish(): Game {
+        this.generateUnassignedIds();
         return this.Game;
     }
 }

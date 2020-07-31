@@ -32,10 +32,13 @@ export class SceneBuilder extends BaseBuilder implements ItemContainingBuilder, 
 
     addActionToBuilder(action: Action): void {
         this.Scene.Actions.push(action);
+        if (action.ID) {
+            this.GameBuilder.IdGeneratorService.addActionId(action);
+        }
     }
 
     public addAction<T extends Action>(action: T): BaseActionBuilder<T, SceneBuilder> {
-        return new BaseActionBuilder<T, SceneBuilder>(action, this);
+        return new BaseActionBuilder<T, SceneBuilder>(this, action);
     }
 
     public addGatewayAction(): GatewayActionBuilder<SceneBuilder> {
@@ -68,6 +71,9 @@ export class SceneBuilder extends BaseBuilder implements ItemContainingBuilder, 
 
     addItemToBuilder(item: InGameItem): void {
         this.Scene.Items.push(item);
+        if (item.ID) {
+            this.GameBuilder.IdGeneratorService.addItemId(item);
+        }
     }
 
     public addItem<T extends InGameItem>(item: T): ItemBuilder<T, SceneBuilder> {
@@ -96,6 +102,9 @@ export class SceneBuilder extends BaseBuilder implements ItemContainingBuilder, 
 
     public finish(): GameBuilder {
         this.Game.Stage.addScene(this.Scene);
+        if (this.Scene.ID) {
+            this.GameBuilder.IdGeneratorService.addSceneId(this.Scene);
+        }
         return this.GameBuilder;
     }
 }

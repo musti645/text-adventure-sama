@@ -10,12 +10,6 @@ import { ItemYieldingAction } from '../models/actions/item-yielding-action.model
  * Assigns IDs to Objects by counting the amount of distinct types
  */
 export class IDGeneratorService {
-    // What happens if the generator comes across an id, after having assigned the same one already?
-    // Solution 1: Track the IDs assigned by the generator and track the conflicts and, once having finished,
-    // reitare through all elements get the ones with the conflicted IDs and replace them accordingly with non assigned ones
-    // Solution 2: iterate through all objects once, gathering the IDs and types, then reiterate once more and assign the IDs
-    // Solution 3: Let the Builders Keep Track of the IDs
-    // Solution 4: Use the IDGenerator in the Builders to assign IDs on the go
     private typeArray: TypeCountContainer[] = [];
 
     public generateIDs(game: Game): void {
@@ -24,7 +18,7 @@ export class IDGeneratorService {
     }
 
 
-    private processScenes(scenes: Scene[]): void {
+    protected processScenes(scenes: Scene[]): void {
         scenes.forEach(element => {
             if (!element.getID) {
                 element.setID(this.getIdFromTypeName(element.constructor.name));
@@ -37,7 +31,7 @@ export class IDGeneratorService {
         });
     }
 
-    private processActions(actions: Action[]): void {
+    protected processActions(actions: Action[]): void {
         actions.forEach(element => {
             if (!element.getID) {
                 element.setID(this.getIdFromTypeName(element.constructor.name));
@@ -54,7 +48,7 @@ export class IDGeneratorService {
         });
     }
 
-    private processItems(items: InGameItem[]): void {
+    protected processItems(items: InGameItem[]): void {
         items.forEach(element => {
             if (!element.getID()) {
                 element.setID(this.getIdFromTypeName(element.constructor.name));
@@ -64,7 +58,7 @@ export class IDGeneratorService {
         });
     }
 
-    private getIdFromTypeName(name: string): number {
+    protected getIdFromTypeName(name: string): number {
         const index = this.typeArray.findIndex(element => {
             return element.Name === name;
         });
@@ -77,10 +71,22 @@ export class IDGeneratorService {
         return this.createTypeCountContainer(name).getAndIncrementCount();
     }
 
+    public addItemId(item: InGameItem): void {
+        this.setUsedIdForTypeName(item.constructor.name, item.getID());
+    }
+
+    public addSceneId(scene: Scene): void {
+        this.setUsedIdForTypeName(scene.constructor.name, scene.getID());
+    }
+
+    public addActionId(action: Action): void {
+        this.setUsedIdForTypeName(action.constructor.name, action.getID());
+    }
+
     /**
      * Add the passed id to the corresponding typeNameContainer's usedID Array
      */
-    private setUsedIdForTypeName(name: string, id: number): void {
+    protected setUsedIdForTypeName(name: string, id: number): void {
         const index = this.typeArray.findIndex(element => {
             return element.Name === name;
         });
@@ -92,7 +98,7 @@ export class IDGeneratorService {
         this.createTypeCountContainer(name).addUsedID(id);
     }
 
-    private createTypeCountContainer(name: string): TypeCountContainer{
+    protected createTypeCountContainer(name: string): TypeCountContainer {
         const container = new TypeCountContainer(name);
         this.typeArray.push(container);
         return container;
@@ -121,10 +127,17 @@ class TypeCountContainer {
     }
 
     addUsedID(usedId: number) {
+        if (this.isIdUsed(usedId)) {
+            throw new EvalError('Id is already being used.');
+        }
         this.UsedIDs.push(usedId);
     }
 
     isCurrentCountUsed(): boolean {
         return this.UsedIDs.filter(element => element === this.Count).length > 0;
+    }
+
+    isIdUsed(id: number): boolean {
+        return !(!this.UsedIDs.find(element => element === id));
     }
 }
