@@ -21,7 +21,7 @@ export class ItemYieldingAction extends OneTimeAction {
             return this.ResponseAfterUse;
         }
 
-        ItemEventService.Instance.yieldItem(new ItemYieldingActionEvent(this));
+        ItemEventService.getInstance().yieldItem(new ItemYieldingActionEvent(this));
 
         this.WasTriggered = true;
         return this.Response;

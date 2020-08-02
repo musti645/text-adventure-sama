@@ -5,12 +5,20 @@ import { Action } from '../models/actions/action.model';
 import { ItemRemovingAction } from '../models/actions/item-removing-action.model';
 import { ItemConsumingAction } from '../models/actions/item-consuming-action.model';
 import { ItemYieldingAction } from '../models/actions/item-yielding-action.model';
+import { Injectable } from '@angular/core';
 
 /**
  * Assigns IDs to Objects by counting the amount of distinct types
  */
+@Injectable({
+    providedIn: 'root'
+})
 export class IDGeneratorService {
     private typeArray: TypeCountContainer[] = [];
+
+    constructor() {
+
+    }
 
     public generateIDs(game: Game): void {
         this.processScenes(game.Stage.getScenes());
@@ -104,9 +112,13 @@ export class IDGeneratorService {
         return container;
     }
 
+    protected getTypeCountContainers(): TypeCountContainer[] {
+        return this.typeArray;
+    }
+
 }
 
-class TypeCountContainer {
+export class TypeCountContainer {
     public Name: string;
     public Count: number;
     // keep track of the used ids for each type
@@ -120,9 +132,10 @@ class TypeCountContainer {
 
     getAndIncrementCount(): number {
         this.Count++;
-        while (this.isCurrentCountUsed) {
+        while (this.isCurrentCountUsed()) {
             this.Count++;
         }
+        this.addUsedID(this.Count);
         return this.Count;
     }
 

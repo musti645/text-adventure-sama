@@ -1,6 +1,10 @@
 import { TestBed, async } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
+import { SceneEventService } from './services/scene-event.service';
+import { ItemEventService } from './services/item-event.service';
+import { InputParserService } from './services/input-parser.service';
+import { IDGeneratorService } from './services/id-generator.service';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -20,16 +24,9 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'text-adventure-sama'`, () => {
+  it(`should have as title 'Text-Adventure-Sama'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('text-adventure-sama');
-  });
-
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('text-adventure-sama app is running!');
+    expect(app.title).toEqual('Text-Adventure-Sama');
   });
 });

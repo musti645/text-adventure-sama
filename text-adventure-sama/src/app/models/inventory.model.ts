@@ -12,9 +12,9 @@ export class Inventory implements IItemConsumingEventListener,
     constructor() {
         this.Items = [];
 
-        ItemEventService.Instance.ItemYieldingActionEvent$.subscribe(this.OnItemYield);
-        ItemEventService.Instance.ItemRemovingActionEvent$.subscribe(this.OnItemRemove);
-        ItemEventService.Instance.ItemConsumingActionEvent$.subscribe(this.OnItemConsume);
+        ItemEventService.getInstance().ItemYieldingActionEvent$.subscribe(this.OnItemYield);
+        ItemEventService.getInstance().ItemRemovingActionEvent$.subscribe(this.OnItemRemove);
+        ItemEventService.getInstance().ItemConsumingActionEvent$.subscribe(this.OnItemConsume);
     }
 
     OnItemYield(event: ItemYieldingActionEvent) {

@@ -19,7 +19,7 @@ export class ItemRemovingAction extends OneTimeAction {
             return this.ResponseAfterUse;
         }
 
-        ItemEventService.Instance.removeItem(new ItemRemovingActionEvent(this));
+        ItemEventService.getInstance().removeItem(new ItemRemovingActionEvent(this));
 
         this.WasTriggered = true;
         return this.Response;

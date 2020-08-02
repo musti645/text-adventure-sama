@@ -8,7 +8,7 @@ describe('TextAdventureComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TextAdventureComponent ]
+      declarations: [ TextAdventureComponent ],
     })
     .compileComponents();
   }));

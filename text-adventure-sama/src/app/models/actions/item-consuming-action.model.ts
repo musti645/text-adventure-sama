@@ -19,7 +19,7 @@ export class ItemConsumingAction extends OneTimeAction {
             return this.ResponseAfterUse;
         }
 
-        ItemEventService.Instance.consumeItem(new ItemConsumingActionEvent(this));
+        ItemEventService.getInstance().consumeItem(new ItemConsumingActionEvent(this));
 
         this.WasTriggered = true;
         return this.Response;

@@ -16,7 +16,7 @@ export class GatewayAction extends Action {
 
     public trigger(): string {
         // trigger event change
-        SceneEventService.Instance.changeScene(new GatewayActionEvent(this));
+        SceneEventService.getInstance().changeScene(new GatewayActionEvent(this));
         return this.Response;
     }
 

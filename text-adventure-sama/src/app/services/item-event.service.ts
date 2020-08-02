@@ -7,16 +7,18 @@ import { Injectable } from '@angular/core';
 /**
  * Singleton Service handling Item Events
  */
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class ItemEventService implements IItemRemovingEventService,
     IItemYieldingEventService,
     IItemConsumingEventService {
 
-    static Instance: ItemEventService;
+    private constructor() {
 
-    constructor() {
-        ItemEventService.Instance = this;
     }
+
+    private static Instance: ItemEventService;
 
     private ItemConsumingActionEventSource = new Subject<ItemConsumingActionEvent>();
     private ItemYieldingActionEventSource = new Subject<ItemYieldingActionEvent>();
@@ -26,6 +28,13 @@ export class ItemEventService implements IItemRemovingEventService,
     public ItemYieldingActionEvent$ = this.ItemYieldingActionEventSource.asObservable();
     public ItemRemovingActionEvent$ = this.ItemRemovingActionEventSource.asObservable();
 
+    public static getInstance(): ItemEventService {
+        if (!ItemEventService.Instance) {
+            ItemEventService.Instance = new ItemEventService();
+        }
+
+        return ItemEventService.Instance;
+    }
 
     public consumeItem(event: ItemConsumingActionEvent) {
         this.ItemConsumingActionEventSource.next(event);

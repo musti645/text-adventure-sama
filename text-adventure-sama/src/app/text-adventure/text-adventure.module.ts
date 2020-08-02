@@ -14,6 +14,6 @@ import { TextAdventureComponent } from './text-adventure.component';
   ],
   exports: [
     TextAdventureComponent
-  ]
+  ],
 })
 export class TextAdventureModule { }

@@ -4,10 +4,6 @@ import { TextInputType } from '../models/other/text-input.enum';
 import { TextInput } from '../models/other/text-input.model';
 import { Game } from '../models/game.model';
 import { GameBuilder } from '../builder/game.builder';
-import { Builder } from 'protractor';
-import { GatewayAction } from '../models/actions/gateway-action.model';
-import { SceneEventService } from '../services/scene-event.service';
-import { ItemEventService } from '../services/item-event.service';
 
 /**
  * Main Component, that contains the input and output of the game.
