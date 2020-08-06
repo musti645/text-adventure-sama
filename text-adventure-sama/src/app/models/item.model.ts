@@ -1,7 +1,7 @@
 /**
  * This class represents an Item in the game.
  */
-export abstract class InGameItem {
+export class InGameItem {
     ID: number;
     Name: string;
     Description: string;

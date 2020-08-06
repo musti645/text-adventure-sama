@@ -28,7 +28,7 @@ export class IDGeneratorService {
 
     protected processScenes(scenes: Scene[]): void {
         scenes.forEach(element => {
-            if (!element.getID) {
+            if (!element.getID()) {
                 element.setID(this.getIdFromTypeName(element.constructor.name));
             } else {
                 this.setUsedIdForTypeName(element.constructor.name, element.getID());
@@ -41,7 +41,7 @@ export class IDGeneratorService {
 
     protected processActions(actions: Action[]): void {
         actions.forEach(element => {
-            if (!element.getID) {
+            if (!element.getID()) {
                 element.setID(this.getIdFromTypeName(element.constructor.name));
             } else {
                 this.setUsedIdForTypeName(element.constructor.name, element.getID());
@@ -101,6 +101,7 @@ export class IDGeneratorService {
 
         if (index !== -1) {
             this.typeArray[index].addUsedID(id);
+            return;
         }
 
         this.createTypeCountContainer(name).addUsedID(id);
