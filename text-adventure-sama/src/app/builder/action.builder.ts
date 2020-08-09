@@ -49,8 +49,8 @@ export class BaseActionBuilder<T extends Action, ReturnBuilderType extends Actio
 export class GatewayActionBuilder<ReturnBuilderType extends ActionContainingBuilder>
     extends BaseActionBuilder<GatewayAction, ReturnBuilderType> {
 
-    constructor(builder: ReturnBuilderType, id?: number) {
-        super(builder, new GatewayAction(id));
+    constructor(builder: ReturnBuilderType) {
+        super(builder, new GatewayAction());
     }
 
     public setTargetSceneId(id?: number): this {
@@ -76,16 +76,16 @@ export class GatewayActionBuilder<ReturnBuilderType extends ActionContainingBuil
 export class ItemConsumingActionBuilder<ReturnBuilderType extends ActionContainingBuilder>
     extends BaseActionBuilder<ItemConsumingAction, ReturnBuilderType> implements ItemContainingBuilder {
 
-    constructor(builder: ReturnBuilderType, id?: number) {
-        super(builder, new ItemConsumingAction(id));
+    constructor(builder: ReturnBuilderType) {
+        super(builder, new ItemConsumingAction());
     }
 
     addItemToBuilder(item: InGameItem): void {
         this.Action.Item = item;
     }
 
-    public addItem<T extends InGameItem>(item: T): ItemBuilder<T, ItemContainingBuilder> {
-        return new ItemBuilder<T, ItemContainingBuilder>(item, this);
+    public addItem(item?: InGameItem): ItemBuilder<ItemConsumingActionBuilder<ReturnBuilderType>> {
+        return new ItemBuilder<ItemConsumingActionBuilder<ReturnBuilderType>>(this, item);
     }
 
 }
@@ -94,16 +94,16 @@ export class ItemConsumingActionBuilder<ReturnBuilderType extends ActionContaini
 export class ItemRemovingActionBuilder<ReturnBuilderType extends ActionContainingBuilder>
     extends BaseActionBuilder<ItemRemovingAction, ReturnBuilderType> implements ItemContainingBuilder {
 
-    constructor(builder: ReturnBuilderType, id?: number) {
-        super(builder, new ItemRemovingAction(id));
+    constructor(builder: ReturnBuilderType) {
+        super(builder, new ItemRemovingAction());
     }
 
     addItemToBuilder(item: InGameItem): void {
         this.Action.Item = item;
     }
 
-    public addItem<T extends InGameItem>(item: T): ItemBuilder<T, ItemContainingBuilder> {
-        return new ItemBuilder<T, ItemContainingBuilder>(item, this);
+    public addItem(item?: InGameItem): ItemBuilder<ItemRemovingActionBuilder<ReturnBuilderType>> {
+        return new ItemBuilder<ItemRemovingActionBuilder<ReturnBuilderType>>(this, item);
     }
 
 }
@@ -112,16 +112,16 @@ export class ItemRemovingActionBuilder<ReturnBuilderType extends ActionContainin
 export class ItemYieldingActionBuilder<ReturnBuilderType extends ActionContainingBuilder>
     extends BaseActionBuilder<ItemYieldingAction, ReturnBuilderType> implements ItemContainingBuilder {
 
-    constructor(builder: ReturnBuilderType, id?: number) {
-        super(builder, new ItemYieldingAction(id));
+    constructor(builder: ReturnBuilderType) {
+        super(builder, new ItemYieldingAction());
     }
 
     addItemToBuilder(item: InGameItem): void {
         this.Action.Item = item;
     }
 
-    public addItem<T extends InGameItem>(item: T): ItemBuilder<T, ItemContainingBuilder> {
-        return new ItemBuilder<T, ItemContainingBuilder>(item, this);
+    public addItem(item?: InGameItem): ItemBuilder<ItemYieldingActionBuilder<ReturnBuilderType>> {
+        return new ItemBuilder<ItemYieldingActionBuilder<ReturnBuilderType>>(this, item);
     }
 
     public setAmountOfItems(amount: number): this {
@@ -144,8 +144,8 @@ export class ItemYieldingActionBuilder<ReturnBuilderType extends ActionContainin
 export class MultiTimeActionBuilder<ReturnBuilderType extends ActionContainingBuilder>
     extends BaseActionBuilder<MultiTimeAction, ReturnBuilderType> {
 
-    constructor(builder: ReturnBuilderType, id?: number) {
-        super(builder, new MultiTimeAction(id));
+    constructor(builder: ReturnBuilderType) {
+        super(builder, new MultiTimeAction());
     }
 
     public setUsagesLeft(count: number): this {
@@ -197,8 +197,8 @@ export class MultiTimeActionBuilder<ReturnBuilderType extends ActionContainingBu
 export class OneTimeActionBuilder<ReturnBuilderType extends ActionContainingBuilder>
     extends BaseActionBuilder<OneTimeAction, ReturnBuilderType> {
 
-    constructor(builder: ReturnBuilderType, id?: number) {
-        super(builder, new OneTimeAction(id));
+    constructor(builder: ReturnBuilderType) {
+        super(builder, new OneTimeAction());
     }
 
     public setWasTrigered(wasTriggered: boolean): this {
@@ -221,8 +221,8 @@ export class OneTimeActionBuilder<ReturnBuilderType extends ActionContainingBuil
 export class RandomResponseActionBuilder<ReturnBuilderType extends ActionContainingBuilder>
     extends BaseActionBuilder<RandomResponseAction, ReturnBuilderType> {
 
-    constructor(builder: ReturnBuilderType, id?: number) {
-        super(builder, new RandomResponseAction(id));
+    constructor(builder: ReturnBuilderType) {
+        super(builder, new RandomResponseAction());
     }
 
     public setResponses(responses: string[]): this {

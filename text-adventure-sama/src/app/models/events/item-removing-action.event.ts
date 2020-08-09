@@ -17,9 +17,9 @@ export class ItemRemovingActionEvent {
 }
 
 export interface IItemRemovingEventService {
-    removeItem(event: ItemRemovingActionEvent);
+    removeItem(event: ItemRemovingActionEvent): void;
 }
 
 export interface IItemRemovingEventListener {
-    OnItemRemove(event: ItemRemovingActionEvent);
+    OnItemRemove(event: ItemRemovingActionEvent): void;
 }

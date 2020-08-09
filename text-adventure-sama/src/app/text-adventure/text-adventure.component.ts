@@ -4,6 +4,7 @@ import { TextInputType } from '../models/other/text-input.enum';
 import { TextInput } from '../models/other/text-input.model';
 import { Game } from '../models/game.model';
 import { GameBuilder } from '../builder/game.builder';
+import { InGameItem } from '../models/Item.model';
 
 /**
  * Main Component, that contains the input and output of the game.
@@ -99,6 +100,17 @@ export class TextAdventureComponent implements OnInit {
         .setTrigger('leave')
         .setResponse('You walk out the door through which you came in. You find yourself infront of the shed.')
         .setTargetSceneId(1)
+        .finish()
+      .addItemYieldingAction()
+        .setAmountOfItems(1)
+        .setResetItemUsagesToMaximum(true)
+        .setResponse('You find a rusty key of some sorts on the ground.')
+        .addItem()
+          .setName('Key')
+          .setDescription('A rusty key.')
+          .setMaximumUsages(1)
+          .setUsagesLeft(1)
+          .finish()
         .finish()
       .finish();
 

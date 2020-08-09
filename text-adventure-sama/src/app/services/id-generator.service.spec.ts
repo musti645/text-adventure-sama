@@ -8,6 +8,9 @@ import { Injectable } from '@angular/core';
 import { SceneEventService } from './scene-event.service';
 import { GatewayAction } from '../models/actions/gateway-action.model';
 import { MultiTimeAction } from '../models/actions/multi-time-action.model';
+import { ItemYieldingAction } from '../models/actions/item-yielding-action.model';
+import { ItemRemovingAction } from '../models/actions/item-removing-action.model';
+import { ItemConsumingAction } from '../models/actions/item-consuming-action.model';
 
 describe('IDGeneratorService', () => {
   beforeEach(() => TestBed.configureTestingModule({
@@ -48,7 +51,7 @@ describe('IDGeneratorService', () => {
 
   });
 
-  it('should set SceneID, InGameItemID and ActionID to 1', () => {
+  it('should set SceneID and InGameItemID to 1', () => {
     const service: IDGeneratorServiceChild = TestBed.inject(IDGeneratorServiceChild);
 
     const scenes: Scene[] = [];
@@ -63,11 +66,10 @@ describe('IDGeneratorService', () => {
 
     const resultScene = scenes[0];
     expect(resultScene.getID()).toBe(1);
-    expect(resultScene.Actions[0].getID()).toBe(1);
     expect(resultScene.Items[0].getID());
 
-    expect(service.getTypeCountContainers().length).toBe(3);
-    expect(service.getTypeCountContainers().filter(e => e.UsedIDs.length > 0).length).toBe(3);
+    expect(service.getTypeCountContainers().length).toBe(2);
+    expect(service.getTypeCountContainers().filter(e => e.UsedIDs.length > 0).length).toBe(2);
   });
 
   it('should set SceneID for multiple unset Scenes', () => {
@@ -129,49 +131,53 @@ describe('IDGeneratorService', () => {
     expect(service.getTypeCountContainers().findIndex(e => e.UsedIDs.length > 0)).toBeGreaterThanOrEqual(0);
   });
 
-  it('should set the ActionID to 1', () => {
+  it('should set the ItemID of ItemYieldingAction to 1', () => {
     const service: IDGeneratorServiceChild = TestBed.inject(IDGeneratorServiceChild);
     const actions: Action[] = [];
+    const itemYieldingAction = new ItemYieldingAction();
+    itemYieldingAction.Item = new InGameItem();
+
     // don't set id
-    actions.push(new GatewayAction());
+    actions.push(itemYieldingAction);
 
     service.processActions(actions);
 
     expect(service.getTypeCountContainers().length).toBe(1);
     expect(service.getTypeCountContainers().findIndex(e => e.UsedIDs.length > 0)).toBe(0);
-    expect(actions[0].getID()).toBe(1);
+    expect((actions[0] as ItemYieldingAction).Item.getID()).toBe(1);
   });
 
-  it('should set not set the ActionID', () => {
+  it('should not set the ItemID of ItemConsumingAction', () => {
     const service: IDGeneratorServiceChild = TestBed.inject(IDGeneratorServiceChild);
     const actions: Action[] = [];
+    const itemConsumingAction = new ItemConsumingAction();
+    itemConsumingAction.Item = new InGameItem();
+
     // don't set id
-    actions.push(new GatewayAction(2));
+    actions.push(itemConsumingAction);
 
     service.processActions(actions);
 
-    expect(actions[0].getID()).toBe(2);
-    expect(service.getTypeCountContainers().length).toBe(1);
-    expect(service.getTypeCountContainers().findIndex(e => e.UsedIDs.length > 0)).toBeGreaterThanOrEqual(0);
+    expect(service.getTypeCountContainers().length).toBe(0);
+    expect(service.getTypeCountContainers().findIndex(e => e.UsedIDs.length > 0)).toBe(-1);
+    expect((actions[0] as ItemConsumingAction).Item.getID()).toBe(undefined);
   });
 
-  //TODO: is this legit? Shouldn't they share the same typecount container?
-  it('should set a different ID for each type of action', () => {
+  it('should not set the ItemID of ItemRemovingAction', () => {
     const service: IDGeneratorServiceChild = TestBed.inject(IDGeneratorServiceChild);
     const actions: Action[] = [];
+    const itemRemovingAction = new ItemRemovingAction();
+    itemRemovingAction.Item = new InGameItem();
+
     // don't set id
-    actions.push(new GatewayAction());
-    actions.push(new MultiTimeAction());
+    actions.push(itemRemovingAction);
 
     service.processActions(actions);
 
-    actions.forEach((element) => {
-      expect(element.getID()).toBe(1);
-    });
-    expect(service.getTypeCountContainers().length).toBe(2);
-    expect(service.getTypeCountContainers().findIndex(e => e.UsedIDs.length > 0)).toBeGreaterThanOrEqual(0);
+    expect(service.getTypeCountContainers().length).toBe(0);
+    expect(service.getTypeCountContainers().findIndex(e => e.UsedIDs.length > 0)).toBe(-1);
+    expect((actions[0] as ItemRemovingAction).Item.getID()).toBe(undefined);
   });
-
 });
 
 @Injectable()

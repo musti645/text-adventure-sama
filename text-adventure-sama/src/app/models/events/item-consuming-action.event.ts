@@ -19,10 +19,10 @@ export class ItemConsumingActionEvent {
 
 
 export interface IItemConsumingEventService {
-    consumeItem(event: ItemConsumingActionEvent);
+    consumeItem(event: ItemConsumingActionEvent): void;
 }
 
 
 export interface IItemConsumingEventListener {
-    OnItemConsume(event: ItemConsumingActionEvent);
+    OnItemConsume(event: ItemConsumingActionEvent): void;
 }

@@ -18,8 +18,8 @@ export class InventoryBuilder extends BaseBuilder implements ItemContainingBuild
         this.Inventory = this.Game.Inventory;
     }
 
-    public addItem<T extends InGameItem>(item: T): ItemBuilder<T, InventoryBuilder> {
-        return new ItemBuilder<T, InventoryBuilder>(item, this);
+    public addItem(item?: InGameItem): ItemBuilder<InventoryBuilder> {
+        return new ItemBuilder<InventoryBuilder>(this, item);
     }
 
     addItemToBuilder(item: InGameItem) {

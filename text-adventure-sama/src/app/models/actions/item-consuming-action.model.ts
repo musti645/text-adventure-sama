@@ -2,6 +2,7 @@ import { OneTimeAction } from './one-time-action.model';
 import { InGameItem } from '../Item.model';
 import { ItemConsumingActionEvent } from '../events/item-consuming-action.event';
 import { ItemEventService } from 'src/app/services/item-event.service';
+import { InteractionType } from '../interactions/interaction-type.enum';
 
 /**
  * An ItemConsumingAction is only triggered once and uses an Item (once) in the players inventory.
@@ -10,8 +11,9 @@ import { ItemEventService } from 'src/app/services/item-event.service';
 export class ItemConsumingAction extends OneTimeAction {
     Item: InGameItem;
 
-    constructor(id?: number) {
-        super(id);
+    constructor() {
+        super();
+        this.InteractionType = InteractionType.USE;
     }
 
     public trigger(): string {

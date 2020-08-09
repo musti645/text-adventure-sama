@@ -10,8 +10,8 @@ export class GatewayAction extends Action {
     TargetSceneName: string;
 
 
-    constructor(id?: number) {
-        super(id);
+    constructor() {
+        super();
     }
 
     public trigger(): string {

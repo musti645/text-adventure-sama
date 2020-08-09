@@ -36,15 +36,15 @@ export class ItemEventService implements IItemRemovingEventService,
         return ItemEventService.Instance;
     }
 
-    public consumeItem(event: ItemConsumingActionEvent) {
+    public consumeItem(event: ItemConsumingActionEvent): void {
         this.ItemConsumingActionEventSource.next(event);
     }
 
-    public yieldItem(event: ItemYieldingActionEvent) {
+    public yieldItem(event: ItemYieldingActionEvent): void {
         this.ItemYieldingActionEventSource.next(event);
     }
 
-    public removeItem(event: ItemRemovingActionEvent) {
+    public removeItem(event: ItemRemovingActionEvent): void {
         this.ItemRemovingActionEventSource.next(event);
     }
 

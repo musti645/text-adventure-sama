@@ -21,9 +21,9 @@ export class ItemYieldingActionEvent {
 
 
 export interface IItemYieldingEventService {
-    yieldItem(event: ItemYieldingActionEvent);
+    yieldItem(event: ItemYieldingActionEvent): void;
 }
 
 export interface IItemYieldingEventListener {
-    OnItemYield(event: ItemYieldingActionEvent);
+    OnItemYield(event: ItemYieldingActionEvent): void;
 }

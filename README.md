@@ -84,3 +84,5 @@ input -> InputParserService
 The idea behind the ID Generator is to be able to outsource the ID assignment to an automated service.
 It goes ahead and holds a counter for each type of object, that it comes across and uses that
 counter to return the new ID of the created object. It is also supposed to track already assigned IDs.
+
+Actions don't need IDs, since they are triggered via their - you guessed it - Trigger and InteractionType.

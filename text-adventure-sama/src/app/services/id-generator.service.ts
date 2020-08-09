@@ -41,15 +41,7 @@ export class IDGeneratorService {
 
     protected processActions(actions: Action[]): void {
         actions.forEach(element => {
-            if (!element.getID()) {
-                element.setID(this.getIdFromTypeName(element.constructor.name));
-            } else {
-                this.setUsedIdForTypeName(element.constructor.name, element.getID());
-            }
-
-            if ((element instanceof ItemRemovingAction ||
-                element instanceof ItemConsumingAction ||
-                element instanceof ItemYieldingAction)
+            if ((element instanceof ItemYieldingAction)
                 && !element.Item.getID()) {
                 element.Item.setID(this.getIdFromTypeName(element.constructor.name));
             }
@@ -87,8 +79,8 @@ export class IDGeneratorService {
         this.setUsedIdForTypeName(scene.constructor.name, scene.getID());
     }
 
-    public addActionId(action: Action): void {
-        this.setUsedIdForTypeName(action.constructor.name, action.getID());
+    public addActionItemId(action: ItemYieldingAction): void {
+        this.setUsedIdForTypeName(action.Item.constructor.name, action.Item.getID());
     }
 
     /**

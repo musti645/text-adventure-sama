@@ -11,8 +11,8 @@ export class MultiTimeAction extends Action {
     Responses: string[];
 
 
-    constructor(id?: number) {
-        super(id);
+    constructor() {
+        super();
     }
 
     public trigger(): string {

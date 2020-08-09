@@ -2,6 +2,7 @@ import { OneTimeAction } from './one-time-action.model';
 import { InGameItem } from '../Item.model';
 import { ItemRemovingActionEvent } from '../events/item-removing-action.event';
 import { ItemEventService } from 'src/app/services/item-event.service';
+import { InteractionType } from '../interactions/interaction-type.enum';
 
 /**
  * An ItemRemovingAction is only triggered once and removes an Item out of the players inventory without using it.
@@ -10,8 +11,9 @@ import { ItemEventService } from 'src/app/services/item-event.service';
 export class ItemRemovingAction extends OneTimeAction {
     Item: InGameItem;
 
-    constructor(id?: number) {
-        super(id);
+    constructor() {
+        super();
+        this.InteractionType = InteractionType.USE;
     }
 
     public trigger(): string {

@@ -2,11 +2,11 @@ import { InGameItem } from '../models/Item.model';
 import { ItemContainingBuilder } from './interfaces/item-containing.builder';
 import { BaseBuilder } from './base.builder';
 
-export class ItemBuilder<T extends InGameItem, ReturnBuilderType extends ItemContainingBuilder> extends BaseBuilder {
-    private Item: T;
+export class ItemBuilder<ReturnBuilderType extends ItemContainingBuilder> extends BaseBuilder {
+    private Item: InGameItem;
     private Builder: ReturnBuilderType;
 
-    constructor(item: T, builder: ReturnBuilderType) {
+    constructor(builder: ReturnBuilderType, item: InGameItem = new InGameItem()) {
         super();
         this.Item = item;
         this.Builder = builder;

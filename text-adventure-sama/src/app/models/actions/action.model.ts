@@ -1,28 +1,19 @@
 import { InteractionType } from '../interactions/interaction-type.enum';
 
 /**
- * Abstract Base class for all actions
+ * Abstract Base class for all actions.
  */
+// Note: Actions don't have IDs, since they are triggered via their InteractionType and their Trigger
 export abstract class Action {
-    ID: number;
     Trigger: string;
     Response: string;
     WrongInteractionTypeResponse: string;
     InteractionType: InteractionType;
 
-    constructor(id?: number) {
-        this.ID = id;
+    constructor() {
     }
 
     public abstract trigger(): string;
 
     public abstract reset(): void;
-
-    public setID(id: number): void {
-        this.ID = id;
-    }
-
-    public getID(): number {
-        return this.ID;
-    }
 }

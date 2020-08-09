@@ -17,6 +17,7 @@ import {
     OneTimeActionBuilder,
     RandomResponseActionBuilder
 } from './action.builder';
+import { ItemYieldingAction } from '../models/actions/item-yielding-action.model';
 
 export class SceneBuilder extends BaseBuilder implements ItemContainingBuilder, ActionContainingBuilder {
     private GameBuilder: GameBuilder;
@@ -32,6 +33,10 @@ export class SceneBuilder extends BaseBuilder implements ItemContainingBuilder, 
 
     addActionToBuilder(action: Action): void {
         this.Scene.Actions.push(action);
+
+        if (action instanceof ItemYieldingAction) {
+            this.GameBuilder.IdGeneratorService.addActionItemId(action as ItemYieldingAction);
+        }
     }
 
     public addAction<T extends Action>(action: T): BaseActionBuilder<T, SceneBuilder> {
@@ -68,10 +73,13 @@ export class SceneBuilder extends BaseBuilder implements ItemContainingBuilder, 
 
     addItemToBuilder(item: InGameItem): void {
         this.Scene.Items.push(item);
+        if (item.ID) {
+            this.GameBuilder.IdGeneratorService.addItemId(item);
+        }
     }
 
-    public addItem<T extends InGameItem>(item: T): ItemBuilder<T, SceneBuilder> {
-        return new ItemBuilder<T, SceneBuilder>(item, this);
+    public addItem(item?: InGameItem): ItemBuilder<SceneBuilder> {
+        return new ItemBuilder<SceneBuilder>(this, item);
     }
 
     public setName(name: string): this {

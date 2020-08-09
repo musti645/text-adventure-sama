@@ -7,8 +7,8 @@ import { Action } from './action.model';
 export class RandomResponseAction extends Action {
     Responses: string[];
 
-    constructor(id?: number) {
-        super(id);
+    constructor() {
+        super();
     }
 
     public trigger(): string {
