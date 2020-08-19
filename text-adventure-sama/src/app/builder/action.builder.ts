@@ -71,6 +71,7 @@ export class GatewayActionBuilder<ReturnBuilderType extends ActionContainingBuil
         return this;
     }
 
+    // TODO: check that either scene name or scene id was set
 }
 
 export class ItemConsumingActionBuilder<ReturnBuilderType extends ActionContainingBuilder>
@@ -88,6 +89,7 @@ export class ItemConsumingActionBuilder<ReturnBuilderType extends ActionContaini
         return new ItemBuilder<ItemConsumingActionBuilder<ReturnBuilderType>>(this, item);
     }
 
+    // TODO: check that item was attached upon finish
 }
 
 
@@ -105,6 +107,8 @@ export class ItemRemovingActionBuilder<ReturnBuilderType extends ActionContainin
     public addItem(item?: InGameItem): ItemBuilder<ItemRemovingActionBuilder<ReturnBuilderType>> {
         return new ItemBuilder<ItemRemovingActionBuilder<ReturnBuilderType>>(this, item);
     }
+
+    // TODO: check that item was attached upon finish
 
 }
 
@@ -138,6 +142,7 @@ export class ItemYieldingActionBuilder<ReturnBuilderType extends ActionContainin
         return this;
     }
 
+    // TODO: check that item was attached upon finish
 }
 
 

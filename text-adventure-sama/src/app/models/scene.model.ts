@@ -11,6 +11,7 @@ export class Scene {
 
     ActionNotRecognizedResponse: string;
     ItemNotFoundResponse: string;
+    InvalidInputResponse: string;
 
     Items: InGameItem[];
     Actions: Action[];
