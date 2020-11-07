@@ -7,7 +7,7 @@ import { IGatewayActionEventListener, GatewayActionEvent } from '../models/event
  * The Stage contains all scenes as well as the current scene.
  * It also manages the transition between scenes.
  */
-export class Stage implements IGatewayActionEventListener{
+export class Stage implements IGatewayActionEventListener {
     private Scenes: Scene[];
     private CurrentScene: Scene;
     // path the user took through the scenes
@@ -25,6 +25,9 @@ export class Stage implements IGatewayActionEventListener{
     }
 
     public getCurrentScene(): Scene {
+        if (!this.CurrentScene) {
+            this.CurrentScene = this.Scenes[0];
+        }
         return this.CurrentScene;
     }
 

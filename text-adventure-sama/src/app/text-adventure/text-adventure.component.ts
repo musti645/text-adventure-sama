@@ -5,6 +5,7 @@ import { TextInput } from '../models/other/text-input.model';
 import { Game } from '../models/game.model';
 import { GameBuilder } from '../builder/game.builder';
 import { InGameItem } from '../models/Item.model';
+import { InputParserService } from '../services/input-parser.service';
 
 /**
  * Main Component, that contains the input and output of the game.
@@ -18,7 +19,7 @@ export class TextAdventureComponent implements OnInit {
   @ViewChild('input', { static: true }) inputElement: ElementRef;
 
   OutputArray: TextInput[] = [];
-  IsLoading: boolean;
+  IsLoading = false;
 
   Game: Game;
   GameBuilder: GameBuilder;
@@ -34,12 +35,14 @@ export class TextAdventureComponent implements OnInit {
     }
   );
 
-  constructor() {
+  constructor(private inputParserService: InputParserService) {
   }
 
   ngOnInit() {
     this.startLoading();
     this.Game = this.buildGame();
+    this.startGame();
+    this.stopLoading();
   }
 
   OnSubmit() {
@@ -49,9 +52,11 @@ export class TextAdventureComponent implements OnInit {
       this.stopLoading();
       return;
     }
-    this.OutputArray.push(new TextInput(inputString, TextInputType.UserInput));
+    this.printInput(inputString);
     this.userInput.setValue('');
-    // todo: parse inputString
+
+    this.printOutput(this.inputParserService.parseInput(inputString));
+
     this.stopLoading();
   }
 
@@ -76,14 +81,30 @@ export class TextAdventureComponent implements OnInit {
     });
   }
 
+  private startGame(){
+    this.printOutput(this.Game.Title);
+    this.printOutput(this.Game.Introduction);
+  }
+
+  private printOutput(output: string){
+    this.OutputArray.push(new TextInput(output, TextInputType.Output));
+  }
+
+  private printInput(input: string){
+    this.OutputArray.push(new TextInput(input, TextInputType.UserInput));
+  }
+
   private buildGame(): Game {
-    const builder = new GameBuilder();
+    const builder = new GameBuilder()
+    .setTitle('-- Test Adventure --')
+    .setIntroduction('You\'ve lost track of where you are while hiking in the woods. Your battery is dead and it\'s going to get dark outside soon. You better find shelter for the night. \r\n'
+    + 'While looking for signs of civilization, such as roads or lights, you come across a small hut...');
 
     builder.addScene(1)
       .setName('Shed in the Woods')
       .setDescription('A cozy looking shed surrounded by a lot of trees.')
       .setActionNotRecognizedResponse('Doing that in a forrest? You don\'t think so.')
-      .setItemNotFoundResponse('There, beneath the leafs and sticks, you seem to have spotted something. As you get closer, you realize, that it was a useless rock.')
+      .setItemNotFoundResponse('There, beneath the leafs and sticks, you seem to have spotted something. As you get closer, you realize that it was a useless rock.')
         .addGatewayAction()
         .setTargetSceneId(2)
         .setTrigger('go inside')

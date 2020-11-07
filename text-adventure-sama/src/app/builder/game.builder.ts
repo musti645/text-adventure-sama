@@ -27,8 +27,19 @@ export class GameBuilder extends BaseBuilder {
         return new SceneBuilder(this, this.Game, id);
     }
 
-    public reset() {
+    public setTitle(title: string): GameBuilder {
+        this.Game.Title = title;
+        return this;
+    }
+
+    public setIntroduction(intro: string): GameBuilder {
+        this.Game.Introduction = intro;
+        return this;
+    }
+
+    public reset(): GameBuilder {
         this.Game.reset();
+        return this;
     }
 
     generateUnassignedIds(): void {

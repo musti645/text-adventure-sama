@@ -6,6 +6,7 @@ import { Stage } from './stage.model';
  */
 export class Game {
     Title: string;
+    Introduction: string;
     Stage: Stage;
     Inventory: Inventory;
 
