@@ -53,8 +53,8 @@ export class InputParserService {
     public parseInput(input: string): string {
         let interactionType;
 
-        const taggedTokens = this.POSTagger.tag(this.Tokenizer.tokenize(input));
-
+        const taggedTokens = this.POSTagger.tag(this.Tokenizer.tokenize(input)).taggedWords;
+        const nouns = this.getNounsFromTokenizedInput(taggedTokens);
         const verbs = this.getVerbsFromTokenizedInput(taggedTokens);
 
         for (const element of verbs) {
@@ -71,22 +71,34 @@ export class InputParserService {
             return this.Game.Stage.getCurrentScene().InvalidInputResponse;
         }
 
-        // are there any actions, that might be triggered?
-        const triggeredAction = this.getTriggeredAction(interactionType, taggedTokens, this.SkipTokenization);
-
-        if (!triggeredAction) {
-            return triggeredAction.trigger();
-        }
-
-        // are there any items, that might be used?
-        const triggeredItem = this.getTriggeredItem(interactionType, taggedTokens, this.SkipTokenization);
-
-        if (!triggeredItem) {
-            return triggeredItem.use();
+        switch (interactionType) {
+            case InteractionType.GO_TO:
+                // scenes/gateway actions
+                return this.getGoToResponse(nouns);
+            case InteractionType.LOOK_AT:
+                // item description
+                return this.getLookAtResponse(nouns);
+            case InteractionType.PICK_UP:
+                // add item to inventory
+                return this.getPickUpResponse(nouns);
+            case InteractionType.USE:
+                // use item in inventory or in scene
+                return this.getUseResponse(nouns);
         }
 
         return this.Game.Stage.getCurrentScene().InvalidInputResponse;
     }
+
+    protected getNounsFromTokenizedInput(taggedTokens: TaggedToken[]): any {
+        return taggedTokens.reduce<string[]>((result, token) => {
+            if (token.tag === defaultCategoryCapitalized || token.tag === defaultCategory) {
+                result.push(token.token);
+            }
+
+            return result;
+        }, []);
+    }
+
 
     protected getVerbsFromTokenizedInput(taggedTokens: TaggedToken[]): any {
         return taggedTokens.reduce<string[]>((result, token) => {
@@ -98,106 +110,120 @@ export class InputParserService {
         }, []);
     }
 
+    protected getGoToResponse(nouns: string[]): string {
+        // get gateway actions
+        const gatewayActions = this.Game.getActionsInScene().filter(val => {
+            return val.InteractionType === InteractionType.GO_TO;
+        });
 
-    protected getTriggeredAction(interactionType: InteractionType, taggedTokens: TaggedToken[], skipTokenization: boolean): Action {
-
-        const actions = this.Game.Stage.getCurrentScene()
-            .Actions
-            .reduce<ActionDistance[]>((filteredActions: ActionDistance[], action: Action) => {
-                if (action.InteractionType !== interactionType) {
-                    return filteredActions;
-                }
-
-                const lowerCaseTrigger = action.Trigger.toLocaleLowerCase();
-                // tag the trigger of the action
-
-                let tokens = [];
-
-                if (!skipTokenization) {
-                    // tag the name of the item
-                    const tag = this.POSTagger.tag(this.Tokenizer.tokenize(action.Trigger))[0].tag;
-                    tokens = taggedTokens.filter(val => val.tag === tag);
-                }
-
-                const filteredTokens = tokens
-                    .filter(val => {
-                        // calculate the Damerau Levenshtein distance between the action trigger and the token
-                        // if it is larger than 2, ignore the token
-                        // ignore case
-                        val.distance = natural.DamerauLevenshteinDistance(val.token.toLocaleLowerCase(),
-                            lowerCaseTrigger, { transposition_cost: 0 });
-                        return val.distance <= 2;
-                    })
-                    .sort(val => val.distance);
-
-                if (!filteredTokens || filteredTokens.length <= 0) {
-                    // no token tags match the tag of the trigger
-                    return filteredActions;
-                }
-
-                // return the action and its lowest distance to a token with the same tag
-                filteredActions.push(new ActionDistance(action, filteredTokens[0].distance));
-
-                return filteredActions;
-            }, []);
-
-        if (!actions || actions.length <= 0) {
-            return null;
+        if (!gatewayActions || gatewayActions.length <= 0) {
+            return this.Game.getInvalidInputResponse();
         }
 
-        actions.sort(val => val.Distance);
+        const actionDistances = this.getActionDistancesFromNouns(nouns, gatewayActions);
 
-        return actions[0].Action;
+        if (!actionDistances || actionDistances.length <= 0) {
+            return this.Game.GatewayTargetNotFoundResponse;
+        }
+
+        const action = actionDistances[0].Action;
+
+        return action.trigger();
     }
 
-    protected getTriggeredItem(interactionType: InteractionType, taggedTokens: TaggedToken[], skipTokenization: boolean): InGameItem {
+    protected getLookAtResponse(nouns: string[]): string {
+        const itemDistances = this.getItemDistancesFromNouns(nouns,
+            this.Game.getItemsInScene(),
+            this.Game.getItemsInInventory());
 
-        const items = this.Game.Stage.getCurrentScene()
-            .Items
-            .reduce<ItemDistance[]>((filteredItems: ItemDistance[], item: InGameItem) => {
-                if (item.InteractionType !== interactionType) {
-                    return filteredItems;
-                }
+        if (!itemDistances || itemDistances.length <= 0) {
+            return this.Game.getItemNotFoundResponse();
+        }
+        return itemDistances[0].Item.Description;
+    }
 
-                const lowerCaseTrigger = item.Name.toLocaleLowerCase();
+    protected getPickUpResponse(nouns: string[]): string {
+        const itemDistances = this.getItemDistancesFromNouns(nouns,
+            this.Game.getItemsInScene(),
+            undefined);
 
-                let tokens = [];
-
-                if (!skipTokenization) {
-                    // tag the name of the item
-                    const tag = this.POSTagger.tag(this.Tokenizer.tokenize(item.Name))[0].tag;
-                    tokens = taggedTokens.filter(val => val.tag === tag);
-                }
-
-                const filteredTokens = tokens
-                    .filter(val => {
-                        // calculate the Damerau Levenshtein distance between the item name and the token
-                        // if it is larger than 2, ignore the token
-                        // ignore case
-                        val.distance = natural.DamerauLevenshteinDistance(val.token.toLocaleLowerCase(),
-                            lowerCaseTrigger, { transposition_cost: 0 });
-                        return val.distance <= 2;
-                    })
-                    .sort(val => val.distance);
-
-                if (!filteredTokens || filteredTokens.length <= 0) {
-                    // no token tags match the tag of the name
-                    return filteredItems;
-                }
-
-                // return the item and its lowest distance to a token with the same tag
-                filteredItems.push(new ItemDistance(item, filteredTokens[0].distance));
-
-                return filteredItems;
-            }, []);
-
-        if (!items || items.length <= 0) {
-            return null;
+        if (!itemDistances || itemDistances.length <= 0) {
+            return this.Game.getItemNotFoundResponse();
         }
 
-        items.sort(val => val.Distance);
+        const item = itemDistances[0].Item;
 
-        return items[0].Item;
+        this.Game.addItemToInventory(item);
+
+        this.Game.removeItemFromScene(item);
+
+        return this.Game.ItemAddedToInventoryResponse;
+    }
+
+    protected getUseResponse(nouns: string[]): string {
+        const itemDistances = this.getItemDistancesFromNouns(nouns,
+            this.Game.getItemsInScene(),
+            this.Game.getItemsInInventory());
+
+        if (!itemDistances || itemDistances.length <= 0) {
+            return this.Game.getItemNotFoundResponse();
+        }
+
+        const item = itemDistances[0].Item;
+
+        return item.use();
+    }
+
+    private getItemDistancesFromNouns(nouns: string[], sceneItems: InGameItem[], inventoryItems: InGameItem[]): ItemDistance[] {
+        const itemDistances: ItemDistance[] = [];
+
+        const items = [];
+        if (sceneItems) {
+            items.push(...sceneItems);
+        }
+
+        if (inventoryItems) {
+            items.push(...inventoryItems);
+        }
+
+        items.map(val => {
+            let taggedName = this.POSTagger.tag(this.Tokenizer.tokenize(val.Name)).taggedWords;
+            taggedName = taggedName.filter(word => word.tag === defaultCategory || word.tag === defaultCategoryCapitalized);
+
+            taggedName.map(name => {
+                nouns.map(noun => {
+                    const distance = natural.DamerauLevenshteinDistance(noun,
+                        name, { transposition_cost: 0 });
+                    if (distance <= 2) {
+                        itemDistances.push(new ItemDistance(val, distance));
+                    }
+                });
+            });
+
+        });
+
+        return itemDistances.sort(val => val.Distance);
+    }
+
+    private getActionDistancesFromNouns(nouns: string[], actions: Action[]): ActionDistance[] {
+        const actionDistances: ActionDistance[] = [];
+
+        actions.map(val => {
+            let taggedTrigger = this.POSTagger.tag(this.Tokenizer.tokenize(val.Trigger)).taggedWords;
+            taggedTrigger = taggedTrigger.filter(word => word.tag === defaultCategory || word.tag === defaultCategoryCapitalized);
+
+            taggedTrigger.map(trigger => {
+                nouns.map(noun => {
+                    const distance = natural.DamerauLevenshteinDistance(noun,
+                        trigger, { transposition_cost: 0 });
+                    if (distance <= 2) {
+                        actionDistances.push(new ActionDistance(val, distance));
+                    }
+                });
+            });
+        });
+
+        return actionDistances.sort(val => val.Distance);
     }
 
     protected getInteractionType(input: string): InteractionType {

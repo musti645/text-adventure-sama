@@ -38,4 +38,11 @@ export class Scene {
     public getItems(): InGameItem[] {
         return this.Items;
     }
+
+    public removeItemFromScene(item: InGameItem) {
+        const index = this.Items.indexOf(item);
+        if (index > -1) {
+            this.Items.splice(index, 1);
+        }
+    }
 }

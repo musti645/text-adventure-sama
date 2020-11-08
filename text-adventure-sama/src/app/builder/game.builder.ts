@@ -27,13 +27,28 @@ export class GameBuilder extends BaseBuilder {
         return new SceneBuilder(this, this.Game, id);
     }
 
-    public setTitle(title: string): GameBuilder {
+    public setTitle(title: string): this {
         this.Game.Title = title;
         return this;
     }
 
-    public setIntroduction(intro: string): GameBuilder {
+    public setIntroduction(intro: string): this {
         this.Game.Introduction = intro;
+        return this;
+    }
+
+    public setItemNotFoundInInventoryResponse(response: string): this {
+        this.Game.ItemNotFoundInInventoryResponse = response;
+        return this;
+    }
+
+    public setItemAddedToInventoryResponse(response: string): this {
+        this.Game.ItemAddedToInventoryResponse = response;
+        return this;
+    }
+
+    public setGatewayTargetNotFoundResponse(response: string): this {
+        this.Game.GatewayTargetNotFoundResponse = response;
         return this;
     }
 

@@ -57,7 +57,9 @@ export class TextAdventureComponent implements OnInit {
     this.printInput(inputString);
     this.userInput.setValue('');
 
-    this.printOutput(this.inputParserService.parseInput(inputString));
+    const parseResult = this.inputParserService.parseInput(inputString);
+
+    this.printOutput(parseResult);
 
     this.stopLoading();
   }
@@ -84,6 +86,7 @@ export class TextAdventureComponent implements OnInit {
   }
 
   private startGame(){
+    this.inputParserService.setGame(this.Game);
     this.printOutput(this.Game.Title);
     this.printOutput(this.Game.Introduction);
   }
@@ -100,18 +103,28 @@ export class TextAdventureComponent implements OnInit {
     const builder = new GameBuilder()
     .setTitle('-- Test Adventure --')
     .setIntroduction('You\'ve lost track of where you are while hiking in the woods. Your battery is dead and it\'s going to get dark outside soon. You better find shelter for the night. \r\n'
-    + 'While looking for signs of civilization, such as roads or lights, you come across a small hut...');
+    + 'While looking for signs of civilization, such as roads or lights, you come across a small hut...')
+    .setGatewayTargetNotFoundResponse('You don\'t know where that is.')
+    .setItemAddedToInventoryResponse('You put that thing into your bag.')
+    .setItemNotFoundInInventoryResponse('You can\'t seem to find what you\'re looking for');
 
     builder.addScene(1)
       .setName('Shed in the Woods')
-      .setDescription('A cozy looking shed surrounded by a lot of trees.')
+      .setDescription('A cozy looking shed surrounded by a lot of trees. Nothing of interest outside of it.')
       .setActionNotRecognizedResponse('Doing that in a forrest? You don\'t think so.')
-      .setItemNotFoundResponse('There, beneath the leafs and sticks, you seem to have spotted something. As you get closer, you realize that it was a useless rock.')
+      .setItemNotFoundResponse('There, beneath the leaves and sticks, you seem to have spotted something. As you get closer, you realize that it was a useless rock.')
+      .setInvalidInputResponse('You\'re confused. Good thing this isn\'t Pokèmon, so you don\'t hit yourself')
         .addGatewayAction()
         .setTargetSceneId(2)
-        .setTrigger('go inside')
+        .setTrigger('go to shed')
         .setResponse('The door is not locked. You open it and walk inside.')
         .finish()
+        .addItem()
+          .setName('weird kebab')
+          .setDescription('Just infront of you lays a stick, that looks like a cross.')
+          .setMaximumUsages(1)
+          .setUsagesLeft(1)
+          .finish()
       .finish();
 
     builder.addScene(2)

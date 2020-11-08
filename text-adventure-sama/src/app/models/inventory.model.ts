@@ -57,6 +57,10 @@ export class Inventory implements IItemConsumingEventListener,
         this.Items.push(toAdd);
     }
 
+    public getItems(): InGameItem[] {
+        return this.Items;
+    }
+
     public reset(): void {
         this.Items = [];
     }

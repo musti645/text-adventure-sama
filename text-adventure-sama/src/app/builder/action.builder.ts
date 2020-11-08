@@ -11,6 +11,7 @@ import { RandomResponseAction } from '../models/actions/random-response-action.m
 import { ItemContainingBuilder } from './interfaces/item-containing.builder';
 import { InGameItem } from '../models/Item.model';
 import { ItemBuilder } from './item.builder';
+import { InteractionType } from '../models/interactions/interaction-type.enum';
 
 export class BaseActionBuilder<T extends Action, ReturnBuilderType extends ActionContainingBuilder> extends BaseBuilder {
     protected Action: T;
@@ -217,6 +218,15 @@ export class OneTimeActionBuilder<ReturnBuilderType extends ActionContainingBuil
         }
 
         this.Action.ResponseAfterUse = response;
+        return this;
+    }
+
+    public setInteractionType(type: InteractionType): this {
+        if (!type) {
+            throw new EvalError('InteractionType not set.');
+        }
+
+        this.Action.InteractionType = type;
         return this;
     }
 

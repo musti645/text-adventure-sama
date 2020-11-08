@@ -102,6 +102,11 @@ export class SceneBuilder extends BaseBuilder implements ItemContainingBuilder, 
         return this;
     }
 
+    public setInvalidInputResponse(response: string): this {
+        this.Scene.InvalidInputResponse = response;
+        return this;
+    }
+
     public finish(): GameBuilder {
         this.Game.Stage.addScene(this.Scene);
         return this.GameBuilder;
