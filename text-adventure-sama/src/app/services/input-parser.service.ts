@@ -7,6 +7,7 @@ import { TextInputType } from '../models/other/text-input.enum';
 
 import * as natural from 'natural';
 import { InteractionType } from '../models/interactions/interaction-type.enum';
+import { IClassificationTrainer } from './classification-trainer.interface';
 const language = 'EN';
 // see Penn Treebank Part-of-Speech Tags for more info on the tags
 const defaultCategory = 'N';
@@ -23,20 +24,23 @@ export class InputParserService {
     Game: Game;
     POSTagger: natural.BrillPOSTagger;
     Tokenizer: natural.WordTokenizer;
+    Classifier: natural.BayesClassifier;
     SkipTokenization: boolean;
 
     constructor() {
     }
 
-    public initialize(): Promise<boolean> {
+    public initialize(trainer: IClassificationTrainer): Promise<boolean> {
         return new Promise<boolean>((resolve) => {
             this.Tokenizer = new natural.WordTokenizer();
             const lexicon = new natural.Lexicon(language, defaultCategory, defaultCategoryCapitalized);
             const ruleSet = new natural.RuleSet('EN');
             this.POSTagger = new natural.BrillPOSTagger(lexicon, ruleSet);
-            resolve(true);
+            this.Classifier = new natural.BayesClassifier();
+            trainer.trainClassifier(this.Classifier).then(() => resolve(true));
         });
     }
+
 
     setGame(game: Game) {
         this.Game = game;
@@ -54,7 +58,7 @@ export class InputParserService {
         const verbs = this.getVerbsFromTokenizedInput(taggedTokens);
 
         for (const element of verbs) {
-            const type = this.getInputType(element);
+            const type = this.getInteractionType(element);
             if (!type) {
                 break;
             }
@@ -94,11 +98,6 @@ export class InputParserService {
         }, []);
     }
 
-
-    protected getInputType(input: string): InteractionType {
-        // create a classifier and manually train it with strings to spit out which type of interaction is being used in this sentence
-        return null;
-    }
 
     protected getTriggeredAction(interactionType: InteractionType, taggedTokens: TaggedToken[], skipTokenization: boolean): Action {
 
@@ -199,6 +198,26 @@ export class InputParserService {
         items.sort(val => val.Distance);
 
         return items[0].Item;
+    }
+
+    protected getInteractionType(input: string): InteractionType {
+        const result = this.Classifier.classify(input);
+        return this.getInteractionTypeFromClassificationResult(result);
+    }
+
+    public getInteractionTypeFromClassificationResult(result: string): InteractionType {
+        switch (result) {
+            case 'use':
+                return InteractionType.USE;
+            case 'look_at':
+                return InteractionType.LOOK_AT;
+            case 'go_to':
+                return InteractionType.GO_TO;
+            case 'pick_up':
+                return InteractionType.PICK_UP;
+            default:
+                return InteractionType.USE;
+        }
     }
 }
 

@@ -6,6 +6,7 @@ import { Game } from '../models/game.model';
 import { GameBuilder } from '../builder/game.builder';
 import { InGameItem } from '../models/Item.model';
 import { InputParserService } from '../services/input-parser.service';
+import { ClassificationTrainer } from '../services/classification-trainer.service';
 
 /**
  * Main Component, that contains the input and output of the game.
@@ -36,6 +37,7 @@ export class TextAdventureComponent implements OnInit {
   );
 
   constructor(private inputParserService: InputParserService) {
+    inputParserService.initialize(new ClassificationTrainer());
   }
 
   ngOnInit() {

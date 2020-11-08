@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { ClassificationTrainer } from './classification-trainer.service';
 import { InputParserService } from './input-parser.service';
 
 describe('InputParserService', () => {
@@ -8,4 +9,13 @@ describe('InputParserService', () => {
     const service: InputParserService = TestBed.inject(InputParserService);
     expect(service).toBeTruthy();
   });
+
+  // test the training
+  it('should initialize successfully', () => {
+    const service: InputParserService = TestBed.inject(InputParserService);
+    service.initialize(new ClassificationTrainer()).then(result => {
+      expect(result).toBeTrue();
+    });
+  });
+
 });
