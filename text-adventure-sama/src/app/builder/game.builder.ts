@@ -62,6 +62,28 @@ export class GameBuilder extends BaseBuilder {
     }
 
     public finish(): Game {
+
+        if (!this.Game.Title) {
+            throw new BuilderError('Game creation could not be finished. Title was not set.');
+        }
+
+        if (!this.Game.Introduction) {
+            throw new BuilderError('Game creation could not be finished. Introduction was not set.');
+        }
+
+        if (!this.Game.ItemAddedToInventoryResponse) {
+            throw new BuilderError('Game creation could not be finished. ItemAddedToInventoryResponse was not set.');
+        }
+
+        if (!this.Game.ItemNotFoundInInventoryResponse) {
+            throw new BuilderError('Game creation could not be finished. ItemNotFoundInInventoryResponse was not set.');
+        }
+
+        if (!this.Game.GatewayTargetNotFoundResponse) {
+            throw new BuilderError('Game creation could not be finished. GatewayTargetNotFoundResponse was not set.');
+        }
+        // TODO: A game has to have scenes
+
         this.generateUnassignedIds();
         return this.Game;
     }

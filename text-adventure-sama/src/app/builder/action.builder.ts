@@ -12,6 +12,7 @@ import { ItemContainingBuilder } from './interfaces/item-containing.builder';
 import { InGameItem } from '../models/Item.model';
 import { ItemBuilder } from './item.builder';
 import { InteractionType } from '../models/interactions/interaction-type.enum';
+import { BuilderError } from '../models/errors/builder.error';
 
 export class BaseActionBuilder<T extends Action, ReturnBuilderType extends ActionContainingBuilder> extends BaseBuilder {
     protected Action: T;
@@ -41,7 +42,28 @@ export class BaseActionBuilder<T extends Action, ReturnBuilderType extends Actio
         return this;
     }
 
+    public onFinish(): void {
+    }
+
     public finish(): ReturnBuilderType {
+        if (!this.Action.Trigger) {
+            throw new BuilderError('Action creation could not be finished. Trigger was not set.');
+        }
+
+        if (!this.Action.Response) {
+            throw new BuilderError('Action creation could not be finished. Response was not set.');
+        }
+
+        if (!this.Action.WrongInteractionTypeResponse) {
+            throw new BuilderError('Action creation could not be finished. WrongInteractionTypeResponse was not set.');
+        }
+
+        if (!this.Action.InteractionType) {
+            throw new BuilderError('Action creation could not be finished. InteractionType was not set.');
+        }
+
+        this.onFinish();
+
         this.Builder.addActionToBuilder(this.Action);
         return this.Builder;
     }
@@ -72,7 +94,11 @@ export class GatewayActionBuilder<ReturnBuilderType extends ActionContainingBuil
         return this;
     }
 
-    // TODO: check that either scene name or scene id was set
+    public onFinish() {
+        if (!this.Action.SceneId || !this.Action.TargetSceneName) {
+            throw new BuilderError('Action creation could not be finished. SceneId and/or TargetSceneName were not set.');
+        }
+    }
 }
 
 export class ItemConsumingActionBuilder<ReturnBuilderType extends ActionContainingBuilder>
@@ -90,7 +116,11 @@ export class ItemConsumingActionBuilder<ReturnBuilderType extends ActionContaini
         return new ItemBuilder<ItemConsumingActionBuilder<ReturnBuilderType>>(this, item);
     }
 
-    // TODO: check that item was attached upon finish
+    public onFinish() {
+        if (!this.Action.Item) {
+            throw new BuilderError('Action creation could not be finished. Item was not set.');
+        }
+    }
 }
 
 
@@ -109,7 +139,11 @@ export class ItemRemovingActionBuilder<ReturnBuilderType extends ActionContainin
         return new ItemBuilder<ItemRemovingActionBuilder<ReturnBuilderType>>(this, item);
     }
 
-    // TODO: check that item was attached upon finish
+    public onFinish() {
+        if (!this.Action.Item) {
+            throw new BuilderError('Action creation could not be finished. Item was not set.');
+        }
+    }
 
 }
 
@@ -143,7 +177,11 @@ export class ItemYieldingActionBuilder<ReturnBuilderType extends ActionContainin
         return this;
     }
 
-    // TODO: check that item was attached upon finish
+    public onFinish() {
+        if (!this.Action.Item) {
+            throw new BuilderError('Action creation could not be finished. Item was not set.');
+        }
+    }
 }
 
 
@@ -164,6 +202,16 @@ export class MultiTimeActionBuilder<ReturnBuilderType extends ActionContainingBu
         }
 
         this.Action.UsagesLeft = count;
+        return this;
+    }
+
+
+    public setInteractionType(type: InteractionType): this {
+        if (!type) {
+            throw new EvalError('InteractionType not set.');
+        }
+
+        this.Action.InteractionType = type;
         return this;
     }
 
@@ -195,6 +243,20 @@ export class MultiTimeActionBuilder<ReturnBuilderType extends ActionContainingBu
 
         this.Action.Responses = responses;
         return this;
+    }
+
+    public onFinish() {
+        if (!this.Action.UsagesLeft) {
+            throw new BuilderError('Action creation could not be finished. UsagesLeft was not set.');
+        }
+
+        if (!this.Action.MaximumUsages) {
+            throw new BuilderError('Action creation could not be finished. MaximumUsages was not set.');
+        }
+
+        if (!this.Action.Responses) {
+            throw new BuilderError('Action creation could not be finished. Responses Array was not set.');
+        }
     }
 
 }
@@ -230,6 +292,11 @@ export class OneTimeActionBuilder<ReturnBuilderType extends ActionContainingBuil
         return this;
     }
 
+    public onFinish() {
+        if (!this.Action.ResponseAfterUse) {
+            throw new BuilderError('Action creation could not be finished. ResponseAfterUse was not set.');
+        }
+    }
 }
 
 
@@ -253,5 +320,18 @@ export class RandomResponseActionBuilder<ReturnBuilderType extends ActionContain
         return this;
     }
 
+    public setInteractionType(type: InteractionType): this {
+        if (!type) {
+            throw new EvalError('InteractionType not set.');
+        }
 
+        this.Action.InteractionType = type;
+        return this;
+    }
+
+    public onFinish() {
+        if (!this.Action.Responses) {
+            throw new BuilderError('Action creation could not be finished. Responses Array was not set.');
+        }
+    }
 }

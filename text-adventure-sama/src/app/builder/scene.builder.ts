@@ -18,6 +18,7 @@ import {
     RandomResponseActionBuilder
 } from './action.builder';
 import { ItemYieldingAction } from '../models/actions/item-yielding-action.model';
+import { BuilderError } from '../models/errors/builder.error';
 
 export class SceneBuilder extends BaseBuilder implements ItemContainingBuilder, ActionContainingBuilder {
     private GameBuilder: GameBuilder;
@@ -108,6 +109,29 @@ export class SceneBuilder extends BaseBuilder implements ItemContainingBuilder, 
     }
 
     public finish(): GameBuilder {
+
+        if (!this.Scene.Name) {
+            throw new BuilderError('Scene creation could not be finished. Name was not set.');
+        }
+
+        if (!this.Scene.Description) {
+            throw new BuilderError('Scene creation could not be finished. Description was not set.');
+        }
+
+        if (!this.Scene.InvalidInputResponse) {
+            throw new BuilderError('Scene creation could not be finished. InvalidInputResponse was not set.');
+        }
+
+        if (!this.Scene.ItemNotFoundResponse) {
+            throw new BuilderError('Scene creation could not be finished. ItemNotFoundResponse was not set.');
+        }
+
+        if (!this.Scene.ActionNotRecognizedResponse) {
+            throw new BuilderError('Scene creation could not be finished. ActionNotRecognizedResponse was not set.');
+        }
+
+        // TODO: each scene has to have a gateway action to another scene or be the last action
+
         this.Game.Stage.addScene(this.Scene);
         return this.GameBuilder;
     }
