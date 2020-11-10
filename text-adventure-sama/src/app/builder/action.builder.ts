@@ -54,14 +54,6 @@ export class BaseActionBuilder<T extends Action, ReturnBuilderType extends Actio
             throw new BuilderError('Action creation could not be finished. Response was not set.');
         }
 
-        if (!this.Action.WrongInteractionTypeResponse) {
-            throw new BuilderError('Action creation could not be finished. WrongInteractionTypeResponse was not set.');
-        }
-
-        if (!this.Action.InteractionType) {
-            throw new BuilderError('Action creation could not be finished. InteractionType was not set.');
-        }
-
         this.onFinish();
 
         this.Builder.addActionToBuilder(this.Action);
@@ -95,7 +87,7 @@ export class GatewayActionBuilder<ReturnBuilderType extends ActionContainingBuil
     }
 
     public onFinish() {
-        if (!this.Action.SceneId || !this.Action.TargetSceneName) {
+        if (!this.Action.SceneId && !this.Action.TargetSceneName) {
             throw new BuilderError('Action creation could not be finished. SceneId and/or TargetSceneName were not set.');
         }
     }
@@ -257,6 +249,10 @@ export class MultiTimeActionBuilder<ReturnBuilderType extends ActionContainingBu
         if (!this.Action.Responses) {
             throw new BuilderError('Action creation could not be finished. Responses Array was not set.');
         }
+
+        if (!this.Action.InteractionType) {
+            throw new BuilderError('Action creation could not be finished. InteractionType was not set.');
+        }
     }
 
 }
@@ -296,6 +292,10 @@ export class OneTimeActionBuilder<ReturnBuilderType extends ActionContainingBuil
         if (!this.Action.ResponseAfterUse) {
             throw new BuilderError('Action creation could not be finished. ResponseAfterUse was not set.');
         }
+
+        if (!this.Action.InteractionType) {
+            throw new BuilderError('Action creation could not be finished. InteractionType was not set.');
+        }
     }
 }
 
@@ -332,6 +332,10 @@ export class RandomResponseActionBuilder<ReturnBuilderType extends ActionContain
     public onFinish() {
         if (!this.Action.Responses) {
             throw new BuilderError('Action creation could not be finished. Responses Array was not set.');
+        }
+
+        if (!this.Action.InteractionType) {
+            throw new BuilderError('Action creation could not be finished. InteractionType was not set.');
         }
     }
 }

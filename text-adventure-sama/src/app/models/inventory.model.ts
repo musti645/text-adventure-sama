@@ -61,8 +61,4 @@ export class Inventory implements IItemConsumingEventListener,
         return this.Items;
     }
 
-    public reset(): void {
-        this.Items = [];
-    }
-
 }

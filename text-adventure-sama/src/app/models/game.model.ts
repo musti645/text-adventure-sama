@@ -1,4 +1,5 @@
 import { Action } from './actions/action.model';
+import { Command } from './command.model';
 import { Inventory } from './inventory.model';
 import { InGameItem } from './Item.model';
 import { Stage } from './stage.model';
@@ -14,15 +15,54 @@ export class Game {
     GatewayTargetNotFoundResponse: string;
     Stage: Stage;
     Inventory: Inventory;
+    Commands: Command[];
 
     constructor() {
         this.Stage = new Stage();
         this.Inventory = new Inventory();
+        this.Commands = [];
+        this.initializeCommands();
     }
 
-    reset() {
-        this.Stage.reset();
-        this.Inventory.reset();
+    private initializeCommands(): void {
+        const helpCommand = new Command();
+        helpCommand.Trigger = 'help';
+        helpCommand.ResponseFunction = () => {
+            let commandsHelp = '';
+            this.Commands.forEach(command => {
+                commandsHelp += `>>${command.Trigger} - ${command.Description}; \r\n`;
+            });
+            return commandsHelp;
+        };
+        this.Commands.push(helpCommand);
+
+
+        const inventoryCommand = new Command();
+        inventoryCommand.Trigger = 'inventory';
+        inventoryCommand.ResponseFunction = () => {
+            let inventoryContents = '';
+            this.Inventory.getItems().forEach(item => {
+                inventoryContents += `>>${item.Name}; \r\n`;
+            });
+            return inventoryContents;
+        };
+        inventoryCommand.Description = 'List all items in your inventory.';
+        this.Commands.push(inventoryCommand);
+
+
+        const sceneCommand = new Command();
+        sceneCommand.Trigger = 'look around';
+        sceneCommand.ResponseFunction = () => {
+            return this.Stage.getCurrentScene().Description;
+        };
+
+        sceneCommand.Description = 'Get a description of the scene you\'re in';
+
+        this.Commands.push(sceneCommand);
+    }
+
+    public getCommands(): Command[] {
+        return this.Commands;
     }
 
     public getItemNotFoundResponse(): string {
@@ -64,5 +104,6 @@ export class Game {
     public addItemToInventory(item: InGameItem) {
         this.Inventory.addItem(item);
     }
+
 
 }

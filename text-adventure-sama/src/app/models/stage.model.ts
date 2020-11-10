@@ -54,10 +54,4 @@ export class Stage implements IGatewayActionEventListener {
     public getScenes(): Scene[] {
         return this.Scenes;
     }
-
-    public reset(): void {
-        this.ScenePath = [];
-        this.Scenes = [];
-        this.CurrentScene = undefined;
-    }
 }

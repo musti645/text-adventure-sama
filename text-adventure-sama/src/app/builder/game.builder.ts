@@ -4,6 +4,7 @@ import { BuilderError } from '../models/errors/builder.error';
 import { SceneBuilder } from './scene.builder';
 import { BaseBuilder } from './base.builder';
 import { IDGeneratorService } from '../services/id-generator.service';
+import { Command } from '../models/command.model';
 
 /**
  * Use this class to chain the game building process.
@@ -25,6 +26,24 @@ export class GameBuilder extends BaseBuilder {
 
     public addScene(id?: number): SceneBuilder {
         return new SceneBuilder(this, this.Game, id);
+    }
+
+    public addGlobalCommand(command: Command): this {
+        if (!command) {
+            throw new EvalError('Command was not set.');
+        }
+
+        if (!command.Response && !command.ResponseFunction) {
+            throw new EvalError('Either Command response or response function have to be set.');
+        }
+
+        this.Game.Commands.push(command);
+        return this;
+    }
+
+    public removeExistingCommands(): this {
+        this.Game.Commands = [];
+        return this;
     }
 
     public setTitle(title: string): this {
@@ -49,11 +68,6 @@ export class GameBuilder extends BaseBuilder {
 
     public setGatewayTargetNotFoundResponse(response: string): this {
         this.Game.GatewayTargetNotFoundResponse = response;
-        return this;
-    }
-
-    public reset(): GameBuilder {
-        this.Game.reset();
         return this;
     }
 
