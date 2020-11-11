@@ -5,7 +5,7 @@
         <tbody>
           <tr *ngFor="let line of OutputArray; let index = i"
             [ngClass]="line.Type  === 'input'? 'input-line' : 'output-line'">
-            <td>{{line.Value}}</td>
+            <td [innerHTML]='line.Value'></td>
           </tr>
         </tbody>
       </table>

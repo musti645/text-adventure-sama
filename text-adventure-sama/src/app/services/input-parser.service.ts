@@ -51,34 +51,26 @@ export class InputParserService {
     }
 
     public parseInput(input: string): string {
-        // TODO: add global commands: help/look around/skip/inventory -> possibility to add new ones too (?)
         const commandsResult = this.getCommandsResponse(input);
         if (commandsResult) {
             return commandsResult;
         }
 
-        let interactionType;
+        // because imperatives are not so common in the brown/penn corpus, we add a 'they ' before
+        // the whole sentence, in order to make it a legitimate sentence and identify imperatives as verbs instead of nouns
+        input = 'they ' + input;
 
         const taggedTokens = this.POSTagger.tag(this.Tokenizer.tokenize(input)).taggedWords;
-        const nouns = this.getNounsFromTokenizedInput(taggedTokens);
-        const verbs = this.getVerbsFromTokenizedInput(taggedTokens);
 
-        for (const element of verbs) {
-            const type = this.getInteractionType(element);
-            if (!type) {
-                break;
-            }
+        // we get verbs and nouns, because in many cases a noun may be mistaken to be a verb and vice versa e.g. (a) stick & (to) stick
+        const nounsAndVerbs = this.getNounsAndVerbsFromTokenizedInput(taggedTokens);
 
-            interactionType = type;
-        }
+        const interactionType = this.getInteractionType(input);
 
         // no interaction type found
-        if (!interactionType) {
+        if (interactionType === undefined || interactionType === null) {
             return this.Game.Stage.getCurrentScene().InvalidInputResponse;
         }
-
-        // we add verbs to the nouns, because in many cases a noun may be mistaken to be a verb and vice versa e.g. (a) stick & (to) stick
-        const nounsAndVerbs = nouns.concat(verbs);
 
         switch (interactionType) {
             case InteractionType.GO_TO:
@@ -93,37 +85,29 @@ export class InputParserService {
             case InteractionType.USE:
                 // use item in inventory or in scene
                 return this.getUseResponse(nounsAndVerbs);
+            default:
+                return this.Game.Stage.getCurrentScene().InvalidInputResponse;
         }
 
-        return this.Game.Stage.getCurrentScene().InvalidInputResponse;
     }
 
     protected getCommandsResponse(input: string): string {
         const lowerCaseInput = input.toLocaleLowerCase();
 
-        this.Game.getCommands().forEach(command => {
+        let commandsResult;
+        this.Game.getCommands().some(command => {
             if (command.Trigger.toLocaleLowerCase() === lowerCaseInput) {
-                return command.activate();
+                commandsResult = command.activate();
+                return true;
             }
         });
 
-        return undefined;
+        return commandsResult;
     }
 
-    protected getNounsFromTokenizedInput(taggedTokens: TaggedToken[]): any {
+    protected getNounsAndVerbsFromTokenizedInput(taggedTokens: TaggedToken[]): any {
         return taggedTokens.reduce<string[]>((result, token) => {
-            if (token.tag === defaultCategoryCapitalized || token.tag === defaultCategory) {
-                result.push(token.token);
-            }
-
-            return result;
-        }, []);
-    }
-
-
-    protected getVerbsFromTokenizedInput(taggedTokens: TaggedToken[]): any {
-        return taggedTokens.reduce<string[]>((result, token) => {
-            if (token.tag === verbCategory) {
+            if (token.tag === defaultCategoryCapitalized || token.tag === defaultCategory || token.tag === verbCategory) {
                 result.push(token.token);
             }
 
@@ -209,7 +193,6 @@ export class InputParserService {
 
         items.map(val => {
             const taggedName = this.POSTagger.tag(this.Tokenizer.tokenize(val.Name)).taggedWords;
-            // TODO: taggedName = taggedName.filter(word => word.tag === defaultCategory || word.tag === defaultCategoryCapitalized);
 
             taggedName.map(name => {
                 relevantWords.map(input => {
@@ -231,7 +214,6 @@ export class InputParserService {
 
         actions.map(val => {
             const taggedTrigger = this.POSTagger.tag(this.Tokenizer.tokenize(val.Trigger)).taggedWords;
-            // TODO: taggedTrigger = taggedTrigger.filter(word => word.tag === defaultCategory || word.tag === defaultCategoryCapitalized);
 
             taggedTrigger.map(trigger => {
                 relevantWords.map(input => {

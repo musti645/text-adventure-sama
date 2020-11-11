@@ -71,6 +71,11 @@ export class GameBuilder extends BaseBuilder {
         return this;
     }
 
+    public setInventoryEmptyResponse(response: string): this {
+        this.Game.InventoryEmptyResponse = response;
+        return this;
+    }
+
     generateUnassignedIds(): void {
         this.IdGeneratorService.generateIDs(this.Game);
     }
@@ -96,7 +101,14 @@ export class GameBuilder extends BaseBuilder {
         if (!this.Game.GatewayTargetNotFoundResponse) {
             throw new BuilderError('Game creation could not be finished. GatewayTargetNotFoundResponse was not set.');
         }
-        // TODO: A game has to have scenes
+
+        if (!this.Game.InventoryEmptyResponse) {
+            throw new BuilderError('Game creation could not be finished. InventoryEmptyResponse was not set.');
+        }
+
+        if (this.Game.Stage.getScenesCount() <= 0) {
+            throw new BuilderError('Game creation could not be finished. No Scenes were found.');
+        }
 
         this.generateUnassignedIds();
         return this.Game;

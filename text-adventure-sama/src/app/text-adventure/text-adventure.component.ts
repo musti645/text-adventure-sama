@@ -92,6 +92,7 @@ export class TextAdventureComponent implements OnInit {
   }
 
   private printOutput(output: string){
+    output = output.split('\r\n').join('<br>');
     this.OutputArray.push(new TextInput(output, TextInputType.Output));
   }
 
@@ -106,7 +107,8 @@ export class TextAdventureComponent implements OnInit {
     + 'While looking for signs of civilization, such as roads or lights, you come across a small hut...')
     .setGatewayTargetNotFoundResponse('You don\'t know where that is.')
     .setItemAddedToInventoryResponse('You put that thing into your bag.')
-    .setItemNotFoundInInventoryResponse('You can\'t seem to find what you\'re looking for');
+    .setItemNotFoundInInventoryResponse('You can\'t seem to find what you\'re looking for')
+    .setInventoryEmptyResponse('You look into your bag, hoping to find something helpful in there, but it\'s empty.');
 
     builder.addScene(1)
       .setName('Shed in the Woods')

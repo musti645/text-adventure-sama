@@ -13,6 +13,7 @@ export class Game {
     ItemNotFoundInInventoryResponse: string;
     ItemAddedToInventoryResponse: string;
     GatewayTargetNotFoundResponse: string;
+    InventoryEmptyResponse: string;
     Stage: Stage;
     Inventory: Inventory;
     Commands: Command[];
@@ -27,10 +28,11 @@ export class Game {
     private initializeCommands(): void {
         const helpCommand = new Command();
         helpCommand.Trigger = 'help';
+        helpCommand.Description = 'A list of all global commands';
         helpCommand.ResponseFunction = () => {
             let commandsHelp = '';
             this.Commands.forEach(command => {
-                commandsHelp += `>>${command.Trigger} - ${command.Description}; \r\n`;
+                commandsHelp += `${command.Trigger} - ${command.Description} \r\n `;
             });
             return commandsHelp;
         };
@@ -40,9 +42,12 @@ export class Game {
         const inventoryCommand = new Command();
         inventoryCommand.Trigger = 'inventory';
         inventoryCommand.ResponseFunction = () => {
-            let inventoryContents = '';
+            if (this.Inventory.getItemCount() <= 0) {
+                return this.InventoryEmptyResponse;
+            }
+            let inventoryContents = 'Items in Inventory: \r\n ';
             this.Inventory.getItems().forEach(item => {
-                inventoryContents += `>>${item.Name}; \r\n`;
+                inventoryContents += `${item.Name} \r\n `;
             });
             return inventoryContents;
         };

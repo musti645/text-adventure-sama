@@ -8,8 +8,10 @@ import * as natural from 'natural';
 export class ClassificationTrainer implements IClassificationTrainer {
     trainClassifier(classifier: natural.BayesClassifier): Promise<void> {
         return new Promise<void>((resolve) => {
-            classifier.addDocument('Use keys', 'use');
-            classifier.addDocument('Use knob', 'use');
+            classifier.addDocument('use keys', 'use');
+            classifier.addDocument('use knob', 'use');
+            classifier.addDocument('use old pen', 'use');
+            classifier.addDocument('use rusty knife', 'use');
             classifier.addDocument('open door', 'use');
             classifier.addDocument('open oven', 'use');
             classifier.addDocument('open window', 'use');
