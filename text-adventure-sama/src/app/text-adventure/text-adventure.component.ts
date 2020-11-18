@@ -44,9 +44,9 @@ export class TextAdventureComponent implements OnInit {
 
   ngOnInit() {
     this.startLoading();
+    // TODO: remove this, once the library is ready to be shipped
     this.Game = this.buildGame();
     this.startGame();
-    this.stopLoading();
   }
 
   OnSubmit() {
@@ -61,9 +61,7 @@ export class TextAdventureComponent implements OnInit {
 
     const parseResult = this.inputParserService.parseInput(inputString);
 
-    this.printOutput(parseResult.Result, parseResult.UseTypewriterAnimation);
-
-    this.stopLoading();
+    this.printOutput(parseResult.Result, parseResult.UseTypewriterAnimation).then(() => this.stopLoading());
   }
 
   OnReset() {
@@ -89,7 +87,7 @@ export class TextAdventureComponent implements OnInit {
 
   private startGame() {
     this.inputParserService.setGame(this.Game);
-    this.printOutput(this.Game.Title).then(() => this.printOutput(this.Game.Introduction));
+    this.printOutput(this.Game.Title).then(() => this.printOutput(this.Game.Introduction)).then(() => this.stopLoading());
   }
 
   private printOutput(output: string, useTypewriteAnimationOnOutput: boolean = true): Promise<void> {
