@@ -50,10 +50,10 @@ export class InputParserService {
         this.SkipTokenization = tokenization;
     }
 
-    public parseInput(input: string): string {
+    public parseInput(input: string): ParseInputResult {
         const commandsResult = this.getCommandsResponse(input);
         if (commandsResult) {
-            return commandsResult;
+            return new ParseInputResult(commandsResult, false);
         }
 
         // because imperatives are not so common in the brown/penn corpus, we add a 'they ' before
@@ -69,24 +69,24 @@ export class InputParserService {
 
         // no interaction type found
         if (interactionType === undefined || interactionType === null) {
-            return this.Game.Stage.getCurrentScene().InvalidInputResponse;
+            return new ParseInputResult(this.Game.Stage.getCurrentScene().InvalidInputResponse);
         }
 
         switch (interactionType) {
             case InteractionType.GO_TO:
                 // scenes/gateway actions
-                return this.getGoToResponse(nounsAndVerbs);
+                return new ParseInputResult(this.getGoToResponse(nounsAndVerbs));
             case InteractionType.LOOK_AT:
                 // item description
-                return this.getLookAtResponse(nounsAndVerbs);
+                return new ParseInputResult(this.getLookAtResponse(nounsAndVerbs));
             case InteractionType.PICK_UP:
                 // add item to inventory
-                return this.getPickUpResponse(nounsAndVerbs);
+                return new ParseInputResult(this.getPickUpResponse(nounsAndVerbs));
             case InteractionType.USE:
                 // use item in inventory or in scene
-                return this.getUseResponse(nounsAndVerbs);
+                return new ParseInputResult(this.getUseResponse(nounsAndVerbs));
             default:
-                return this.Game.Stage.getCurrentScene().InvalidInputResponse;
+                return new ParseInputResult(this.Game.Stage.getCurrentScene().InvalidInputResponse);
         }
 
     }
@@ -247,6 +247,19 @@ export class InputParserService {
             default:
                 return InteractionType.USE;
         }
+    }
+}
+
+/**
+ * Allows us to pass multiple parameters without altering the function too much
+ */
+export class ParseInputResult {
+    public Result: string;
+    public UseTypewriterAnimation: boolean;
+
+    constructor(result: string, typewriteAnimation: boolean = true){
+        this.Result = result;
+        this.UseTypewriterAnimation = typewriteAnimation;
     }
 }
 

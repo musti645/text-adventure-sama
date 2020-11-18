@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, Input } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { TextInputType } from '../models/other/text-input.enum';
 import { TextInput } from '../models/other/text-input.model';
@@ -21,8 +21,10 @@ export class TextAdventureComponent implements OnInit {
 
   OutputArray: TextInput[] = [];
   IsLoading = false;
+  @Input() UseTypewritingAnimation = true;
+  @Input() TypewriterSpeed = 40;
 
-  Game: Game;
+  @Input() Game: Game;
   GameBuilder: GameBuilder;
 
   InputForm: FormGroup = new FormGroup(
@@ -59,7 +61,7 @@ export class TextAdventureComponent implements OnInit {
 
     const parseResult = this.inputParserService.parseInput(inputString);
 
-    this.printOutput(parseResult);
+    this.printOutput(parseResult.Result, parseResult.UseTypewriterAnimation);
 
     this.stopLoading();
   }
@@ -85,30 +87,62 @@ export class TextAdventureComponent implements OnInit {
     });
   }
 
-  private startGame(){
+  private startGame() {
     this.inputParserService.setGame(this.Game);
-    this.printOutput(this.Game.Title);
-    this.printOutput(this.Game.Introduction);
+    this.printOutput(this.Game.Title).then(() => this.printOutput(this.Game.Introduction));
   }
 
-  private printOutput(output: string){
-    output = output.split('\r\n').join('<br>');
-    this.OutputArray.push(new TextInput(output, TextInputType.Output));
+  private printOutput(output: string, useTypewriteAnimationOnOutput: boolean = true): Promise<void> {
+    return new Promise<void>((outerResolve) => {
+      if (useTypewriteAnimationOnOutput && this.UseTypewritingAnimation) {
+        const outputLines = output.split('\r\n');
+        // we create a promise chain, in order to avoid printing new lines written as '<br>'
+        let outputPromise = new Promise((resolve) => resolve());
+        for (const singleLine of outputLines) {
+          outputPromise = outputPromise.then(() => this.printLineAnimated(singleLine));
+        }
+        outputPromise = outputPromise.then(outerResolve);
+      } else {
+        output = output.split('\r\n').join('<br>');
+        this.OutputArray.push(new TextInput(output, TextInputType.Output));
+        outerResolve();
+      }
+    });
   }
 
-  private printInput(input: string){
+  private printLineAnimated(line: string): Promise<void> {
+    return new Promise<void>((resolve) => {
+      this.OutputArray.push(new TextInput('', TextInputType.Output));
+      // exit the recursion with the "resolve" function of the promise
+      this.typewriteOutput(0, line, this.OutputArray, resolve);
+    });
+  }
+
+  private typewriteOutput(i: number, output: string, outputArray: TextInput[], resolveFunction) {
+    if (i >= output.length) {
+      resolveFunction();
+    }
+    const char = output.charAt(i);
+    outputArray[outputArray.length - 1].Value += char;
+    i++;
+    setTimeout(() => {
+      this.typewriteOutput(i, output, this.OutputArray, resolveFunction);
+    }, this.TypewriterSpeed);
+  }
+
+  private printInput(input: string) {
     this.OutputArray.push(new TextInput(input, TextInputType.UserInput));
   }
 
   private buildGame(): Game {
     const builder = new GameBuilder()
-    .setTitle('-- Test Adventure --')
-    .setIntroduction('You\'ve lost track of where you are while hiking in the woods. Your battery is dead and it\'s going to get dark outside soon. You better find shelter for the night. \r\n'
-    + 'While looking for signs of civilization, such as roads or lights, you come across a small hut...')
-    .setGatewayTargetNotFoundResponse('You don\'t know where that is.')
-    .setItemAddedToInventoryResponse('You put that thing into your bag.')
-    .setItemNotFoundInInventoryResponse('You can\'t seem to find what you\'re looking for')
-    .setInventoryEmptyResponse('You look into your bag, hoping to find something helpful in there, but it\'s empty.');
+      .setTitle('-- Test Adventure --')
+      .setIntroduction('You\'ve lost track of where you are while hiking in the woods. Your battery is dead and it\'s going to get dark outside soon. You better find shelter for the night. \r\n'
+        + 'While looking for signs of civilization, such as roads or lights, you come across a small hut...')
+      .setGatewayTargetNotFoundResponse('You don\'t know where that is.')
+      .setItemAddedToInventoryResponse('You put that thing into your bag.')
+      .setItemNotFoundInInventoryResponse('You can\'t seem to find what you\'re looking for')
+      .setInventoryEmptyResponse('You look into your bag, hoping to find something helpful in there, but it\'s empty.');
 
     builder.addScene(1)
       .setName('Shed in the Woods')
@@ -116,19 +150,19 @@ export class TextAdventureComponent implements OnInit {
       .setActionNotRecognizedResponse('Doing that in a forrest? You don\'t think so.')
       .setItemNotFoundResponse('There, beneath the leaves and sticks, you seem to have spotted something. As you get closer, you realize that it was a useless rock.')
       .setInvalidInputResponse('You\'re confused. Good thing this isn\'t Pokèmon, so you don\'t hit yourself')
-        .addGatewayAction()
-          .setTargetSceneId(2)
-          .setTrigger('Shed')
-          .setResponse('The door is not locked. You open it and walk inside.')
-          .finish()
-        .addItem()
-          .setName('weird Stick')
-          .setDescription('A weird stick, that looks like a cross.')
-          .setItemUsedResponse('You use the stick to scratch your back. The stick breaks, but at least the itch is gone.')
-          .setNoUsagesLeftResponse('You broke the stick. It\'s unusable now.')
-          .setMaximumUsages(1)
-          .setUsagesLeft(1)
-          .finish()
+      .addGatewayAction()
+      .setTargetSceneId(2)
+      .setTrigger('Shed')
+      .setResponse('The door is not locked. You open it and walk inside.')
+      .finish()
+      .addItem()
+      .setName('weird Stick')
+      .setDescription('A weird stick, that looks like a cross.')
+      .setItemUsedResponse('You use the stick to scratch your back. The stick breaks, but at least the itch is gone.')
+      .setNoUsagesLeftResponse('You broke the stick. It\'s unusable now.')
+      .setMaximumUsages(1)
+      .setUsagesLeft(1)
+      .finish()
       .finish();
 
     builder.addScene(2)
@@ -138,24 +172,24 @@ export class TextAdventureComponent implements OnInit {
       .setItemNotFoundResponse('The place is too messy. You can\'t seem to find what you\'re looking for.')
       .setInvalidInputResponse('Just as you start doing that a fly passes your ear. You feel irritated and forget what you wanted to do.')
       .addGatewayAction()
-        .setTrigger('leave')
-        .setResponse('You walk out the door through which you came in. You find yourself infront of the shed.')
-        .setTargetSceneId(1)
-        .finish()
+      .setTrigger('leave')
+      .setResponse('You walk out the door through which you came in. You find yourself infront of the shed.')
+      .setTargetSceneId(1)
+      .finish()
       .addItemYieldingAction()
-        .setTrigger('sleep')
-        .setAmountOfItems(1)
-        .setResetItemUsagesToMaximum(true)
-        .setResponse('You jump into the bed and snuggle into place. While doing that you feel something hard inside your pillow. You open it up and find a rusty key of some sorts.')
-        .addItem()
-          .setName('Key')
-          .setDescription('A rusty key.')
-          .setItemUsedResponse('You stick the key into the hole. It turns and you hear a clicking sound. Of course, the key breaks in the process.')
-          .setNoUsagesLeftResponse('You broke the key. It\'s unusable now.')
-          .setMaximumUsages(1)
-          .setUsagesLeft(1)
-          .finish()
-        .finish()
+      .setTrigger('sleep')
+      .setAmountOfItems(1)
+      .setResetItemUsagesToMaximum(true)
+      .setResponse('You jump into the bed and snuggle into place. While doing that you feel something hard inside your pillow. You open it up and find a rusty key of some sorts.')
+      .addItem()
+      .setName('Key')
+      .setDescription('A rusty key.')
+      .setItemUsedResponse('You stick the key into the hole. It turns and you hear a clicking sound. Of course, the key breaks in the process.')
+      .setNoUsagesLeftResponse('You broke the key. It\'s unusable now.')
+      .setMaximumUsages(1)
+      .setUsagesLeft(1)
+      .finish()
+      .finish()
       .finish();
 
     return builder.finish();
