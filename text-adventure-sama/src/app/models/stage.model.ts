@@ -17,7 +17,7 @@ export class Stage implements IGatewayActionEventListener {
         this.ScenePath = [];
         this.Scenes = [];
 
-        SceneEventService.getInstance().GatewayActionEvent$.subscribe(this.OnSceneChange);
+        SceneEventService.getInstance().GatewayActionEvent$.subscribe((event) => this.OnSceneChange(event));
     }
 
     OnSceneChange(event: GatewayActionEvent) {
