@@ -5,6 +5,7 @@ export class Command {
     Trigger: string;
     Response: string;
     ResponseFunction: () => string;
+    UseTypeWritingAnimation: boolean;
     Description: string;
 
     public activate(): string {

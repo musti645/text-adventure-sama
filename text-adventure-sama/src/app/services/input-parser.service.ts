@@ -53,7 +53,7 @@ export class InputParserService {
     public parseInput(input: string): ParseInputResult {
         const commandsResult = this.getCommandsResponse(input);
         if (commandsResult) {
-            return new ParseInputResult(commandsResult, false);
+            return commandsResult;
         }
 
         // because imperatives are not so common in the brown/penn corpus, we add a 'they ' before
@@ -91,13 +91,13 @@ export class InputParserService {
 
     }
 
-    protected getCommandsResponse(input: string): string {
+    protected getCommandsResponse(input: string): ParseInputResult {
         const lowerCaseInput = input.toLocaleLowerCase();
 
-        let commandsResult;
+        let commandsResult: ParseInputResult;
         this.Game.getCommands().some(command => {
             if (command.Trigger.toLocaleLowerCase() === lowerCaseInput) {
-                commandsResult = command.activate();
+                commandsResult = new ParseInputResult(command.activate(), command.UseTypeWritingAnimation);
                 return true;
             }
         });

@@ -29,6 +29,7 @@ export class Game {
         const helpCommand = new Command();
         helpCommand.Trigger = 'help';
         helpCommand.Description = 'A list of all global commands';
+        helpCommand.UseTypeWritingAnimation = false;
         helpCommand.ResponseFunction = () => {
             let commandsHelp = '';
             this.Commands.forEach(command => {
@@ -41,6 +42,7 @@ export class Game {
 
         const inventoryCommand = new Command();
         inventoryCommand.Trigger = 'inventory';
+        inventoryCommand.UseTypeWritingAnimation = true;
         inventoryCommand.ResponseFunction = () => {
             if (this.Inventory.getItemCount() <= 0) {
                 return this.InventoryEmptyResponse;
@@ -57,6 +59,7 @@ export class Game {
 
         const sceneCommand = new Command();
         sceneCommand.Trigger = 'look around';
+        sceneCommand.UseTypeWritingAnimation = true;
         sceneCommand.ResponseFunction = () => {
             return this.Stage.getCurrentScene().Description;
         };
