@@ -29,24 +29,24 @@ export class Inventory implements IItemConsumingEventListener,
     }
 
     OnItemRemove(event: ItemRemovingActionEvent) {
-        this.removeItemFromInventory(event.Item.ID);
+        this.removeItemFromInventory(event.Item.getID());
     }
 
     OnItemConsume(event: ItemConsumingActionEvent) {
-        const items = this.findItemsById(event.Item.ID);
+        const items = this.findItemsById(event.Item.getID());
         items[0].use();
     }
 
     public findItemsById(id: number): InGameItem[] {
-        return this.Items.filter(o => o.ID === id);
+        return this.Items.filter(o => o.getID() === id);
     }
 
     public findItemsByName(name: string): InGameItem[] {
-        return this.Items.filter(o => o.Name === name);
+        return this.Items.filter(o => o.getName() === name);
     }
 
     public removeItemFromInventory(id: number): void {
-        this.Items = this.Items.filter(o => o.ID !== id);
+        this.Items = this.Items.filter(o => o.getID() !== id);
     }
 
     public getItemCount(): number {
