@@ -33,46 +33,46 @@ export class GameBuilder extends BaseBuilder {
             throw new EvalError('Command was not set.');
         }
 
-        if (!command.Response && !command.ResponseFunction) {
+        if (!command.getResponse() && !command.getResponseFunction()) {
             throw new EvalError('Either Command response or response function have to be set.');
         }
 
-        this.Game.Commands.push(command);
+        this.Game.getCommands().push(command);
         return this;
     }
 
     public removeExistingCommands(): this {
-        this.Game.Commands = [];
+        this.Game.setCommands([]);
         return this;
     }
 
     public setTitle(title: string): this {
-        this.Game.Title = title;
+        this.Game.setTitle(title);
         return this;
     }
 
     public setIntroduction(intro: string): this {
-        this.Game.Introduction = intro;
+        this.Game.setIntroduction(intro);
         return this;
     }
 
     public setItemNotFoundInInventoryResponse(response: string): this {
-        this.Game.ItemNotFoundInInventoryResponse = response;
+        this.Game.setItemNotFoundInInventoryResponse(response);
         return this;
     }
 
     public setItemAddedToInventoryResponse(response: string): this {
-        this.Game.ItemAddedToInventoryResponse = response;
+        this.Game.setItemAddedToInventoryResponse(response);
         return this;
     }
 
     public setGatewayTargetNotFoundResponse(response: string): this {
-        this.Game.GatewayTargetNotFoundResponse = response;
+        this.Game.setGatewayTargetNotFoundResponse(response);
         return this;
     }
 
     public setInventoryEmptyResponse(response: string): this {
-        this.Game.InventoryEmptyResponse = response;
+        this.Game.setInventoryEmptyResponse(response);
         return this;
     }
 
@@ -82,31 +82,31 @@ export class GameBuilder extends BaseBuilder {
 
     public finish(): Game {
 
-        if (!this.Game.Title) {
+        if (!this.Game.getTitle()) {
             throw new BuilderError('Game creation could not be finished. Title was not set.');
         }
 
-        if (!this.Game.Introduction) {
+        if (!this.Game.getIntroduction()) {
             throw new BuilderError('Game creation could not be finished. Introduction was not set.');
         }
 
-        if (!this.Game.ItemAddedToInventoryResponse) {
+        if (!this.Game.getItemAddedToInventoryResponse()) {
             throw new BuilderError('Game creation could not be finished. ItemAddedToInventoryResponse was not set.');
         }
 
-        if (!this.Game.ItemNotFoundInInventoryResponse) {
+        if (!this.Game.getItemNotFoundInInventoryResponse()) {
             throw new BuilderError('Game creation could not be finished. ItemNotFoundInInventoryResponse was not set.');
         }
 
-        if (!this.Game.GatewayTargetNotFoundResponse) {
+        if (!this.Game.getGatewayTargetNotFoundResponse()) {
             throw new BuilderError('Game creation could not be finished. GatewayTargetNotFoundResponse was not set.');
         }
 
-        if (!this.Game.InventoryEmptyResponse) {
+        if (!this.Game.getInventoryEmptyResponse()) {
             throw new BuilderError('Game creation could not be finished. InventoryEmptyResponse was not set.');
         }
 
-        if (this.Game.Stage.getScenesCount() <= 0) {
+        if (this.Game.getScenesCount() <= 0) {
             throw new BuilderError('Game creation could not be finished. No Scenes were found.');
         }
 

@@ -19,7 +19,7 @@ export class IDGeneratorService {
     }
 
     public generateIDs(game: Game): void {
-        this.processScenes(game.Stage.getScenes());
+        this.processScenes(game.getStage().getScenes());
         this.typeArray = [];
     }
 
@@ -40,8 +40,8 @@ export class IDGeneratorService {
     protected processActions(actions: Action[]): void {
         actions.forEach(element => {
             if ((element instanceof ItemYieldingAction)
-                && !element.Item.getID()) {
-                element.Item.setID(this.getIdFromTypeName(element.constructor.name));
+                && !element.getItem().getID()) {
+                element.getItem().setID(this.getIdFromTypeName(element.constructor.name));
             }
         });
     }
@@ -78,7 +78,7 @@ export class IDGeneratorService {
     }
 
     public addActionItemId(action: ItemYieldingAction): void {
-        this.setUsedIdForTypeName(action.Item.constructor.name, action.Item.getID());
+        this.setUsedIdForTypeName(action.getItem().constructor.name, action.getItem().getID());
     }
 
     /**

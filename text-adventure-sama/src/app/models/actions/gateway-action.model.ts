@@ -7,21 +7,37 @@ import { InteractionType } from '../interactions/interaction-type.enum';
  * When a GatewayAction is triggered, the game moves on to another scene.
  */
 export class GatewayAction extends Action {
-    SceneId: number;
-    TargetSceneName: string;
+    private TargetSceneId: number;
+    private TargetSceneName: string;
 
 
     constructor() {
         super();
-        this.InteractionType = InteractionType.GO_TO;
+        this.setInteractionType(InteractionType.GO_TO);
     }
 
     public trigger(): string {
         // trigger event change
         SceneEventService.getInstance().changeScene(new GatewayActionEvent(this));
-        return this.Response;
+        return this.getResponse();
     }
 
     public reset() {
+    }
+
+    public getTargetSceneId(): number {
+        return this.TargetSceneId;
+    }
+
+    public setTargetSceneId(id: number): void {
+        this.TargetSceneId = id;
+    }
+
+    public getTargetSceneName(): string {
+        return this.TargetSceneName;
+    }
+
+    public setTargetSceneName(name: string): void {
+        this.TargetSceneName = name;
     }
 }

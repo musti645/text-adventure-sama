@@ -29,7 +29,7 @@ export class BaseActionBuilder<T extends Action, ReturnBuilderType extends Actio
             throw new EvalError('No Trigger found.');
         }
 
-        this.Action.Trigger = trigger;
+        this.Action.setTrigger(trigger);
         return this;
     }
 
@@ -38,7 +38,12 @@ export class BaseActionBuilder<T extends Action, ReturnBuilderType extends Actio
             throw new EvalError('No Response found.');
         }
 
-        this.Action.Response = response;
+        this.Action.setResponse(response);
+        return this;
+    }
+
+    public setEndGameAction(): this {
+        this.Action.setIsEndGameAction(true);
         return this;
     }
 
@@ -46,11 +51,11 @@ export class BaseActionBuilder<T extends Action, ReturnBuilderType extends Actio
     }
 
     public finish(): ReturnBuilderType {
-        if (!this.Action.Trigger) {
+        if (!this.Action.getTrigger()) {
             throw new BuilderError('Action creation could not be finished. Trigger was not set.');
         }
 
-        if (!this.Action.Response) {
+        if (!this.Action.getResponse()) {
             throw new BuilderError('Action creation could not be finished. Response was not set.');
         }
 
@@ -73,7 +78,7 @@ export class GatewayActionBuilder<ReturnBuilderType extends ActionContainingBuil
             throw new EvalError('TargetSceneId Value has to be greater than 0.');
         }
 
-        this.Action.SceneId = id;
+        this.Action.setTargetSceneId(id);
         return this;
     }
 
@@ -82,12 +87,12 @@ export class GatewayActionBuilder<ReturnBuilderType extends ActionContainingBuil
             throw new EvalError('TargetSceneName Value is invalid.');
         }
 
-        this.Action.TargetSceneName = name;
+        this.Action.setTargetSceneName(name);
         return this;
     }
 
     public onFinish() {
-        if (!this.Action.SceneId && !this.Action.TargetSceneName) {
+        if (!this.Action.getTargetSceneId() && !this.Action.getTargetSceneName()) {
             throw new BuilderError('Action creation could not be finished. SceneId and/or TargetSceneName were not set.');
         }
     }
@@ -101,7 +106,7 @@ export class ItemConsumingActionBuilder<ReturnBuilderType extends ActionContaini
     }
 
     addItemToBuilder(item: InGameItem): void {
-        this.Action.Item = item;
+        this.Action.setItem(item);
     }
 
     public addItem(item?: InGameItem): ItemBuilder<ItemConsumingActionBuilder<ReturnBuilderType>> {
@@ -109,7 +114,7 @@ export class ItemConsumingActionBuilder<ReturnBuilderType extends ActionContaini
     }
 
     public onFinish() {
-        if (!this.Action.Item) {
+        if (!this.Action.getItem()) {
             throw new BuilderError('Action creation could not be finished. Item was not set.');
         }
     }
@@ -124,7 +129,7 @@ export class ItemRemovingActionBuilder<ReturnBuilderType extends ActionContainin
     }
 
     addItemToBuilder(item: InGameItem): void {
-        this.Action.Item = item;
+        this.Action.setItem(item);
     }
 
     public addItem(item?: InGameItem): ItemBuilder<ItemRemovingActionBuilder<ReturnBuilderType>> {
@@ -132,7 +137,7 @@ export class ItemRemovingActionBuilder<ReturnBuilderType extends ActionContainin
     }
 
     public onFinish() {
-        if (!this.Action.Item) {
+        if (!this.Action.getItem()) {
             throw new BuilderError('Action creation could not be finished. Item was not set.');
         }
     }
@@ -148,7 +153,7 @@ export class ItemYieldingActionBuilder<ReturnBuilderType extends ActionContainin
     }
 
     addItemToBuilder(item: InGameItem): void {
-        this.Action.Item = item;
+        this.Action.setItem(item);
     }
 
     public addItem(item?: InGameItem): ItemBuilder<ItemYieldingActionBuilder<ReturnBuilderType>> {
@@ -160,17 +165,17 @@ export class ItemYieldingActionBuilder<ReturnBuilderType extends ActionContainin
             throw new EvalError('AmountOfItems Value has to be greater than 0.');
         }
 
-        this.Action.AmountOfItems = amount;
+        this.Action.setAmountOfItems(amount);
         return this;
     }
 
     public setResetItemUsagesToMaximum(reset: boolean): this {
-        this.Action.ResetItemUsagesToMaximum = reset;
+        this.Action.setResetItemUsagesToMaximum(reset);
         return this;
     }
 
     public onFinish() {
-        if (!this.Action.Item) {
+        if (!this.Action.getItem()) {
             throw new BuilderError('Action creation could not be finished. Item was not set.');
         }
     }
@@ -189,11 +194,11 @@ export class MultiTimeActionBuilder<ReturnBuilderType extends ActionContainingBu
             throw new EvalError('UsagesLeft Value has to be greater than 0.');
         }
 
-        if (this.Action.MaximumUsages && this.Action.MaximumUsages < count) {
+        if (this.Action.getMaximumUsages() && this.Action.getMaximumUsages() < count) {
             throw new EvalError('UsagesLeft Value has to be less than or equal to MaximumUsages Value.');
         }
 
-        this.Action.UsagesLeft = count;
+        this.Action.setUsagesLeft(count);
         return this;
     }
 
@@ -203,7 +208,7 @@ export class MultiTimeActionBuilder<ReturnBuilderType extends ActionContainingBu
             throw new EvalError('InteractionType not set.');
         }
 
-        this.Action.InteractionType = type;
+        this.Action.setInteractionType(type);
         return this;
     }
 
@@ -212,15 +217,15 @@ export class MultiTimeActionBuilder<ReturnBuilderType extends ActionContainingBu
             throw new EvalError('MaximumUsages Value has to be greater than 0.');
         }
 
-        if (this.Action.UsagesLeft && this.Action.UsagesLeft > count) {
+        if (this.Action.getUsagesLeft() && this.Action.getUsagesLeft() > count) {
             throw new EvalError('MaximumUsages Value has to be greater than or equal to UsagesLeft Value.');
         }
 
-        if (this.Action.Responses && this.Action.Responses.length !== count) {
+        if (this.Action.getResponses() && this.Action.getResponses().length !== count) {
             throw new EvalError('MaximumUsages Value has to match the Amount of Responses.');
         }
 
-        this.Action.MaximumUsages = count;
+        this.Action.setMaximumUsages(count);
         return this;
     }
 
@@ -233,24 +238,24 @@ export class MultiTimeActionBuilder<ReturnBuilderType extends ActionContainingBu
             throw new EvalError('Responses Array may not be empty.');
         }
 
-        this.Action.Responses = responses;
+        this.Action.setResponses(responses);
         return this;
     }
 
     public onFinish() {
-        if (!this.Action.UsagesLeft) {
+        if (!this.Action.getUsagesLeft()) {
             throw new BuilderError('Action creation could not be finished. UsagesLeft was not set.');
         }
 
-        if (!this.Action.MaximumUsages) {
+        if (!this.Action.getMaximumUsages()) {
             throw new BuilderError('Action creation could not be finished. MaximumUsages was not set.');
         }
 
-        if (!this.Action.Responses) {
+        if (!this.Action.getResponses()) {
             throw new BuilderError('Action creation could not be finished. Responses Array was not set.');
         }
 
-        if (!this.Action.InteractionType) {
+        if (!this.Action.getInteractionType()) {
             throw new BuilderError('Action creation could not be finished. InteractionType was not set.');
         }
     }
@@ -266,7 +271,7 @@ export class OneTimeActionBuilder<ReturnBuilderType extends ActionContainingBuil
     }
 
     public setWasTrigered(wasTriggered: boolean): this {
-        this.Action.WasTriggered = wasTriggered;
+        this.Action.setWasTriggered(wasTriggered);
         return this;
     }
 
@@ -275,7 +280,7 @@ export class OneTimeActionBuilder<ReturnBuilderType extends ActionContainingBuil
             throw new EvalError('No Response found.');
         }
 
-        this.Action.ResponseAfterUse = response;
+        this.Action.setResponseAfterUse(response);
         return this;
     }
 
@@ -284,16 +289,16 @@ export class OneTimeActionBuilder<ReturnBuilderType extends ActionContainingBuil
             throw new EvalError('InteractionType not set.');
         }
 
-        this.Action.InteractionType = type;
+        this.Action.setInteractionType(type);
         return this;
     }
 
     public onFinish() {
-        if (!this.Action.ResponseAfterUse) {
+        if (!this.Action.getResponseAfterUse()) {
             throw new BuilderError('Action creation could not be finished. ResponseAfterUse was not set.');
         }
 
-        if (!this.Action.InteractionType) {
+        if (!this.Action.getInteractionType()) {
             throw new BuilderError('Action creation could not be finished. InteractionType was not set.');
         }
     }
@@ -316,7 +321,7 @@ export class RandomResponseActionBuilder<ReturnBuilderType extends ActionContain
             throw new EvalError('Responses Array may not be empty.');
         }
 
-        this.Action.Responses = responses;
+        this.Action.setResponses(responses);
         return this;
     }
 
@@ -325,16 +330,16 @@ export class RandomResponseActionBuilder<ReturnBuilderType extends ActionContain
             throw new EvalError('InteractionType not set.');
         }
 
-        this.Action.InteractionType = type;
+        this.Action.setInteractionType(type);
         return this;
     }
 
     public onFinish() {
-        if (!this.Action.Responses) {
+        if (!this.Action.getResponses()) {
             throw new BuilderError('Action creation could not be finished. Responses Array was not set.');
         }
 
-        if (!this.Action.InteractionType) {
+        if (!this.Action.getInteractionType()) {
             throw new BuilderError('Action creation could not be finished. InteractionType was not set.');
         }
     }

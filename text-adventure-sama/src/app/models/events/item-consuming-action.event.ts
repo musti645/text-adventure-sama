@@ -10,10 +10,10 @@ export class ItemConsumingActionEvent {
 
 
     constructor(action: ItemConsumingAction){
-        this.Item = action.Item;
-        this.Response = action.Response;
-        this.ResponseAfterUse = action.ResponseAfterUse;
-        this.WasTriggered = action.WasTriggered;
+        this.Item = action.getItem();
+        this.Response = action.getResponse();
+        this.ResponseAfterUse = action.getResponseAfterUse();
+        this.WasTriggered = action.getWasTriggered();
     }
 }
 

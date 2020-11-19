@@ -1,3 +1,4 @@
+import { InteractionType } from '../interactions/interaction-type.enum';
 import { Action } from './action.model';
 
 /**
@@ -5,11 +6,12 @@ import { Action } from './action.model';
  * Each subsequent trigger returns the same response.
  */
 export class OneTimeAction extends Action {
-    WasTriggered: boolean;
-    ResponseAfterUse: string;
+    private WasTriggered: boolean;
+    private ResponseAfterUse: string;
 
     constructor() {
         super();
+        this.setInteractionType(InteractionType.DO);
     }
 
     public trigger(): string {
@@ -18,10 +20,26 @@ export class OneTimeAction extends Action {
         }
 
         this.WasTriggered = true;
-        return this.Response;
+        return this.getResponse();
     }
 
     public reset() {
         this.WasTriggered = false;
+    }
+
+    public getWasTriggered(): boolean {
+        return this.WasTriggered;
+    }
+
+    public setWasTriggered(triggered: boolean): void {
+        this.WasTriggered = triggered;
+    }
+
+    public getResponseAfterUse(): string {
+        return this.ResponseAfterUse;
+    }
+
+    public setResponseAfterUse(response: string): void {
+        this.ResponseAfterUse = response;
     }
 }

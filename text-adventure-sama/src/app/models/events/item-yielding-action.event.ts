@@ -10,12 +10,12 @@ export class ItemYieldingActionEvent {
     WasTriggered: boolean;
 
     constructor(action: ItemYieldingAction){
-        this.Item = action.Item;
-        this.AmountOfItems = action.AmountOfItems;
-        this.ResetItemUsagesToMaximum = action.ResetItemUsagesToMaximum;
-        this.Response = action.Response;
-        this.ResponseAfterUse = action.ResponseAfterUse;
-        this.WasTriggered = action.WasTriggered;
+        this.Item = action.getItem();
+        this.Response = action.getResponse();
+        this.ResponseAfterUse = action.getResponseAfterUse();
+        this.WasTriggered = action.getWasTriggered();
+        this.AmountOfItems = action.getAmountOfItems();
+        this.ResetItemUsagesToMaximum = action.getResetItemUsagesToMaximum();
     }
 }
 

@@ -3,6 +3,7 @@ import { Action } from './actions/action.model';
 
 /**
  * A Scene is a container of actions and Items.
+ * The player can only be inside one scene at a time.
  */
 export class Scene {
     ID: number;

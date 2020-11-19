@@ -5,10 +5,10 @@ import { InteractionType } from '../interactions/interaction-type.enum';
  */
 // Note: Actions don't have IDs, since they are triggered via their InteractionType and their Trigger
 export abstract class Action {
-    Trigger: string;
-    Response: string;
-    WrongInteractionTypeResponse: string;
-    InteractionType: InteractionType;
+    private Trigger: string;
+    private Response: string;
+    private InteractionType: InteractionType;
+    private IsEndGameAction: boolean;
 
     constructor() {
     }
@@ -16,4 +16,36 @@ export abstract class Action {
     public abstract trigger(): string;
 
     public abstract reset(): void;
+
+    public setTrigger(trigger: string): void {
+        this.Trigger = trigger;
+    }
+
+    public setInteractionType(type: InteractionType): void {
+        this.InteractionType = type;
+    }
+
+    public setResponse(response: string): void {
+        this.Response = response;
+    }
+
+    public setIsEndGameAction(endGameAction: boolean): void {
+        this.IsEndGameAction = endGameAction;
+    }
+
+    public getTrigger(): string {
+        return this.Trigger;
+    }
+
+    public getIsEndGameAction(): boolean {
+        return this.IsEndGameAction;
+    }
+
+    public getInteractionType(): InteractionType {
+        return this.InteractionType;
+    }
+
+    public getResponse(): string {
+        return this.Response;
+    }
 }

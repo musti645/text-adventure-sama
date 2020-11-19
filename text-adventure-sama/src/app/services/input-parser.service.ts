@@ -8,6 +8,7 @@ import { TextInputType } from '../models/other/text-input.enum';
 import * as natural from 'natural';
 import { InteractionType } from '../models/interactions/interaction-type.enum';
 import { IClassificationTrainer } from './classification-trainer.interface';
+import { ParseInputResult } from '../models/other/parse-input-result.model';
 const language = 'EN';
 // see Penn Treebank Part-of-Speech Tags for more info on the tags
 const defaultCategory = 'N';
@@ -21,11 +22,10 @@ const verbCategory = 'VB';
     providedIn: 'root'
 })
 export class InputParserService {
-    Game: Game;
-    POSTagger: natural.BrillPOSTagger;
-    Tokenizer: natural.WordTokenizer;
-    Classifier: natural.BayesClassifier;
-    SkipTokenization: boolean;
+    private Game: Game;
+    private POSTagger: natural.BrillPOSTagger;
+    private Tokenizer: natural.WordTokenizer;
+    private Classifier: natural.BayesClassifier;
 
     constructor() {
     }
@@ -44,10 +44,6 @@ export class InputParserService {
 
     setGame(game: Game) {
         this.Game = game;
-    }
-
-    setTokenization(tokenization: boolean) {
-        this.SkipTokenization = tokenization;
     }
 
     public parseInput(input: string): ParseInputResult {
@@ -69,24 +65,24 @@ export class InputParserService {
 
         // no interaction type found
         if (interactionType === undefined || interactionType === null) {
-            return new ParseInputResult(this.Game.Stage.getCurrentScene().InvalidInputResponse);
+            return new ParseInputResult(this.Game.getInvalidInputResponse());
         }
 
         switch (interactionType) {
             case InteractionType.GO_TO:
                 // scenes/gateway actions
-                return new ParseInputResult(this.getGoToResponse(nounsAndVerbs));
+                return this.getGoToResponse(nounsAndVerbs);
             case InteractionType.LOOK_AT:
                 // item description
-                return new ParseInputResult(this.getLookAtResponse(nounsAndVerbs));
+                return this.getLookAtResponse(nounsAndVerbs);
             case InteractionType.PICK_UP:
                 // add item to inventory
-                return new ParseInputResult(this.getPickUpResponse(nounsAndVerbs));
+                return this.getPickUpResponse(nounsAndVerbs);
             case InteractionType.USE:
                 // use item in inventory or in scene
-                return new ParseInputResult(this.getUseResponse(nounsAndVerbs));
+                return this.getUseResponse(nounsAndVerbs);
             default:
-                return new ParseInputResult(this.Game.Stage.getCurrentScene().InvalidInputResponse);
+                return this.getDoResponse(nounsAndVerbs);
         }
 
     }
@@ -96,13 +92,120 @@ export class InputParserService {
 
         let commandsResult: ParseInputResult;
         this.Game.getCommands().some(command => {
-            if (command.Trigger.toLocaleLowerCase() === lowerCaseInput) {
-                commandsResult = new ParseInputResult(command.activate(), command.UseTypeWritingAnimation);
+            if (command.getTrigger().toLocaleLowerCase() === lowerCaseInput) {
+                commandsResult = new ParseInputResult(command.activate(), command.getUseTypeWritingAnimation());
                 return true;
             }
         });
 
         return commandsResult;
+    }
+
+    protected getGoToResponse(relevantWords: string[]): ParseInputResult {
+        const result = new ParseInputResult('');
+        // get gateway actions
+        const gatewayActions = this.Game.getActionsInScene().filter(val => {
+            return val.getInteractionType() === InteractionType.GO_TO;
+        });
+
+        if (!gatewayActions || gatewayActions.length <= 0) {
+            result.Result = this.Game.getGatewayTargetNotFoundResponse();
+            return result;
+        }
+
+        const actionDistances = this.getActionDistancesFromNouns(relevantWords, gatewayActions);
+
+        if (!actionDistances || actionDistances.length <= 0) {
+            result.Result = this.Game.getGatewayTargetNotFoundResponse();
+            return result;
+        }
+
+        const action = actionDistances[0].Action;
+
+        result.Result = action.trigger();
+        result.IsEndGameResult = action.getIsEndGameAction();
+        return result;
+
+    }
+
+    protected getLookAtResponse(relevantWords: string[]): ParseInputResult {
+        const result = new ParseInputResult('');
+
+        const itemDistances = this.getItemDistancesFromNouns(relevantWords,
+            this.Game.getItemsInScene(),
+            this.Game.getItemsInInventory());
+
+        if (!itemDistances || itemDistances.length <= 0) {
+            result.Result = this.Game.getItemNotFoundResponse();
+        }
+        result.Result = itemDistances[0].Item.getDescription();
+        return result;
+    }
+
+    protected getPickUpResponse(relevantWords: string[]): ParseInputResult {
+        const result = new ParseInputResult('');
+
+        const itemDistances = this.getItemDistancesFromNouns(relevantWords,
+            this.Game.getItemsInScene(),
+            undefined);
+
+        if (!itemDistances || itemDistances.length <= 0) {
+            result.Result = this.Game.getItemNotFoundResponse();
+            return result;
+        }
+
+        const item = itemDistances[0].Item;
+
+        this.Game.addItemToInventory(item);
+
+        this.Game.removeItemFromScene(item);
+
+        result.Result = this.Game.getItemAddedToInventoryResponse();
+        return result;
+    }
+
+    protected getUseResponse(relevantWords: string[]): ParseInputResult {
+        const result = new ParseInputResult('');
+
+        const itemDistances = this.getItemDistancesFromNouns(relevantWords,
+            this.Game.getItemsInScene(),
+            this.Game.getItemsInInventory());
+
+        if (!itemDistances || itemDistances.length <= 0) {
+            result.Result = this.Game.getItemNotFoundResponse();
+            return result;
+        }
+
+        const item = itemDistances[0].Item;
+
+        result.Result = item.use();
+        return result;
+    }
+
+    protected getDoResponse(relevantWords: string[]): ParseInputResult {
+        const result = new ParseInputResult('');
+
+        const actions = this.Game.getActionsInScene().filter(val => {
+            return val.getInteractionType() === InteractionType.DO;
+        });
+
+        if (!actions || actions.length <= 0) {
+            result.Result = this.Game.getActionNotRecognizedResponse();
+            return result;
+        }
+
+        const actionDistances = this.getActionDistancesFromNouns(relevantWords, actions);
+
+        if (!actionDistances || actionDistances.length <= 0) {
+            result.Result = this.Game.getActionNotRecognizedResponse();
+            return result;
+        }
+
+        const action = actionDistances[0].Action;
+
+        result.Result = action.trigger();
+        result.IsEndGameResult = action.getIsEndGameAction();
+        return result;
     }
 
     protected getNounsAndVerbsFromTokenizedInput(taggedTokens: TaggedToken[]): any {
@@ -113,70 +216,6 @@ export class InputParserService {
 
             return result;
         }, []);
-    }
-
-    protected getGoToResponse(relevantWords: string[]): string {
-        // get gateway actions
-        const gatewayActions = this.Game.getActionsInScene().filter(val => {
-            return val.InteractionType === InteractionType.GO_TO;
-        });
-
-        if (!gatewayActions || gatewayActions.length <= 0) {
-            return this.Game.getInvalidInputResponse();
-        }
-
-        const actionDistances = this.getActionDistancesFromNouns(relevantWords, gatewayActions);
-
-        if (!actionDistances || actionDistances.length <= 0) {
-            return this.Game.GatewayTargetNotFoundResponse;
-        }
-
-        const action = actionDistances[0].Action;
-
-        return action.trigger();
-    }
-
-    protected getLookAtResponse(relevantWords: string[]): string {
-        const itemDistances = this.getItemDistancesFromNouns(relevantWords,
-            this.Game.getItemsInScene(),
-            this.Game.getItemsInInventory());
-
-        if (!itemDistances || itemDistances.length <= 0) {
-            return this.Game.getItemNotFoundResponse();
-        }
-        return itemDistances[0].Item.Description;
-    }
-
-    protected getPickUpResponse(relevantWords: string[]): string {
-        const itemDistances = this.getItemDistancesFromNouns(relevantWords,
-            this.Game.getItemsInScene(),
-            undefined);
-
-        if (!itemDistances || itemDistances.length <= 0) {
-            return this.Game.getItemNotFoundResponse();
-        }
-
-        const item = itemDistances[0].Item;
-
-        this.Game.addItemToInventory(item);
-
-        this.Game.removeItemFromScene(item);
-
-        return this.Game.ItemAddedToInventoryResponse;
-    }
-
-    protected getUseResponse(relevantWords: string[]): string {
-        const itemDistances = this.getItemDistancesFromNouns(relevantWords,
-            this.Game.getItemsInScene(),
-            this.Game.getItemsInInventory());
-
-        if (!itemDistances || itemDistances.length <= 0) {
-            return this.Game.getItemNotFoundResponse();
-        }
-
-        const item = itemDistances[0].Item;
-
-        return item.use();
     }
 
     private getItemDistancesFromNouns(relevantWords: string[], sceneItems: InGameItem[], inventoryItems: InGameItem[]): ItemDistance[] {
@@ -213,7 +252,7 @@ export class InputParserService {
         const actionDistances: ActionDistance[] = [];
 
         actions.map(val => {
-            const taggedTrigger = this.POSTagger.tag(this.Tokenizer.tokenize(val.Trigger)).taggedWords;
+            const taggedTrigger = this.POSTagger.tag(this.Tokenizer.tokenize(val.getTrigger())).taggedWords;
 
             taggedTrigger.map(trigger => {
                 relevantWords.map(input => {
@@ -244,29 +283,14 @@ export class InputParserService {
                 return InteractionType.GO_TO;
             case 'pick_up':
                 return InteractionType.PICK_UP;
+            case 'do':
+                return InteractionType.DO;
             default:
-                return InteractionType.USE;
+                return InteractionType.DO;
         }
     }
 }
 
-/**
- * Allows us to pass multiple parameters without altering the function too much
- */
-export class ParseInputResult {
-    public Result: string;
-    public UseTypewriterAnimation: boolean;
-
-    constructor(result: string, typewriteAnimation: boolean = true){
-        this.Result = result;
-        this.UseTypewriterAnimation = typewriteAnimation;
-    }
-}
-
-export class InputWrapper {
-    public InputType: TextInputType;
-    public Keyword: string;
-}
 
 class ActionTag {
     public Action: Action;

@@ -4,21 +4,15 @@ import { InteractionType } from './interactions/interaction-type.enum';
  * This class represents an Item in the game.
  */
 export class InGameItem {
-    ID: number;
-    Name: string;
-    Description: string;
-    MaximumUsages: number;
+    private ID: number;
+    private Name: string;
+    private Description: string;
+    private MaximumUsages: number;
 
-    UsagesLeft: number;
+    private UsagesLeft: number;
 
-    ItemUsedResponse: string;
-    NoUsagesLeftResponse: string;
-
-    /**
-     * There are different ways to interact with different items, therefore we need the interaction type
-     * For example: 'open door' instead of 'use door'
-     */
-    InteractionType: InteractionType;
+    private ItemUsedResponse: string;
+    private NoUsagesLeftResponse: string;
 
     constructor(id?: number) {
         this.ID = id;
@@ -42,5 +36,53 @@ export class InGameItem {
 
     public getID(): number {
         return this.ID;
+    }
+
+    public setName(name: string): void {
+        this.Name = name;
+    }
+
+    public getName(): string {
+        return this.Name;
+    }
+
+    public setDescription(desc: string): void {
+        this.Description = desc;
+    }
+
+    public getDescription(): string {
+        return this.Description;
+    }
+
+    public setMaximumUsages(usages: number): void {
+        this.MaximumUsages = usages;
+    }
+
+    public getMaximumUsages(): number {
+        return this.MaximumUsages;
+    }
+
+    public setUsagesLeft(usages: number): void {
+        this.UsagesLeft = usages;
+    }
+
+    public getUsagesLeft(): number {
+        return this.UsagesLeft;
+    }
+
+    public setItemUsedResponse(response: string): void {
+        this.ItemUsedResponse = response;
+    }
+
+    public getItemUsedResponse(): string {
+        return this.ItemUsedResponse;
+    }
+
+    public setNoUsagesLeftResponse(response: string): void {
+        this.NoUsagesLeftResponse = response;
+    }
+
+    public getNoUsagesLeftResponse(): string {
+        return this.NoUsagesLeftResponse;
     }
 }

@@ -14,12 +14,12 @@ export class ItemBuilder<ReturnBuilderType extends ItemContainingBuilder> extend
     }
 
     public setName(name: string): this {
-        this.Item.Name = name;
+        this.Item.setName(name);
         return this;
     }
 
     public setDescription(description: string): this {
-        this.Item.Description = description;
+        this.Item.setDescription(description);
         return this;
     }
 
@@ -28,11 +28,11 @@ export class ItemBuilder<ReturnBuilderType extends ItemContainingBuilder> extend
             throw new EvalError('MaximumUsages Value has to be greater than 0.');
         }
 
-        if (this.Item.UsagesLeft && this.Item.UsagesLeft > maxUsages) {
+        if (this.Item.getUsagesLeft() && this.Item.getUsagesLeft() > maxUsages) {
             throw new EvalError('MaximumUsages Value has to be greater or equal to the UsagesLeft Value');
         }
 
-        this.Item.MaximumUsages = maxUsages;
+        this.Item.setMaximumUsages(maxUsages);
         return this;
     }
 
@@ -41,11 +41,11 @@ export class ItemBuilder<ReturnBuilderType extends ItemContainingBuilder> extend
             throw new EvalError('UsagesLeft Value has to be greater than 0.');
         }
 
-        if (this.Item.MaximumUsages && usagesLeft > this.Item.MaximumUsages) {
+        if (this.Item.getMaximumUsages() && usagesLeft > this.Item.getMaximumUsages()) {
             throw new EvalError('UsagesLeft Value has to be less or equal to the MaximumUsages Value.');
         }
 
-        this.Item.UsagesLeft = usagesLeft;
+        this.Item.setUsagesLeft(usagesLeft);
         return this;
     }
 
@@ -54,7 +54,7 @@ export class ItemBuilder<ReturnBuilderType extends ItemContainingBuilder> extend
             throw new EvalError('ItemUsedResponse was undefined.');
         }
 
-        this.Item.ItemUsedResponse = response;
+        this.Item.setItemUsedResponse(response);
         return this;
     }
 
@@ -64,34 +64,34 @@ export class ItemBuilder<ReturnBuilderType extends ItemContainingBuilder> extend
             throw new EvalError('NoUsagesLeftResponse was undefined.');
         }
 
-        this.Item.NoUsagesLeftResponse = response;
+        this.Item.setNoUsagesLeftResponse(response);
         return this;
     }
 
     public finish(): ReturnBuilderType {
-        if (!this.Item.Name) {
+        if (!this.Item.getName()) {
             throw new BuilderError('Item creation could not be finished. Name was not set.');
         }
 
-        if (!this.Item.Description) {
+        if (!this.Item.getDescription()) {
             throw new BuilderError('Item creation could not be finished. Description was not set.');
         }
 
 
-        if (!this.Item.ItemUsedResponse) {
+        if (!this.Item.getItemUsedResponse()) {
             throw new BuilderError('Item creation could not be finished. ItemUsedResponse was not set.');
         }
 
-        if (!this.Item.NoUsagesLeftResponse) {
+        if (!this.Item.getNoUsagesLeftResponse()) {
             throw new BuilderError('Item creation could not be finished. NoUsagesLeftResponse was not set.');
         }
 
-        if (!this.Item.MaximumUsages) {
-            this.Item.MaximumUsages = 1;
+        if (!this.Item.getMaximumUsages()) {
+            this.Item.setMaximumUsages(1);
         }
 
-        if (!this.Item.UsagesLeft) {
-            this.Item.UsagesLeft = 1;
+        if (!this.Item.getUsagesLeft()) {
+            this.Item.setUsagesLeft(1);
         }
 
         this.Builder.addItemToBuilder(this.Item);

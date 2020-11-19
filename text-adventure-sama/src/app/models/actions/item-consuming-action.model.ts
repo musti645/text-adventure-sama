@@ -9,25 +9,33 @@ import { InteractionType } from '../interactions/interaction-type.enum';
  * It can only be triggered, if the user has got the Item in her inventory.
  */
 export class ItemConsumingAction extends OneTimeAction {
-    Item: InGameItem;
+    private Item: InGameItem;
 
     constructor() {
         super();
-        this.InteractionType = InteractionType.USE;
+        this.setInteractionType(InteractionType.USE);
     }
 
     public trigger(): string {
-        if (this.WasTriggered) {
-            return this.ResponseAfterUse;
+        if (this.getWasTriggered()) {
+            return this.getResponseAfterUse();
         }
 
         ItemEventService.getInstance().consumeItem(new ItemConsumingActionEvent(this));
 
-        this.WasTriggered = true;
-        return this.Response;
+        this.setWasTriggered(true);
+        return this.getResponse();
     }
 
     public reset() {
-        this.WasTriggered = false;
+        this.setWasTriggered(false);
+    }
+
+    public getItem(): InGameItem {
+        return this.Item;
+    }
+
+    public setItem(item: InGameItem): void {
+        this.Item = item;
     }
 }

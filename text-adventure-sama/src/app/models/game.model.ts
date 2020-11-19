@@ -8,15 +8,15 @@ import { Stage } from './stage.model';
  * Represents the Game.
  */
 export class Game {
-    Title: string;
-    Introduction: string;
-    ItemNotFoundInInventoryResponse: string;
-    ItemAddedToInventoryResponse: string;
-    GatewayTargetNotFoundResponse: string;
-    InventoryEmptyResponse: string;
-    Stage: Stage;
-    Inventory: Inventory;
-    Commands: Command[];
+    private Title: string;
+    private Introduction: string;
+    private ItemNotFoundInInventoryResponse: string;
+    private ItemAddedToInventoryResponse: string;
+    private GatewayTargetNotFoundResponse: string;
+    private InventoryEmptyResponse: string;
+    private Stage: Stage;
+    private Inventory: Inventory;
+    private Commands: Command[];
 
     constructor() {
         this.Stage = new Stage();
@@ -27,50 +27,85 @@ export class Game {
 
     private initializeCommands(): void {
         const helpCommand = new Command();
-        helpCommand.Trigger = 'help';
-        helpCommand.Description = 'A list of all global commands';
-        helpCommand.UseTypeWritingAnimation = false;
-        helpCommand.ResponseFunction = () => {
+        helpCommand.setTrigger('help');
+        helpCommand.setDescription('A list of all global commands');
+        helpCommand.setUseTypeWritingAnimation(false);
+        helpCommand.setResponseFunction(() => {
             let commandsHelp = '';
             this.Commands.forEach(command => {
-                commandsHelp += `${command.Trigger} - ${command.Description} \r\n `;
+                commandsHelp += `${command.getTrigger()} - ${command.getDescription()} \r\n `;
             });
             return commandsHelp;
-        };
+        });
         this.Commands.push(helpCommand);
 
 
         const inventoryCommand = new Command();
-        inventoryCommand.Trigger = 'inventory';
-        inventoryCommand.UseTypeWritingAnimation = true;
-        inventoryCommand.ResponseFunction = () => {
+        inventoryCommand.setTrigger('inventory');
+        inventoryCommand.setDescription('List all items in your inventory.');
+        inventoryCommand.setUseTypeWritingAnimation(false);
+        inventoryCommand.setResponseFunction(() => {
             if (this.Inventory.getItemCount() <= 0) {
                 return this.InventoryEmptyResponse;
             }
             let inventoryContents = 'Items in Inventory: \r\n ';
             this.Inventory.getItems().forEach(item => {
-                inventoryContents += `${item.Name} \r\n `;
+                inventoryContents += `${item.getName()} \r\n `;
             });
             return inventoryContents;
-        };
-        inventoryCommand.Description = 'List all items in your inventory.';
+        });
         this.Commands.push(inventoryCommand);
 
 
         const sceneCommand = new Command();
-        sceneCommand.Trigger = 'look around';
-        sceneCommand.UseTypeWritingAnimation = true;
-        sceneCommand.ResponseFunction = () => {
+        sceneCommand.setTrigger('look around');
+        sceneCommand.setDescription('Get a description of the scene you\'re in');
+        sceneCommand.setUseTypeWritingAnimation(true);
+        sceneCommand.setResponseFunction(() => {
             return this.Stage.getCurrentScene().Description;
-        };
-
-        sceneCommand.Description = 'Get a description of the scene you\'re in';
+        });
 
         this.Commands.push(sceneCommand);
     }
 
+    public getStage(): Stage {
+        return this.Stage;
+    }
+
+    public getInventory(): Inventory {
+        return this.Inventory;
+    }
+
+    public setInventory(inventory: Inventory): void {
+        this.Inventory = inventory;
+    }
+
+    public getScenesCount(): number {
+        return this.Stage.getScenesCount();
+    }
+
+    public getTitle(): string {
+        return this.Title;
+    }
+
+    public setTitle(title: string): void {
+        this.Title = title;
+    }
+
+    public getIntroduction(): string {
+        return this.Introduction;
+    }
+
+    public setIntroduction(intro: string): void {
+        this.Introduction = intro;
+    }
+
     public getCommands(): Command[] {
         return this.Commands;
+    }
+
+    public setCommands(commands: Command[]): void {
+        this.Commands = commands;
     }
 
     public getItemNotFoundResponse(): string {
@@ -93,6 +128,10 @@ export class Game {
         return this.ItemNotFoundInInventoryResponse;
     }
 
+    public setItemNotFoundInInventoryResponse(response: string): void {
+        this.ItemNotFoundInInventoryResponse = response;
+    }
+
     public getActionsInScene(): Action[] {
         return this.Stage.getCurrentScene().getActions();
     }
@@ -113,5 +152,27 @@ export class Game {
         this.Inventory.addItem(item);
     }
 
+    public getItemAddedToInventoryResponse(): string {
+        return this.ItemAddedToInventoryResponse;
+    }
 
+    public setItemAddedToInventoryResponse(response: string): void {
+        this.ItemAddedToInventoryResponse = response;
+    }
+
+    public getGatewayTargetNotFoundResponse(): string {
+        return this.GatewayTargetNotFoundResponse;
+    }
+
+    public setGatewayTargetNotFoundResponse(response: string): void {
+        this.GatewayTargetNotFoundResponse = response;
+    }
+
+    public getInventoryEmptyResponse(): string {
+        return this.InventoryEmptyResponse;
+    }
+
+    public setInventoryEmptyResponse(response: string): void {
+        this.InventoryEmptyResponse = response;
+    }
 }

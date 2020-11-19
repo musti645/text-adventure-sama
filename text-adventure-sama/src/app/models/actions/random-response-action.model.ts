@@ -1,3 +1,4 @@
+import { InteractionType } from '../interactions/interaction-type.enum';
 import { Action } from './action.model';
 
 /**
@@ -5,10 +6,11 @@ import { Action } from './action.model';
  * Each time this Action is triggered, the response will be selected randomly out of the passed array.
  */
 export class RandomResponseAction extends Action {
-    Responses: string[];
+    private Responses: string[];
 
     constructor() {
         super();
+        this.setInteractionType(InteractionType.DO);
     }
 
     public trigger(): string {
@@ -17,5 +19,13 @@ export class RandomResponseAction extends Action {
     }
 
     public reset() {
+    }
+
+    public getResponses(): string[] {
+        return this.Responses;
+    }
+
+    public setResponses(responses: string[]): void {
+        this.Responses = responses;
     }
 }

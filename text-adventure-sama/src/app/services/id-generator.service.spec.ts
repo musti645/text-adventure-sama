@@ -135,7 +135,7 @@ describe('IDGeneratorService', () => {
     const service: IDGeneratorServiceChild = TestBed.inject(IDGeneratorServiceChild);
     const actions: Action[] = [];
     const itemYieldingAction = new ItemYieldingAction();
-    itemYieldingAction.Item = new InGameItem();
+    itemYieldingAction.setItem(new InGameItem());
 
     // don't set id
     actions.push(itemYieldingAction);
@@ -144,14 +144,14 @@ describe('IDGeneratorService', () => {
 
     expect(service.getTypeCountContainers().length).toBe(1);
     expect(service.getTypeCountContainers().findIndex(e => e.UsedIDs.length > 0)).toBe(0);
-    expect((actions[0] as ItemYieldingAction).Item.getID()).toBe(1);
+    expect((actions[0] as ItemYieldingAction).getItem().getID()).toBe(1);
   });
 
   it('should not set the ItemID of ItemConsumingAction', () => {
     const service: IDGeneratorServiceChild = TestBed.inject(IDGeneratorServiceChild);
     const actions: Action[] = [];
     const itemConsumingAction = new ItemConsumingAction();
-    itemConsumingAction.Item = new InGameItem();
+    itemConsumingAction.setItem(new InGameItem());
 
     // don't set id
     actions.push(itemConsumingAction);
@@ -160,14 +160,14 @@ describe('IDGeneratorService', () => {
 
     expect(service.getTypeCountContainers().length).toBe(0);
     expect(service.getTypeCountContainers().findIndex(e => e.UsedIDs.length > 0)).toBe(-1);
-    expect((actions[0] as ItemConsumingAction).Item.getID()).toBe(undefined);
+    expect((actions[0] as ItemConsumingAction).getItem().getID()).toBe(undefined);
   });
 
   it('should not set the ItemID of ItemRemovingAction', () => {
     const service: IDGeneratorServiceChild = TestBed.inject(IDGeneratorServiceChild);
     const actions: Action[] = [];
     const itemRemovingAction = new ItemRemovingAction();
-    itemRemovingAction.Item = new InGameItem();
+    itemRemovingAction.setItem(new InGameItem());
 
     // don't set id
     actions.push(itemRemovingAction);
@@ -176,7 +176,7 @@ describe('IDGeneratorService', () => {
 
     expect(service.getTypeCountContainers().length).toBe(0);
     expect(service.getTypeCountContainers().findIndex(e => e.UsedIDs.length > 0)).toBe(-1);
-    expect((actions[0] as ItemRemovingAction).Item.getID()).toBe(undefined);
+    expect((actions[0] as ItemRemovingAction).getItem().getID()).toBe(undefined);
   });
 });
 

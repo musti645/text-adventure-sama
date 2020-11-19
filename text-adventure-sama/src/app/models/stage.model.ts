@@ -4,7 +4,7 @@ import { SceneEventService } from '../services/scene-event.service';
 import { IGatewayActionEventListener, GatewayActionEvent } from '../models/events/gateway-action.event';
 
 /**
- * The Stage contains all scenes as well as the current scene.
+ * The Stage contains all scenes (including a pointer to the current scene).
  * It also manages the transition between scenes.
  */
 export class Stage implements IGatewayActionEventListener {

@@ -67,6 +67,32 @@ export class ClassificationTrainer implements IClassificationTrainer {
             classifier.addDocument('collect stones', 'pick_up');
             classifier.addDocument('acquire medal', 'pick_up');
 
+            classifier.addDocument('dance', 'do');
+            classifier.addDocument('sit', 'do');
+            classifier.addDocument('stand', 'do');
+            classifier.addDocument('sleep', 'do');
+            classifier.addDocument('fish', 'do');
+            classifier.addDocument('do', 'do');
+            classifier.addDocument('write', 'do');
+            classifier.addDocument('read', 'do');
+            classifier.addDocument('find', 'do');
+            classifier.addDocument('work', 'do');
+            classifier.addDocument('try', 'do');
+            classifier.addDocument('feel', 'do');
+            classifier.addDocument('create', 'do');
+            classifier.addDocument('speak', 'do');
+            classifier.addDocument('talk', 'do');
+            classifier.addDocument('offer', 'do');
+            classifier.addDocument('buy', 'do');
+            classifier.addDocument('kill', 'do');
+            classifier.addDocument('beat', 'do');
+            classifier.addDocument('harm', 'do');
+            classifier.addDocument('jump', 'do');
+            classifier.addDocument('sell', 'do');
+            classifier.addDocument('pull', 'do');
+            classifier.addDocument('push', 'do');
+            classifier.addDocument('put', 'do');
+
             classifier.events.on('trainedWithDocument', () => resolve());
 
             classifier.train();

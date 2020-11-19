@@ -74,7 +74,7 @@ export class SceneBuilder extends BaseBuilder implements ItemContainingBuilder, 
 
     addItemToBuilder(item: InGameItem): void {
         this.Scene.Items.push(item);
-        if (item.ID) {
+        if (item.getID()) {
             this.GameBuilder.IdGeneratorService.addItemId(item);
         }
     }
@@ -132,7 +132,7 @@ export class SceneBuilder extends BaseBuilder implements ItemContainingBuilder, 
 
         // TODO: each scene has to have a gateway action to another scene or be the last action
 
-        this.Game.Stage.addScene(this.Scene);
+        this.Game.getStage().addScene(this.Scene);
         return this.GameBuilder;
     }
 }

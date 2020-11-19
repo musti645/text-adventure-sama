@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { TextInputType } from '../models/other/text-input.enum';
 import { TextInput } from '../models/other/text-input.model';
@@ -7,6 +7,8 @@ import { GameBuilder } from '../builder/game.builder';
 import { InGameItem } from '../models/Item.model';
 import { InputParserService } from '../services/input-parser.service';
 import { ClassificationTrainer } from '../services/classification-trainer.service';
+import { GameResetEvent } from '../models/events/game-reset.event';
+import { GameEndEvent } from '../models/events/game-end.event';
 
 /**
  * Main Component, that contains the input and output of the game.
@@ -25,6 +27,10 @@ export class TextAdventureComponent implements OnInit {
   @Input() TypewriterSpeed = 40;
 
   @Input() Game: Game;
+
+  @Output() OnGameResetEvent: EventEmitter<GameResetEvent> = new EventEmitter<GameResetEvent>();
+  @Output() OnGameEndEvent: EventEmitter<GameEndEvent> = new EventEmitter<GameEndEvent>();
+
   GameBuilder: GameBuilder;
 
   InputForm: FormGroup = new FormGroup(
@@ -64,8 +70,12 @@ export class TextAdventureComponent implements OnInit {
     this.printOutput(parseResult.Result, parseResult.UseTypewriterAnimation).then(() => this.stopLoading());
   }
 
-  OnReset() {
-    this.buildGame();
+  OnGameReset() {
+    this.OnGameResetEvent.emit(new GameResetEvent(this.Game));
+  }
+
+  OnGameEnd() {
+    this.OnGameEndEvent.emit(new GameEndEvent(this.Game));
   }
 
   get userInput() {
@@ -87,7 +97,7 @@ export class TextAdventureComponent implements OnInit {
 
   private startGame() {
     this.inputParserService.setGame(this.Game);
-    this.printOutput(this.Game.Title).then(() => this.printOutput(this.Game.Introduction)).then(() => this.stopLoading());
+    this.printOutput(this.Game.getTitle()).then(() => this.printOutput(this.Game.getIntroduction())).then(() => this.stopLoading());
   }
 
   private printOutput(output: string, useTypewriteAnimationOnOutput: boolean = true): Promise<void> {

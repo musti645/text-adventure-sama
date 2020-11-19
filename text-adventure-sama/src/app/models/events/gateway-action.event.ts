@@ -5,8 +5,8 @@ export class GatewayActionEvent {
     TargetSceneName: string;
 
     constructor(action: GatewayAction){
-        this.TargetSceneID = action.SceneId;
-        this.TargetSceneName = action.TargetSceneName;
+        this.TargetSceneID = action.getTargetSceneId();
+        this.TargetSceneName = action.getTargetSceneName();
     }
 }
 

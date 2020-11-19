@@ -23,14 +23,14 @@ export class InventoryBuilder extends BaseBuilder implements ItemContainingBuild
 
     addItemToBuilder(item: InGameItem) {
         this.Inventory.addItem(item);
-        if (item.ID) {
+        if (item.getID()) {
             this.GameBuilder.IdGeneratorService.addItemId(item);
         }
     }
 
 
     public finish(): GameBuilder {
-        this.Game.Inventory = this.Inventory;
+        this.Game.setInventory(this.Inventory);
         return this.GameBuilder;
     }
 }
