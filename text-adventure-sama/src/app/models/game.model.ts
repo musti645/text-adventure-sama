@@ -62,7 +62,11 @@ export class Game {
         sceneCommand.setDescription('Get a description of the scene you\'re in');
         sceneCommand.setUseTypeWritingAnimation(true);
         sceneCommand.setResponseFunction(() => {
-            return this.Stage.getCurrentScene().Description;
+            let description = this.Stage.getCurrentScene().Description;
+            for (const item of this.Stage.getCurrentScene().getItems()) {
+                description += ` ${item.getInSceneDescription()}`;
+            }
+            return description;
         });
 
         this.Commands.push(sceneCommand);

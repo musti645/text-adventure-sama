@@ -1,5 +1,3 @@
-import { InteractionType } from './interactions/interaction-type.enum';
-
 /**
  * This class represents an Item in the game.
  */
@@ -14,8 +12,16 @@ export class InGameItem {
     private ItemUsedResponse: string;
     private NoUsagesLeftResponse: string;
 
+    private CanPickUp: boolean;
+    private CannotPickUpResponse: string;
+
+    private InSceneDescription: string;
+
+    // TODO: Function to check, if item is usable in the current context function(scene, item) => bool
+
     constructor(id?: number) {
         this.ID = id;
+        this.CanPickUp = true;
     }
 
     public use(): string {
@@ -85,4 +91,29 @@ export class InGameItem {
     public getNoUsagesLeftResponse(): string {
         return this.NoUsagesLeftResponse;
     }
+
+    public getCanPickUp(): boolean {
+        return this.CanPickUp;
+    }
+
+    public setCanPickUp(value: boolean): void {
+        this.CanPickUp = value;
+    }
+
+    public setCannotPickUpResponse(response: string): void {
+        this.CannotPickUpResponse = response;
+    }
+
+    public getCannotPickUpResponse(): string {
+        return this.CannotPickUpResponse;
+    }
+
+    public getInSceneDescription(): string {
+        return this.InSceneDescription;
+    }
+
+    public setInSceneDescription(descr: string): void {
+        this.InSceneDescription = descr;
+    }
+
 }

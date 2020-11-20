@@ -6,11 +6,13 @@ import { BuilderError } from '../models/errors/builder.error';
 export class ItemBuilder<ReturnBuilderType extends ItemContainingBuilder> extends BaseBuilder {
     private Item: InGameItem;
     private Builder: ReturnBuilderType;
+    private RequireInSceneDescription: boolean;
 
-    constructor(builder: ReturnBuilderType, item: InGameItem = new InGameItem()) {
+    constructor(builder: ReturnBuilderType, item: InGameItem = new InGameItem(), requireInSceneDescription: boolean = false) {
         super();
         this.Item = item;
         this.Builder = builder;
+        this.RequireInSceneDescription = requireInSceneDescription;
     }
 
     public setName(name: string): this {
@@ -37,8 +39,8 @@ export class ItemBuilder<ReturnBuilderType extends ItemContainingBuilder> extend
     }
 
     public setUsagesLeft(usagesLeft: number): this {
-        if (usagesLeft <= 0) {
-            throw new EvalError('UsagesLeft Value has to be greater than 0.');
+        if (usagesLeft < 0) {
+            throw new EvalError('UsagesLeft Value has to be greater than or equal to 0.');
         }
 
         if (this.Item.getMaximumUsages() && usagesLeft > this.Item.getMaximumUsages()) {
@@ -68,6 +70,29 @@ export class ItemBuilder<ReturnBuilderType extends ItemContainingBuilder> extend
         return this;
     }
 
+    public setCanPickUp(value: boolean): this {
+        this.Item.setCanPickUp(value);
+        return this;
+    }
+
+    public setCannotPickUpResponse(response: string): this {
+        if (!response) {
+            throw new EvalError('CannotPickUpResponse was undefined.');
+        }
+
+        this.Item.setCannotPickUpResponse(response);
+        return this;
+    }
+
+    public setInSceneDescription(descr: string): this {
+        if (!descr) {
+            throw new EvalError('InSceneDescription was undefined.');
+        }
+
+        this.Item.setInSceneDescription(descr);
+        return this;
+    }
+
     public finish(): ReturnBuilderType {
         if (!this.Item.getName()) {
             throw new BuilderError('Item creation could not be finished. Name was not set.');
@@ -78,7 +103,7 @@ export class ItemBuilder<ReturnBuilderType extends ItemContainingBuilder> extend
         }
 
 
-        if (!this.Item.getItemUsedResponse()) {
+        if (this.Item.getUsagesLeft() > 0 && !this.Item.getItemUsedResponse()) {
             throw new BuilderError('Item creation could not be finished. ItemUsedResponse was not set.');
         }
 
@@ -86,11 +111,20 @@ export class ItemBuilder<ReturnBuilderType extends ItemContainingBuilder> extend
             throw new BuilderError('Item creation could not be finished. NoUsagesLeftResponse was not set.');
         }
 
-        if (!this.Item.getMaximumUsages()) {
+        if (!this.Item.getCanPickUp() && !this.Item.getCannotPickUpResponse()) {
+            throw new BuilderError('Item creation could not be finished. CannotPickUpResponse was not set.');
+        }
+
+        // if this item is added to a scene, instead of the inventory or an action, the InSceneDescription has to be set.
+        if (this.RequireInSceneDescription  && !this.Item.getInSceneDescription()) {
+            throw new BuilderError('Item creation could not be finished. InSceneDescription was not set.');
+        }
+
+        if (this.Item.getMaximumUsages() < 0) {
             this.Item.setMaximumUsages(1);
         }
 
-        if (!this.Item.getUsagesLeft()) {
+        if (this.Item.getUsagesLeft() < 0) {
             this.Item.setUsagesLeft(1);
         }
 

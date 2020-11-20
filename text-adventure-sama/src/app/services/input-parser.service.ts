@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { Action } from '../models/actions/action.model';
 import { InGameItem } from '../models/Item.model';
 import { Game } from '../models/game.model';
-import { TextInputType } from '../models/other/text-input.enum';
 
 import * as natural from 'natural';
 import { InteractionType } from '../models/interactions/interaction-type.enum';
@@ -13,7 +12,8 @@ const language = 'EN';
 // see Penn Treebank Part-of-Speech Tags for more info on the tags
 const defaultCategory = 'N';
 const defaultCategoryCapitalized = 'NNP';
-const verbCategory = 'VB';
+const nounCategories = ['N', 'NN', 'NNS', 'NNP', 'NNPS'];
+const verbCategories = ['VB', 'VBD', 'VBG', 'VBN', 'VBO', 'VBZ'];
 
 /**
  * Helps to parse text input and call the corresponding action, returning a response
@@ -57,7 +57,6 @@ export class InputParserService {
         input = 'they ' + input;
 
         const taggedTokens = this.POSTagger.tag(this.Tokenizer.tokenize(input)).taggedWords;
-
         // we get verbs and nouns, because in many cases a noun may be mistaken to be a verb and vice versa e.g. (a) stick & (to) stick
         const nounsAndVerbs = this.getNounsAndVerbsFromTokenizedInput(taggedTokens);
 
@@ -137,7 +136,9 @@ export class InputParserService {
 
         if (!itemDistances || itemDistances.length <= 0) {
             result.Result = this.Game.getItemNotFoundResponse();
+            return result;
         }
+
         result.Result = itemDistances[0].Item.getDescription();
         return result;
     }
@@ -155,6 +156,11 @@ export class InputParserService {
         }
 
         const item = itemDistances[0].Item;
+
+        if (!item.getCanPickUp()) {
+            result.Result = item.getCannotPickUpResponse();
+            return result;
+        }
 
         this.Game.addItemToInventory(item);
 
@@ -176,9 +182,7 @@ export class InputParserService {
             return result;
         }
 
-        const item = itemDistances[0].Item;
-
-        result.Result = item.use();
+        result.Result =  itemDistances[0].Item.use();
         return result;
     }
 
@@ -210,7 +214,7 @@ export class InputParserService {
 
     protected getNounsAndVerbsFromTokenizedInput(taggedTokens: TaggedToken[]): any {
         return taggedTokens.reduce<string[]>((result, token) => {
-            if (token.tag === defaultCategoryCapitalized || token.tag === defaultCategory || token.tag === verbCategory) {
+            if (nounCategories.includes(token.tag) || verbCategories.includes(token.tag)) {
                 result.push(token.token);
             }
 
@@ -232,7 +236,6 @@ export class InputParserService {
 
         items.map(val => {
             const taggedName = this.POSTagger.tag(this.Tokenizer.tokenize(val.Name)).taggedWords;
-
             taggedName.map(name => {
                 relevantWords.map(input => {
                     const distance = natural.DamerauLevenshteinDistance(input,

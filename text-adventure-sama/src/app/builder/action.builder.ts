@@ -105,7 +105,16 @@ export class ItemConsumingActionBuilder<ReturnBuilderType extends ActionContaini
         super(builder, new ItemConsumingAction());
     }
 
-    addItemToBuilder(item: InGameItem): void {
+    public setInteractionType(type: InteractionType): this {
+        if (!type) {
+            throw new EvalError('InteractionType not set.');
+        }
+
+        this.Action.setInteractionType(type);
+        return this;
+    }
+
+    public addItemToBuilder(item: InGameItem): void {
         this.Action.setItem(item);
     }
 
@@ -128,8 +137,18 @@ export class ItemRemovingActionBuilder<ReturnBuilderType extends ActionContainin
         super(builder, new ItemRemovingAction());
     }
 
-    addItemToBuilder(item: InGameItem): void {
+    public addItemToBuilder(item: InGameItem): void {
         this.Action.setItem(item);
+    }
+
+
+    public setInteractionType(type: InteractionType): this {
+        if (!type) {
+            throw new EvalError('InteractionType not set.');
+        }
+
+        this.Action.setInteractionType(type);
+        return this;
     }
 
     public addItem(item?: InGameItem): ItemBuilder<ItemRemovingActionBuilder<ReturnBuilderType>> {
@@ -166,6 +185,15 @@ export class ItemYieldingActionBuilder<ReturnBuilderType extends ActionContainin
         }
 
         this.Action.setAmountOfItems(amount);
+        return this;
+    }
+
+    public setInteractionType(type: InteractionType): this {
+        if (!type) {
+            throw new EvalError('InteractionType not set.');
+        }
+
+        this.Action.setInteractionType(type);
         return this;
     }
 
