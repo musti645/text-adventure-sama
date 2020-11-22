@@ -162,6 +162,12 @@ export class InputParserService {
             return result;
         }
 
+        // one cannot pick up an item, that has no usages left anymore
+        if (item.getUsagesLeft() <= 0) {
+            result.Result = item.getNoUsagesLeftResponse();
+            return result;
+        }
+
         this.Game.addItemToInventory(item);
 
         this.Game.removeItemFromScene(item);
@@ -182,7 +188,21 @@ export class InputParserService {
             return result;
         }
 
-        result.Result =  itemDistances[0].Item.use();
+        const currentItem = itemDistances[0].Item;
+
+        if (!currentItem.CanUseFunction(currentItem, this.Game.getStage().getCurrentScene(), this.Game.getInventory())) {
+            result.Result = currentItem.getCannotUseItemResponse();
+            return result;
+        }
+
+        result.Result = currentItem.use();
+
+        // if the item was in the inventory and has no usages left anymore -> remove it from inventory
+        if (currentItem.WasPickedUp && currentItem.getUsagesLeft() <= 0) {
+            result.Result += `\r\n${currentItem.getNoUsagesLeftResponse()}`;
+            this.Game.removeItemFromInventory(currentItem);
+        }
+
         return result;
     }
 

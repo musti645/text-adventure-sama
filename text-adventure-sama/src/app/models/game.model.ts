@@ -156,6 +156,10 @@ export class Game {
         this.Inventory.addItem(item);
     }
 
+    public removeItemFromInventory(item: InGameItem) {
+        this.Inventory.removeItemFromInventory(item.getID());
+    }
+
     public getItemAddedToInventoryResponse(): string {
         return this.ItemAddedToInventoryResponse;
     }

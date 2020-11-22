@@ -54,6 +54,7 @@ export class Inventory implements IItemConsumingEventListener,
     }
 
     public addItem(toAdd: InGameItem): void {
+        toAdd.WasPickedUp = true;
         this.Items.push(toAdd);
     }
 

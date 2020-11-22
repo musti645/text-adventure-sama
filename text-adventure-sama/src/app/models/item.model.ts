@@ -1,3 +1,6 @@
+import { Inventory } from './inventory.model';
+import { Scene } from './scene.model';
+
 /**
  * This class represents an Item in the game.
  */
@@ -14,10 +17,15 @@ export class InGameItem {
 
     private CanPickUp: boolean;
     private CannotPickUpResponse: string;
+    public WasPickedUp: boolean;
 
     private InSceneDescription: string;
 
-    // TODO: Function to check, if item is usable in the current context function(scene, item) => bool
+    private CannotUseItemResponse: string;
+    public CanUseFunction(item: this, currentScene: Scene, inventory: Inventory): boolean {
+        return true;
+    };
+
 
     constructor(id?: number) {
         this.ID = id;
@@ -31,6 +39,7 @@ export class InGameItem {
         }
         return this.NoUsagesLeftResponse;
     }
+
 
     public resetUsages(): void {
         this.UsagesLeft = this.MaximumUsages;
@@ -114,6 +123,18 @@ export class InGameItem {
 
     public setInSceneDescription(descr: string): void {
         this.InSceneDescription = descr;
+    }
+
+    public setCanUseFunction(func: (item: this, currentScene: Scene, inventory: Inventory) => boolean): void {
+        this.CanUseFunction = func;
+    }
+
+    public setCannotUseItemResponse(response: string): void {
+        this.CannotUseItemResponse = response;
+    }
+
+    public getCannotUseItemResponse(): string {
+        return this.CannotUseItemResponse;
     }
 
 }
