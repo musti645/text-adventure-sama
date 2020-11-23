@@ -5,13 +5,15 @@ import { SceneBuilder } from './scene.builder';
 import { BaseBuilder } from './base.builder';
 import { IDGeneratorService } from '../services/id-generator.service';
 import { Command } from '../models/command.model';
+import { CommandContainingBuilder } from './interfaces/command-containing.builder';
+import { CommandBuilder } from './command.builder';
 
 /**
  * Use this class to chain the game building process.
  * Once your Game is build completely, call the 'build' method.
  */
-export class GameBuilder extends BaseBuilder {
-    private Game: Game;
+export class GameBuilder extends BaseBuilder implements CommandContainingBuilder {
+    protected Game: Game;
     public IdGeneratorService: IDGeneratorService;
 
     constructor() {
@@ -28,13 +30,13 @@ export class GameBuilder extends BaseBuilder {
         return new SceneBuilder(this, this.Game, id);
     }
 
-    public addGlobalCommand(command: Command): this {
-        if (!command) {
-            throw new EvalError('Command was not set.');
-        }
+    public addCommand(): CommandBuilder<GameBuilder> {
+        return new CommandBuilder(this);
+    }
 
-        if (!command.getResponse() && !command.getResponseFunction()) {
-            throw new EvalError('Either Command response or response function have to be set.');
+    addCommandToBuilder(command: Command): this {
+        if (!command) {
+            throw new BuilderError('Command was undefined');
         }
 
         this.Game.getCommands().push(command);
@@ -47,38 +49,59 @@ export class GameBuilder extends BaseBuilder {
     }
 
     public setTitle(title: string): this {
+        if (!title) {
+            throw new EvalError('Title was undefined.');
+        }
+
         this.Game.setTitle(title);
         return this;
     }
 
     public setIntroduction(intro: string): this {
+        if (!intro) {
+            throw new EvalError('Introduction was undefined.');
+        }
+
         this.Game.setIntroduction(intro);
         return this;
     }
 
     public setItemNotFoundInInventoryResponse(response: string): this {
+        if (!response) {
+            throw new EvalError('ItemNotFoundInInventoryResponse was undefined.');
+        }
+
         this.Game.setItemNotFoundInInventoryResponse(response);
         return this;
     }
 
     public setItemAddedToInventoryResponse(response: string): this {
+        if (!response) {
+            throw new EvalError('ItemAddedToInventoryResponse was undefined.');
+        }
+
         this.Game.setItemAddedToInventoryResponse(response);
         return this;
     }
 
     public setGatewayTargetNotFoundResponse(response: string): this {
+        if (!response) {
+            throw new EvalError('GatewayTargetNotFoundResponse was undefined.');
+        }
+
         this.Game.setGatewayTargetNotFoundResponse(response);
         return this;
     }
 
     public setInventoryEmptyResponse(response: string): this {
+        if (!response) {
+            throw new EvalError('InventoryEmptyResponse was undefined.');
+        }
+
         this.Game.setInventoryEmptyResponse(response);
         return this;
     }
 
-    generateUnassignedIds(): void {
-        this.IdGeneratorService.generateIDs(this.Game);
-    }
 
     public finish(): Game {
 
@@ -112,5 +135,10 @@ export class GameBuilder extends BaseBuilder {
 
         this.generateUnassignedIds();
         return this.Game;
+    }
+
+
+    protected generateUnassignedIds(): void {
+        this.IdGeneratorService.generateIDs(this.Game);
     }
 }
