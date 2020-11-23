@@ -67,7 +67,7 @@ export class CommandBuilder<ReturnBuilderType extends CommandContainingBuilder> 
             throw new BuilderError('Could not create Command. Description was not set.');
         }
 
-        if (!this.Command.getTrigger() && !this.Command.getResponseFunction()) {
+        if (!this.Command.getResponse() && !this.Command.getResponseFunction()) {
             throw new BuilderError('Could not create Command. Response and ResponseFunction were not set. One of both is required.');
         }
 
