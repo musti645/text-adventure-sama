@@ -21,7 +21,7 @@ import { OneTimeActionBuilder } from './action-builders/one-time-action.builder'
 export class SceneBuilder extends BaseBuilder implements ItemContainingBuilder, ActionContainingBuilder {
     private GameBuilder: GameBuilder;
     private Game: Game;
-    private Scene: Scene;
+    protected Scene: Scene;
 
     constructor(gameBuilder: GameBuilder, game: Game, sceneId: number = null) {
         super();
@@ -31,7 +31,7 @@ export class SceneBuilder extends BaseBuilder implements ItemContainingBuilder, 
     }
 
     addActionToBuilder(action: Action): void {
-        this.Scene.Actions.push(action);
+        this.Scene.getActions().push(action);
 
         if (action instanceof ItemYieldingAction) {
             this.GameBuilder.IdGeneratorService.addActionItemId(action as ItemYieldingAction);
@@ -71,7 +71,7 @@ export class SceneBuilder extends BaseBuilder implements ItemContainingBuilder, 
     }
 
     addItemToBuilder(item: InGameItem): void {
-        this.Scene.Items.push(item);
+        this.Scene.getItems().push(item);
         if (item.getID()) {
             this.GameBuilder.IdGeneratorService.addItemId(item);
         }
@@ -82,49 +82,69 @@ export class SceneBuilder extends BaseBuilder implements ItemContainingBuilder, 
     }
 
     public setName(name: string): this {
-        this.Scene.Name = name;
+        if (!name) {
+            throw new EvalError('Name was not set.');
+        }
+
+        this.Scene.setName(name);
         return this;
     }
 
     public setDescription(description: string): this {
-        this.Scene.Description = description;
+        if (!description) {
+            throw new EvalError('Description was not set.');
+        }
+
+        this.Scene.setDescription(description);
         return this;
     }
 
     public setActionNotRecognizedResponse(response: string): this {
-        this.Scene.ActionNotRecognizedResponse = response;
+        if (!response) {
+            throw new EvalError('ActionNotRecognizedResponse was not set.');
+        }
+
+        this.Scene.setActionNotRecognizedResponse(response);
         return this;
     }
 
     public setItemNotFoundResponse(response: string): this {
-        this.Scene.ItemNotFoundResponse = response;
+        if (!response) {
+            throw new EvalError('ItemNotFoundResponse was not set.');
+        }
+
+        this.Scene.setItemNotFoundResponse(response);
         return this;
     }
 
     public setInvalidInputResponse(response: string): this {
-        this.Scene.InvalidInputResponse = response;
+        if (!response) {
+            throw new EvalError('InvalidInputResponse was not set.');
+        }
+
+        this.Scene.setInvalidInputResponse(response);
         return this;
     }
 
     public finish(): GameBuilder {
 
-        if (!this.Scene.Name) {
+        if (!this.Scene.getName()) {
             throw new BuilderError('Scene creation could not be finished. Name was not set.');
         }
 
-        if (!this.Scene.Description) {
+        if (!this.Scene.getDescription()) {
             throw new BuilderError('Scene creation could not be finished. Description was not set.');
         }
 
-        if (!this.Scene.InvalidInputResponse) {
+        if (!this.Scene.getInvalidInputResponse()) {
             throw new BuilderError('Scene creation could not be finished. InvalidInputResponse was not set.');
         }
 
-        if (!this.Scene.ItemNotFoundResponse) {
+        if (!this.Scene.getItemNotFoundResponse()) {
             throw new BuilderError('Scene creation could not be finished. ItemNotFoundResponse was not set.');
         }
 
-        if (!this.Scene.ActionNotRecognizedResponse) {
+        if (!this.Scene.getActionNotRecognizedResponse()) {
             throw new BuilderError('Scene creation could not be finished. ActionNotRecognizedResponse was not set.');
         }
 

@@ -32,7 +32,7 @@ export class Stage implements IGatewayActionEventListener {
     }
 
     public goToScene(id: number): Scene {
-        const nextScene = this.Scenes.find(s => s.ID === id);
+        const nextScene = this.Scenes.find(s => s.getID() === id);
         if (!nextScene) {
             throw new GameError('Scene could not be found.');
         }

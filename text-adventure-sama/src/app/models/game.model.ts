@@ -62,7 +62,7 @@ export class Game {
         sceneCommand.setDescription('Get a description of the scene you\'re in');
         sceneCommand.setUseTypeWritingAnimation(true);
         sceneCommand.setResponseFunction(() => {
-            let description = this.Stage.getCurrentScene().Description;
+            let description = this.Stage.getCurrentScene().getDescription();
             for (const item of this.Stage.getCurrentScene().getItems()) {
                 description += ` ${item.getInSceneDescription()}`;
             }
@@ -113,19 +113,19 @@ export class Game {
     }
 
     public getItemNotFoundResponse(): string {
-        return this.Stage.getCurrentScene().ItemNotFoundResponse;
+        return this.Stage.getCurrentScene().getItemNotFoundResponse();
     }
 
     public getInvalidInputResponse(): string {
-        return this.Stage.getCurrentScene().InvalidInputResponse;
+        return this.Stage.getCurrentScene().getInvalidInputResponse();
     }
 
     public getActionNotRecognizedResponse(): string {
-        return this.Stage.getCurrentScene().ActionNotRecognizedResponse;
+        return this.Stage.getCurrentScene().getActionNotRecognizedResponse();
     }
 
     public getSceneDescription(): string {
-        return this.Stage.getCurrentScene().Description;
+        return this.Stage.getCurrentScene().getDescription();
     }
 
     public getItemNotFoundInInventoryResponse(): string {

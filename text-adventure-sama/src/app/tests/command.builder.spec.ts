@@ -79,7 +79,7 @@ describe('CommandBuilder.', () => {
         expect(testBuilder.getCommand().getResponse()).toBe(response);
     });
 
-    it('should throw a builder error when trying to finish creation process of an action without a Trigger AND not add the action to the parent builder.', () => {
+    it('should throw a builder error when trying to finish creation process of an command without a Trigger AND not add the command to the parent builder.', () => {
         testBuilder.setResponse(testCommand.getResponse())
         .setDescription(testCommand.getDescription())
         .setResponseFunction(testCommand.getResponseFunction())
@@ -89,7 +89,7 @@ describe('CommandBuilder.', () => {
         expect(parentBuilder.Commands.length).toBe(0);
     });
 
-    it('should throw a builder error when trying to finish creation process of an action with neither a Response nor a ResponseFunction AND not add the action to the parent builder.', () => {
+    it('should throw a builder error when trying to finish creation process of an command with neither a Response nor a ResponseFunction AND not add the command to the parent builder.', () => {
         testBuilder.setTrigger(testCommand.getTrigger())
         .setDescription(testCommand.getDescription())
         .setUseTypeWritingAnimation(testCommand.getUseTypeWritingAnimation());
@@ -98,7 +98,7 @@ describe('CommandBuilder.', () => {
         expect(parentBuilder.Commands.length).toBe(0);
     });
 
-    it('should throw a builder error when trying to finish creation process of an action without a Description AND not add the action to the parent builder.', () => {
+    it('should throw a builder error when trying to finish creation process of an command without a Description AND not add the command to the parent builder.', () => {
         testBuilder.setTrigger(testCommand.getTrigger())
         .setResponse(testCommand.getResponse())
         .setResponseFunction(testCommand.getResponseFunction())
@@ -108,7 +108,7 @@ describe('CommandBuilder.', () => {
         expect(parentBuilder.Commands.length).toBe(0);
     });
 
-    it('should add the action to the parent builder.', () => {
+    it('should add the command to the parent builder.', () => {
         testBuilder.setTrigger(testCommand.getTrigger())
         .setResponse(testCommand.getResponse())
         .setDescription(testCommand.getDescription())

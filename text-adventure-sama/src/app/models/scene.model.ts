@@ -6,16 +6,16 @@ import { Action } from './actions/action.model';
  * The player can only be inside one scene at a time.
  */
 export class Scene {
-    ID: number;
-    Name: string;
-    Description: string;
+    private ID: number;
+    private Name: string;
+    private Description: string;
 
-    ActionNotRecognizedResponse: string;
-    ItemNotFoundResponse: string;
-    InvalidInputResponse: string;
+    private ActionNotRecognizedResponse: string;
+    private ItemNotFoundResponse: string;
+    private InvalidInputResponse: string;
 
-    Items: InGameItem[];
-    Actions: Action[];
+    private Items: InGameItem[];
+    private Actions: Action[];
 
     constructor(id?: number) {
         this.ID = id;
@@ -30,6 +30,46 @@ export class Scene {
 
     public getID(): number {
         return this.ID;
+    }
+
+    public getName(): string {
+        return this.Name;
+    }
+
+    public setName(name: string): void {
+        this.Name = name;
+    }
+
+    public getDescription(): string {
+        return this.Description;
+    }
+
+    public setDescription(descr: string): void {
+        this.Description = descr;
+    }
+
+    public getActionNotRecognizedResponse(): string {
+        return this.ActionNotRecognizedResponse;
+    }
+
+    public setActionNotRecognizedResponse(response: string): void {
+        this.ActionNotRecognizedResponse = response;
+    }
+
+    public getItemNotFoundResponse(): string {
+        return this.ItemNotFoundResponse;
+    }
+
+    public setItemNotFoundResponse(response: string): void {
+        this.ItemNotFoundResponse = response;
+    }
+
+    public getInvalidInputResponse(): string {
+        return this.InvalidInputResponse;
+    }
+
+    public setInvalidInputResponse(response: string): void {
+        this.InvalidInputResponse = response;
     }
 
     public getActions(): Action[] {

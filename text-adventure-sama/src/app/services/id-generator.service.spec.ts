@@ -57,8 +57,8 @@ describe('IDGeneratorService', () => {
     const scenes: Scene[] = [];
 
     const scene = new Scene();
-    scene.Actions.push(new GatewayAction());
-    scene.Items.push(new InGameItem());
+    scene.getActions().push(new GatewayAction());
+    scene.getItems().push(new InGameItem());
 
     scenes.push(scene);
 
@@ -66,7 +66,7 @@ describe('IDGeneratorService', () => {
 
     const resultScene = scenes[0];
     expect(resultScene.getID()).toBe(1);
-    expect(resultScene.Items[0].getID());
+    expect(resultScene.getItems()[0].getID());
 
     expect(service.getTypeCountContainers().length).toBe(2);
     expect(service.getTypeCountContainers().filter(e => e.UsedIDs.length > 0).length).toBe(2);
