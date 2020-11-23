@@ -122,7 +122,7 @@ describe('ItemRemovingActionBuilder.', () => {
         const areEqual = _.isEqual(item, testBuilder.getAction().getItem());
         expect(areEqual).toBeTrue();
     });
-    
+
     // addItem
     it('should return an ItemBuilder when calling addItem.', () => {
         const itemBuilder = testBuilder.addItem();

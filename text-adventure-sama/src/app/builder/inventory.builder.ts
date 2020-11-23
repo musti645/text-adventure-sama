@@ -5,16 +5,18 @@ import { InGameItem } from '../models/Item.model';
 import { BaseBuilder } from './base.builder';
 import { ItemContainingBuilder } from './interfaces/item-containing.builder';
 import { ItemBuilder } from './item.builder';
+import { BuilderError } from '../models/errors/builder.error';
 
 export class InventoryBuilder extends BaseBuilder implements ItemContainingBuilder {
     private GameBuilder: GameBuilder;
     private Game: Game;
-    private Inventory: Inventory;
+    protected Inventory: Inventory;
 
     constructor(gameBuilder: GameBuilder, game: Game) {
         super();
         this.GameBuilder = gameBuilder;
         this.Game = game;
+        this.Inventory = new Inventory();
     }
 
     public addItem(item?: InGameItem): ItemBuilder<InventoryBuilder> {
@@ -22,6 +24,9 @@ export class InventoryBuilder extends BaseBuilder implements ItemContainingBuild
     }
 
     addItemToBuilder(item: InGameItem) {
+        if (!item) {
+            throw new BuilderError('Could not add Item to Inventory. Item was not set.');
+        }
         this.Inventory.addItem(item);
         if (item.getID()) {
             this.GameBuilder.IdGeneratorService.addItemId(item);
