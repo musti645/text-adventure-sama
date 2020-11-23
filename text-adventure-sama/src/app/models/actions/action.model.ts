@@ -11,6 +11,7 @@ export abstract class Action {
     private IsEndGameAction: boolean;
 
     constructor() {
+        this.IsEndGameAction = false;
     }
 
     public abstract trigger(): string;

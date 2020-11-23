@@ -7,18 +7,16 @@ import { ItemContainingBuilder } from './interfaces/item-containing.builder';
 import { BaseBuilder } from './base.builder';
 import { ActionContainingBuilder } from './interfaces/action-containing.builder';
 import { Action } from '../models/actions/action.model';
-import {
-    BaseActionBuilder,
-    GatewayActionBuilder,
-    ItemConsumingActionBuilder,
-    ItemRemovingActionBuilder,
-    ItemYieldingActionBuilder,
-    MultiTimeActionBuilder,
-    OneTimeActionBuilder,
-    RandomResponseActionBuilder
-} from './action.builder';
+import { BaseActionBuilder } from './action-builders/base-action.builder';
 import { ItemYieldingAction } from '../models/actions/item-yielding-action.model';
 import { BuilderError } from '../models/errors/builder.error';
+import { GatewayActionBuilder } from './action-builders/gateway-action.builder';
+import { ItemConsumingActionBuilder } from './action-builders/item-consuming-action.builder';
+import { ItemRemovingActionBuilder } from './action-builders/item-removing-action.builder';
+import { ItemYieldingActionBuilder } from './action-builders/item-yielding-action.builder';
+import { MultiTimeActionBuilder } from './action-builders/multi-time-action.builder';
+import { RandomResponseActionBuilder } from './action-builders/random-response-action.builder';
+import { OneTimeActionBuilder } from './action-builders/one-time-action.builder';
 
 export class SceneBuilder extends BaseBuilder implements ItemContainingBuilder, ActionContainingBuilder {
     private GameBuilder: GameBuilder;

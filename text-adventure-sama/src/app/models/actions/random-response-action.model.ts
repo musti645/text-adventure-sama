@@ -10,6 +10,8 @@ export class RandomResponseAction extends Action {
 
     constructor() {
         super();
+        // set normal response to avoid errors during build
+        this.setResponse(' ');
         this.setInteractionType(InteractionType.DO);
     }
 
