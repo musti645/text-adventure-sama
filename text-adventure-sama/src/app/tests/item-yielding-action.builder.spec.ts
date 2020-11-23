@@ -33,6 +33,7 @@ describe('ItemYieldingActionBuilder.', () => {
         });
     });
 
+    // InteractionType
     it('should throw an error when trying to set a null InteractionType AND not set the InteractionType.', () => {
         expect(() => testBuilder.setInteractionType(null)).toThrowError(EvalError);
         expect(testBuilder.getAction().getInteractionType()).toBe(InteractionType.DO);
@@ -55,6 +56,7 @@ describe('ItemYieldingActionBuilder.', () => {
         expect(testBuilder.getAction().getInteractionType()).toBe(type);
     });
 
+    // WasTriggered
     it('should throw an error when trying to set a null WasTriggered Attribute.', () => {
         testBuilder.getAction().setWasTriggered(true);
         expect(() => testBuilder.setWasTrigered(null)).toThrowError(EvalError);
@@ -75,6 +77,7 @@ describe('ItemYieldingActionBuilder.', () => {
     });
 
 
+    // ResponseAfterUse
     it('should throw an error when trying to set an undefined ResponseAfterUse AND not set the property.', () => {
         testBuilder.getAction().setResponseAfterUse(testAction.getResponseAfterUse());
         expect(() => testBuilder.setResponseAfterUse(undefined)).toThrowError(EvalError);
@@ -98,6 +101,7 @@ describe('ItemYieldingActionBuilder.', () => {
         expect(testBuilder.getAction().getResponseAfterUse()).toBe(response);
     });
 
+    // addItemToBuilder
     it('should throw an error when trying to add an undefined Item to the action AND not add it.', () => {
         testBuilder.getAction().setItem(testAction.getItem());
         expect(() => testBuilder.addItemToBuilder(undefined)).toThrowError(BuilderError);
@@ -121,6 +125,7 @@ describe('ItemYieldingActionBuilder.', () => {
         expect(areEqual).toBeTrue();
     });
 
+    // AmountOfItems
     it('should throw an error when trying to set an undefined AmountOfItems AND not set the Property.', () => {
         expect(() => testBuilder.setAmountOfItems(undefined)).toThrowError(EvalError);
         expect(testBuilder.getAction().getAmountOfItems()).toBe(1);
@@ -143,6 +148,7 @@ describe('ItemYieldingActionBuilder.', () => {
         expect(testBuilder.getAction().getAmountOfItems()).toBe(amount);
     });
 
+    // ResetItemUsagesToMaximum
     it('should throw an error when trying to set undefined ResetItemUsagesToMaximum Property.', () => {
         testBuilder.getAction().setResetItemUsagesToMaximum(true);
         expect(() => testBuilder.setResetItemUsagesToMaximum(undefined)).toThrowError(EvalError);
@@ -162,11 +168,13 @@ describe('ItemYieldingActionBuilder.', () => {
         expect(testBuilder.getAction().getResetItemUsagesToMaximum()).toBe(reset);
     });
 
+    // addItem
     it('should return an ItemBuilder when calling addItem.', () => {
         const itemBuilder = testBuilder.addItem();
         expect(itemBuilder).toBeInstanceOf(ItemBuilder);
     });
 
+    // finish
     it('should throw a builder error when trying to finish creation, due to missing item AND not finish the building process.', () => {
         expect(() => testBuilder.finish()).toThrowError(BuilderError);
         expect(parentBuilder.Actions).toHaveSize(0);

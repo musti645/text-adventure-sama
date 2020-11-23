@@ -6,7 +6,7 @@ import { Scene } from '../models/scene.model';
 import { Inventory } from '../models/inventory.model';
 
 export class ItemBuilder<ReturnBuilderType extends ItemContainingBuilder> extends BaseBuilder {
-    private Item: InGameItem;
+    protected Item: InGameItem;
     private Builder: ReturnBuilderType;
     private RequireInSceneDescription: boolean;
     private IsCanUseFunctionReplaced: boolean;
@@ -19,17 +19,25 @@ export class ItemBuilder<ReturnBuilderType extends ItemContainingBuilder> extend
     }
 
     public setName(name: string): this {
+        if (!name) {
+            throw new EvalError('Name was undefined');
+        }
+
         this.Item.setName(name);
         return this;
     }
 
     public setDescription(description: string): this {
+        if (!description) {
+            throw new EvalError('Description was undefined');
+        }
+
         this.Item.setDescription(description);
         return this;
     }
 
     public setMaximumUsages(maxUsages: number): this {
-        if (maxUsages <= 0) {
+        if (maxUsages === undefined || maxUsages <= 0) {
             throw new EvalError('MaximumUsages Value has to be greater than 0.');
         }
 
@@ -42,7 +50,7 @@ export class ItemBuilder<ReturnBuilderType extends ItemContainingBuilder> extend
     }
 
     public setUsagesLeft(usagesLeft: number): this {
-        if (usagesLeft < 0) {
+        if (usagesLeft === undefined || usagesLeft === null || usagesLeft < 0) {
             throw new EvalError('UsagesLeft Value has to be greater than or equal to 0.');
         }
 

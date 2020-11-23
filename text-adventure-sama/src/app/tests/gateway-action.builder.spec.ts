@@ -27,6 +27,7 @@ describe('GatewayActionBuilder.', () => {
     });
 
 
+    // TargetSceneId
     // you cannot test a function which expects parameters in jasmine to throw an error -> wrap in anonymous function
     it('should throw an error when trying to set a null TargetSceneId.', () => {
         testBuilder.setTargetSceneId(testAction.getTargetSceneId());
@@ -51,6 +52,7 @@ describe('GatewayActionBuilder.', () => {
         expect(testBuilder.getAction().getTargetSceneId()).toBe(testAction.getTargetSceneId());
     });
 
+    // TargetSceneName
     it('should throw an error when trying to set an undefined TargetSceneName.', () => {
         testBuilder.setTargetSceneName(testAction.getTargetSceneName());
         expect(() => testBuilder.setTargetSceneName(undefined)).toThrowError(EvalError);
@@ -74,6 +76,7 @@ describe('GatewayActionBuilder.', () => {
         expect(testBuilder.getAction().getTargetSceneName()).toBe(testAction.getTargetSceneName());
     });
 
+    // finish
     it('should throw an error when trying to finish the creation process of an action without TargetSceneID AND TargetSceneName.', () => {
         expect(() => testBuilder.finish()).toThrowError(BuilderError);
         expect(parentBuilder.Actions).toHaveSize(0);

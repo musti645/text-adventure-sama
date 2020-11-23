@@ -26,6 +26,7 @@ describe('BaseActionBuilder.', () => {
         });
     });
 
+    // Trigger
     it('should throw an error when trying to set an undefined Trigger AND not set the Property.', () => {
         testBuilder.setTrigger(testAction.getTrigger());
         expect(() => testBuilder.setTrigger(undefined)).toThrowError(EvalError);
@@ -51,6 +52,7 @@ describe('BaseActionBuilder.', () => {
         expect(testBuilder.getAction().getTrigger()).toBe(trigger);
     });
 
+    // Response
     it('should throw an error when trying to set an undefined Response AND not set the Property.', () => {
         testBuilder.setResponse(testAction.getResponse());
         expect(() => testBuilder.setResponse(undefined)).toThrowError(EvalError);
@@ -76,6 +78,7 @@ describe('BaseActionBuilder.', () => {
         expect(testBuilder.getAction().getResponse()).toBe(response);
     });
 
+    // finish
     it('should throw a builder error when trying to finish creation process of an action without a Trigger AND not add the action to the parent builder.', () => {
         testBuilder.setResponse(testAction.getResponse());
 

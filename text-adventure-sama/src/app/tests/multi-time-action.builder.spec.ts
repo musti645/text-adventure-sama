@@ -30,6 +30,7 @@ describe('MultiTimeActionBuilder.', () => {
     });
 
 
+    // InteractionType
     it('should throw an error when trying to set a null InteractionType AND not set the InteractionType.', () => {
         expect(() => testBuilder.setInteractionType(null)).toThrowError(EvalError);
         expect(testBuilder.getAction().getInteractionType()).toBe(InteractionType.DO);
@@ -52,6 +53,7 @@ describe('MultiTimeActionBuilder.', () => {
         expect(testBuilder.getAction().getInteractionType()).toBe(type);
     });
 
+    // Usages Left
     it('should throw an error when trying to set an invalid UsagesLeft Value AND not set the Property.', () => {
         expect(() => testBuilder.setUsagesLeft(-29)).toThrowError(EvalError);
         expect(testBuilder.getAction().getUsagesLeft()).toBeUndefined();
@@ -83,6 +85,7 @@ describe('MultiTimeActionBuilder.', () => {
     });
 
 
+    // MaximumUsages
     it('should throw an error when trying to set a null MaximumUsages Value AND not set the Property.', () => {
         testBuilder.getAction().setMaximumUsages(testAction.getMaximumUsages());
         expect(() => testBuilder.setMaximumUsages(null)).toThrowError(EvalError);
@@ -119,6 +122,7 @@ describe('MultiTimeActionBuilder.', () => {
         expect(testBuilder.getAction().getMaximumUsages()).toBe(usages);
     });
 
+    // Responses
     it('should throw an error when trying to set an undefined Responses Array and not set the property.', () => {
         testBuilder.getAction().setResponses(testAction.getResponses());
         expect(() => testBuilder.setResponses(undefined)).toThrowError(EvalError);
@@ -148,6 +152,7 @@ describe('MultiTimeActionBuilder.', () => {
     });
 
 
+    // finish
     it('should throw a builder error when trying to finish an action without having set UsagesLeft', () => {
         testBuilder.getAction().setInteractionType(testAction.getInteractionType());
         testBuilder.getAction().setMaximumUsages(testAction.getMaximumUsages());

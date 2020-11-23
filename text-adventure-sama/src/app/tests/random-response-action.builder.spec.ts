@@ -27,6 +27,7 @@ describe('RandomResponseActionBuilder.', () => {
     });
 
 
+    // InteractionType
     it('should throw an error when trying to set a null InteractionType AND not set the InteractionType.', () => {
         expect(() => testBuilder.setInteractionType(null)).toThrowError(EvalError);
         expect(testBuilder.getAction().getInteractionType()).toBe(InteractionType.DO);
@@ -49,6 +50,7 @@ describe('RandomResponseActionBuilder.', () => {
         expect(testBuilder.getAction().getInteractionType()).toBe(type);
     });
 
+    // Responses
     it('should throw an error when trying to set an undefined Responses Array and not set the property.', () => {
         testBuilder.getAction().setResponses(testAction.getResponses());
         expect(() => testBuilder.setResponses(undefined)).toThrowError(EvalError);
@@ -79,6 +81,7 @@ describe('RandomResponseActionBuilder.', () => {
     });
 
 
+    // finish
     it('should throw a builder error when trying to finish an action without having set Responses', () => {
         testBuilder.getAction().setInteractionType(testAction.getInteractionType());
 

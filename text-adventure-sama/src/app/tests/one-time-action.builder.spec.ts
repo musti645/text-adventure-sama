@@ -27,7 +27,7 @@ describe('OneTimeActionBuilder.', () => {
         });
     });
 
-
+    // InteractionType
     it('should throw an error when trying to set a null InteractionType AND not set the InteractionType.', () => {
         expect(() => testBuilder.setInteractionType(null)).toThrowError(EvalError);
         expect(testBuilder.getAction().getInteractionType()).toBe(InteractionType.DO);
@@ -50,6 +50,7 @@ describe('OneTimeActionBuilder.', () => {
         expect(testBuilder.getAction().getInteractionType()).toBe(type);
     });
 
+    // WasTriggered
     it('should throw an error when trying to set a null WasTriggered Attribute.', () => {
         testBuilder.getAction().setWasTriggered(true);
         expect(() => testBuilder.setWasTrigered(null)).toThrowError(EvalError);
@@ -70,6 +71,7 @@ describe('OneTimeActionBuilder.', () => {
     });
 
 
+    // ResponseAfterUse
     it('should throw an error when trying to set an undefined ResponseAfterUse AND not set the property.', () => {
         testBuilder.getAction().setResponseAfterUse(testAction.getResponseAfterUse());
         expect(() => testBuilder.setResponseAfterUse(undefined)).toThrowError(EvalError);
@@ -94,6 +96,7 @@ describe('OneTimeActionBuilder.', () => {
         expect(testBuilder.getAction().getResponseAfterUse()).toBe(response);
     });
 
+    // finish
     it('should throw a builder error when trying to finish creation without having set ResponseAfterUse AND not finish the building process.', () => {
         expect(() => testBuilder.finish()).toThrowError(BuilderError);
         expect(parentBuilder.Actions).toHaveSize(0);

@@ -31,6 +31,7 @@ describe('ItemConsumingActionBuilder.', () => {
         });
     });
 
+    // InteractionType
     it('should throw an error when trying to set a null InteractionType AND not set the InteractionType.', () => {
         expect(() => testBuilder.setInteractionType(null)).toThrowError(EvalError);
         expect(testBuilder.getAction().getInteractionType()).toBe(InteractionType.USE);
@@ -53,6 +54,7 @@ describe('ItemConsumingActionBuilder.', () => {
         expect(testBuilder.getAction().getInteractionType()).toBe(type);
     });
 
+    // WasTriggered
     it('should throw an error when trying to set a null WasTriggered Attribute.', () => {
         testBuilder.getAction().setWasTriggered(true);
         expect(() => testBuilder.setWasTrigered(null)).toThrowError(EvalError);
@@ -72,6 +74,7 @@ describe('ItemConsumingActionBuilder.', () => {
         expect(testBuilder.getAction().getWasTriggered()).toBe(wasTriggered);
     });
 
+    // ResponseAfterUse
     it('should throw an error when trying to set an undefined ResponseAfterUse AND not set the property.', () => {
         testBuilder.getAction().setResponseAfterUse(testAction.getResponseAfterUse());
         expect(() => testBuilder.setResponseAfterUse(undefined)).toThrowError(EvalError);
@@ -95,6 +98,7 @@ describe('ItemConsumingActionBuilder.', () => {
         expect(testBuilder.getAction().getResponseAfterUse()).toBe(response);
     });
 
+    // addItemToBuilder
     it('should throw an error when trying to add an undefined Item to the action AND not add it.', () => {
         testBuilder.getAction().setItem(testAction.getItem());
         expect(() => testBuilder.addItemToBuilder(undefined)).toThrowError(BuilderError);
@@ -118,15 +122,18 @@ describe('ItemConsumingActionBuilder.', () => {
         expect(areEqual).toBeTrue();
     });
 
+    // addItem
+    it('should return an ItemBuilder when calling addItem.', () => {
+        const itemBuilder = testBuilder.addItem();
+        expect(itemBuilder).toBeInstanceOf(ItemBuilder);
+    });
+
+    // finish
     it('should throw a builder error when trying to finish creation, due to missing item AND not finish the building process.', () => {
         expect(() => testBuilder.finish()).toThrowError(BuilderError);
         expect(parentBuilder.Actions).toHaveSize(0);
     });
 
-    it('should return an ItemBuilder when calling addItem.', () => {
-        const itemBuilder = testBuilder.addItem();
-        expect(itemBuilder).toBeInstanceOf(ItemBuilder);
-    });
 
     it('should add the action to the parent builder with everything set.', () => {
         testBuilder.setTrigger(testAction.getTrigger())

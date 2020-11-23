@@ -24,7 +24,7 @@ export class InGameItem {
     private CannotUseItemResponse: string;
     public CanUseFunction(item: this, currentScene: Scene, inventory: Inventory): boolean {
         return true;
-    };
+    }
 
 
     constructor(id?: number) {
@@ -135,6 +135,10 @@ export class InGameItem {
 
     public getCannotUseItemResponse(): string {
         return this.CannotUseItemResponse;
+    }
+
+    public getCanUseFunction(): (item: this, currentScene: Scene, inventory: Inventory) => boolean {
+        return this.CanUseFunction;
     }
 
 }

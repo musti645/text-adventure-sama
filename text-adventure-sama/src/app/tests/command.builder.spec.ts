@@ -29,6 +29,7 @@ describe('CommandBuilder.', () => {
         });
     });
 
+    // Trigger
     it('should throw an error when trying to set an undefined Trigger AND not set the Property.', () => {
         testBuilder.setTrigger(testCommand.getTrigger());
         expect(() => testBuilder.setTrigger(undefined)).toThrowError(EvalError);
@@ -54,6 +55,7 @@ describe('CommandBuilder.', () => {
         expect(testBuilder.getCommand().getTrigger()).toBe(trigger);
     });
 
+    // Response
     it('should throw an error when trying to set an undefined Response AND not set the Property.', () => {
         testBuilder.setResponse(testCommand.getResponse());
         expect(() => testBuilder.setResponse(undefined)).toThrowError(EvalError);
@@ -79,6 +81,7 @@ describe('CommandBuilder.', () => {
         expect(testBuilder.getCommand().getResponse()).toBe(response);
     });
 
+    // finish
     it('should throw a builder error when trying to finish creation process of an command without a Trigger AND not add the command to the parent builder.', () => {
         testBuilder.setResponse(testCommand.getResponse())
         .setDescription(testCommand.getDescription())
