@@ -59,7 +59,7 @@ export class ItemConsumingActionBuilder<ReturnBuilderType extends ActionContaini
         }
 
         if (!this.Action.getResponseAfterUse()) {
-            throw new BuilderError('Action creation could not be finished. ResponseAfterUse was not set.')
+            throw new BuilderError('Action creation could not be finished. ResponseAfterUse was not set.');
         }
     }
 }

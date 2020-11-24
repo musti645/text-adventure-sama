@@ -146,6 +146,6 @@ class TestCommandBuilder extends BaseBuilder implements CommandContainingBuilder
         return new CommandBuilder<TestCommandBuilder>(this);
     }
 
-    public finish() {
+    public finish(): void {
     }
 }

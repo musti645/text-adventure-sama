@@ -13,6 +13,12 @@
  *
  * Learn more in https://angular.io/guide/browser-support
  */
+// tslint:disable: object-literal-shorthand
+// tslint:disable: typedef
+// tslint:disable: no-bitwise
+// tslint:disable: no-var-keyword
+// tslint:disable: prefer-const
+// tslint:disable: space-before-function-paren
 
 /***************************************************************************************************
  * BROWSER POLYFILLS
@@ -116,7 +122,7 @@ if (!Array.prototype.reduce) {
                     value = callback(value, o[k], k, o);
                 }
 
-                // d. Increase k by 1.      
+                // d. Increase k by 1.
                 k++;
             }
 
