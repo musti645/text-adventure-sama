@@ -11,6 +11,7 @@ import { GameResetEvent } from '../models/events/game-reset.event';
 import { GameEndEvent } from '../models/events/game-end.event';
 import { GameStartEvent } from '../models/events/game-start.event';
 import { InteractionType } from '../models/interactions/interaction-type.enum';
+import { IClassificationTrainer } from '../services/classification-trainer.interface';
 
 /**
  * Main Component, that contains the input and output of the game.
@@ -29,6 +30,7 @@ export class TextAdventureComponent implements OnInit {
   @Input() TypewriterSpeed = 40;
 
   @Input() Game: Game;
+  @Input() ClassificationTrainer: IClassificationTrainer;
 
   @Output() OnGameStartEvent: EventEmitter<GameStartEvent> = new EventEmitter<GameStartEvent>();
   @Output() OnGameResetEvent: EventEmitter<GameResetEvent> = new EventEmitter<GameResetEvent>();
@@ -48,7 +50,12 @@ export class TextAdventureComponent implements OnInit {
   );
 
   constructor(private inputParserService: InputParserService) {
-    inputParserService.initialize(new ClassificationTrainer());
+    if (!this.ClassificationTrainer) {
+      inputParserService.initialize(new ClassificationTrainer());
+    }
+    else {
+      inputParserService.initialize(this.ClassificationTrainer);
+    }
   }
 
   ngOnInit() {
