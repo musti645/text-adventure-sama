@@ -1,8 +1,31 @@
-# text-adventure-sama #
+# TextAdventureSama #
 
 An Angular library to add a Text Adventure to your Web Application.
 
 ## How it works ##
+
+Import the `TextAdventureModule` to the Module that is to contain the component. 
+
+```typescript
+import { TextAdventureModule } from 'text-adventure-sama';
+
+@NgModule({
+  declarations: [
+    //...
+  ],
+  imports: [
+    //... other modules
+    TextAdventureModule
+  ],
+  providers: [
+      //...
+  ],
+  bootstrap: [
+      //...
+  ]
+})
+
+```
 
 Add the Text-Adventure-Component to your DOM and pass it a Game Object via the corresponding Attribute.
 
@@ -135,15 +158,15 @@ There are multiple types of Actions, which behave differently to triggers.
 
 #### Types of Actions ####
 
-|Type|Description|
-|---|---|
-|Gateway Action| When Gateway Action is triggered, the player leaves the current scene and moves on to the linked scene.|
-|Multi-Time Action|The Multi-Time Action (open for name suggestions) can be triggered multiple times and each time returns a different response.|
-|One-Time Action|A One-Time Action can only be triggered once and after having been triggered, always responds with the same string.|
-|Random-Response Action|Triggering a RandomResponse Action returns a random response out of a list of responses.|
-|Item-Yielding Action|Once an Item-Yielding Action is triggered, the player receives an Item into her inventory.|
-|ItemConsuming Action|In order to trigger this an Item-Consuming Action, the player needs to have a certain item in her inventory.The Item is used once. If it has got one Usage left, it will be removed from the inventory.|
-|ItemRemoving Action|In order to trigger this an Item-Removing Action, the player needs to have a certain item in her inventory.The Item is removed from the inventory without being used.|
+| Type                   | Description                                                                                                                                                                                             |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Gateway Action         | When Gateway Action is triggered, the player leaves the current scene and moves on to the linked scene.                                                                                                 |
+| Multi-Time Action      | The Multi-Time Action (open for name suggestions) can be triggered multiple times and each time returns a different response.                                                                           |
+| One-Time Action        | A One-Time Action can only be triggered once and after having been triggered, always responds with the same string.                                                                                     |
+| Random-Response Action | Triggering a RandomResponse Action returns a random response out of a list of responses.                                                                                                                |
+| Item-Yielding Action   | Once an Item-Yielding Action is triggered, the player receives an Item into her inventory.                                                                                                              |
+| ItemConsuming Action   | In order to trigger this an Item-Consuming Action, the player needs to have a certain item in her inventory.The Item is used once. If it has got one Usage left, it will be removed from the inventory. |
+| ItemRemoving Action    | In order to trigger this an Item-Removing Action, the player needs to have a certain item in her inventory.The Item is removed from the inventory without being used.                                   |
 
 #### InteractionTypes ####
 
@@ -187,6 +210,29 @@ In order to use your own ClassificationTrainer, just implement the interface and
 #### Using standardized input ####
 
 There's also the possibility to make sure, the user only uses standardized input, that has been used to train the classifier. This way, the InteractionTypes are more clearly distinguishable for the classifier and we don't get wront InteractionTypes for input.
+
+
+
+
+
+## Known Issues ##
+
+### CommonJS Warnings ##
+
+In order to remove the Build warnings regarding CommonJS, include the following to your `angular.json` file
+
+```json
+    "build": {
+        "builder": "@angular-devkit/build-angular:browser",
+        "options": {
+            //...
+        "allowedCommonJsDependencies": [
+            "lodash",
+            "lodash.clonedeep",
+            "natural"
+        ]
+    }
+```
 
 ## In Depth Look ##
 

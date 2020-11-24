@@ -70,7 +70,12 @@
             "styles": [
               "projects/example-app/src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "allowedCommonJsDependencies": [
+              "lodash",
+              "lodash.clonedeep",
+              "natural"
+           ]
           },
           "configurations": {
             "production": {
