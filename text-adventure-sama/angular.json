@@ -26,7 +26,8 @@
           "options": {
             "main": "projects/text-adventure-sama/src/test.ts",
             "tsConfig": "projects/text-adventure-sama/tsconfig.spec.json",
-            "karmaConfig": "projects/text-adventure-sama/karma.conf.js"
+            "karmaConfig": "projects/text-adventure-sama/karma.conf.js",
+            "codeCoverage": true
           }
         },
         "lint": {
