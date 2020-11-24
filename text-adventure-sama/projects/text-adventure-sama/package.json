@@ -7,9 +7,9 @@
     "lodash.clonedeep": "^4.5.0",
     "lodash": "^4.5.0",
     "rxjs": "~6.6.3",
-    "natural": "^2.1.5"
+    "natural": "^2.1.5",
+    "tslib": "^2.0.0"
   },
   "dependencies": {
-    "tslib": "^2.0.0"
   }
 }
