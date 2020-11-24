@@ -2,9 +2,39 @@
 
 An Angular library to add a Text Adventure to your Web Application.
 
-## How it works ##
+## Getting Started ##
 
-Import the `TextAdventureModule` to the Module that is to contain the component. 
+### Configuration Changes ###
+
+We need to add the following to the `package.json` and `polyfills.ts`, in order to be able to use the Natural Language Processing Library. This is due to the fact, that [NaturalNode](https://github.com/NaturalNode/natural) is actually a back end library, but we want to use it on the client side.
+
+```json
+// package.json
+{
+  "name": "something",
+  // BEGIN INSERT
+  "browser": {
+    "fs": false,
+    "os": false,
+    "path": false,
+    "webworker-threads": false
+  },
+  //END INSERT
+}
+```
+
+And
+
+```typescript
+// polyfills.ts
+(window as any).global = window;
+```
+
+See [here](https://github.com/angular/angular-cli/issues/8160) for more information on the *polyfills.ts* part
+
+### Adding the Component ###
+
+Import the `TextAdventureModule` to the Module that is to contain the component.
 
 ```typescript
 import { TextAdventureModule } from 'text-adventure-sama';
@@ -30,17 +60,17 @@ import { TextAdventureModule } from 'text-adventure-sama';
 Add the Text-Adventure-Component to your DOM and pass it a Game Object via the corresponding Attribute.
 
 ```HTML
-<text-adventure-component [Game]="Game"></text-adventure-component>
+<tas-text-adventure [Game]="Game"></tas-text-adventure>
 ```
 
 Currently there are 3 Events, that you can listen to.
 
 ```HTML
-<text-adventure-component [Game]="Game"
+<tas-text-adventure [Game]="Game"
     (OnGameStartEvent)="onGameStart($event)"
     (OnGameResetEvent)="onGameReset($event)"
     (OnGameEndEvent)="onGameEnd($event)">
-</text-adventure-component>
+</tas-text-adventure>
 ```
 
 ### Creating a new Game ###
@@ -59,19 +89,14 @@ First, you create the [Game](#game) itself and set all the necessary Strings to 
 const builder = new GameBuilder();
 
 builder.setTitle('-- Test Adventure --')
-.setIntroduction('You\'ve lost track of where you are while hiking in the woods.'
-+ 'Your battery is dead and it\'s going to get dark outside soon.'
-+ 'You better find shelter for the night. \r\n'
-+ 'While looking for signs of civilization you come across a small hut...')
+.setIntroduction('You\'ve lost track of where you are while hiking in the woods.')
 .setGatewayTargetNotFoundResponse('You don\'t know where that is.')
 .setItemAddedToInventoryResponse('You put that thing into your bag.')
 .setItemNotFoundInInventoryResponse('You can\'t seem to find what you\'re looking for')
-.setInventoryEmptyResponse('You look into your bag, hoping to find something helpful in there, but it\'s empty.');
-
-//...
+.setInventoryEmptyResponse('Just emptiness. Nothing more.');
 ```
 
-Then you add a [Scene](#scenes) to the Game. By calling `addScene()` you receive a `SceneBuilder.` Once you're done with the Scene itself, you can call `finish()` in order to get the `GameBuilder` back.
+Then you add a [Scene](#scenes) to the Game. By calling `addScene()` you receive a `SceneBuilder.` Once you're done with the Scene itself, you can call `finish()` in order to get the `GameBuilder` back. But before doing so, let's add some Actions and Items to the Scene.
 
 ```typescript
 // either pass your own ID to the SceneBuilder, or let the game generate it for you
@@ -87,6 +112,7 @@ Now you can add an [Action](#actions) to the game and allow the user to do somet
 
 ```typescript
 // a gateway action, for example, allows the user to go to another scene
+// it's triggered by writing something like "go to shed"
 .addGatewayAction()
     .setTargetSceneId(2)
     .setTrigger('Shed')
@@ -107,6 +133,23 @@ It is also possible to add [Items](#items) to the Scene, with which the user can
     .setUsagesLeft(0)
     .finish()
 ```
+
+Once you are done with that, your code that creates the game should look something like this:
+
+- Create a new GameBuilder
+- Set Game Properties
+- Add a Scene
+- Set Scene Properties
+- Add Action to the Scene
+- Set Action Properties
+- Finish Action Creation
+- Add Item to the Scene
+- Finish Item Creation
+- Finish Scene Creation
+- Add another Scene
+- Finish Scene Creation
+- ...
+- Finish Game Creation
 
 ## Structure ##
 
@@ -211,15 +254,11 @@ In order to use your own ClassificationTrainer, just implement the interface and
 
 There's also the possibility to make sure, the user only uses standardized input, that has been used to train the classifier. This way, the InteractionTypes are more clearly distinguishable for the classifier and we don't get wront InteractionTypes for input.
 
-
-
-
-
 ## Known Issues ##
 
 ### CommonJS Warnings ##
 
-In order to remove the Build warnings regarding CommonJS, include the following to your `angular.json` file
+In order to remove the Build warnings regarding CommonJS, include the following to your `angular.json` file.
 
 ```json
     "build": {
@@ -234,11 +273,14 @@ In order to remove the Build warnings regarding CommonJS, include the following 
     }
 ```
 
+<!-- TODO: install lodash-es, instead of lodash -->
+
 ## In Depth Look ##
 
+<!-- TODO:
 ### From Input to Output ###
 
-<!-- TODO: THIS -->
+ TODO: THIS -->
 
 ### ID Generator ##
 
