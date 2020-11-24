@@ -1,0 +1,62 @@
+$overflow-type: hidden;
+$background-color: #222222;
+$text-color: #ddd;
+$font-family: "Lucida Sans Typewriter", "Lucida Console", monaco, "Bitstream Vera Sans Mono", monospace;
+$padding-small: 8px;
+
+.text-adventure-root {
+  height: 100%;
+  margin: 0;
+  font-family: $font-family;
+
+  background: $background-color;
+  color: $text-color;
+
+  .row {
+    margin: 0;
+  }
+
+  .output-container-wrapper {
+    height: 95%;
+    padding: $padding-small;
+
+    overflow: $overflow-type;
+    display: flex;
+    flex-direction: column-reverse;
+
+    .output-container {
+      text-overflow: ellipsis;
+      display: flex;
+
+      .input-line {
+        font-style: italic;
+      }
+    }
+  }
+
+
+  .input-container-wrapper {
+    .input-container {
+      form {
+        .form-group {
+          input {
+            background-color: $background-color;
+            color: $text-color;
+
+            border-radius: 0px;
+            border-width: 0px;
+            border-top: 1px solid $text-color;
+
+            width: 100%;
+            padding: $padding-small;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+          }
+        }
+      }
+
+    }
+
+  }
+}
