@@ -42,7 +42,7 @@ export class InputParserService {
     }
 
 
-    setGame(game: Game) {
+    setGame(game: Game): void {
         this.Game = game;
     }
 
@@ -81,6 +81,7 @@ export class InputParserService {
                 // use item in inventory or in scene
                 return this.getUseResponse(nounsAndVerbs);
             default:
+                // do something
                 return this.getDoResponse(nounsAndVerbs);
         }
 

@@ -24,7 +24,7 @@ export class Scene {
         this.Actions = [];
     }
 
-    public setID(id: number) {
+    public setID(id: number): void {
         this.ID = id;
     }
 
@@ -80,7 +80,7 @@ export class Scene {
         return this.Items;
     }
 
-    public removeItemFromScene(item: InGameItem) {
+    public removeItemFromScene(item: InGameItem): void {
         const index = this.Items.indexOf(item);
         if (index > -1) {
             this.Items.splice(index, 1);

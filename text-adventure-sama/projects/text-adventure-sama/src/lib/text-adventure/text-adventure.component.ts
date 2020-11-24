@@ -69,7 +69,7 @@ export class TextAdventureComponent implements OnInit {
   OnSubmit(): void {
     this.startLoading();
     const inputString = this.userInput.value;
-    if (inputString === '') {
+    if (!inputString) {
       this.stopLoading();
       return;
     }

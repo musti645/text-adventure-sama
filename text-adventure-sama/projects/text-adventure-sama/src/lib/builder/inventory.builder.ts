@@ -23,7 +23,7 @@ export class InventoryBuilder extends BaseBuilder implements ItemContainingBuild
         return new ItemBuilder<InventoryBuilder>(this, item);
     }
 
-    addItemToBuilder(item: InGameItem) {
+    addItemToBuilder(item: InGameItem): void {
         if (!item) {
             throw new BuilderError('Could not add Item to Inventory. Item was not set.');
         }

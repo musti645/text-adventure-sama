@@ -3,6 +3,7 @@ import { ItemEventService } from '../services/item-event.service';
 import { IItemConsumingEventListener, ItemConsumingActionEvent } from '../models/events/item-consuming-action.event';
 import { IItemRemovingEventListener, ItemRemovingActionEvent } from '../models/events/item-removing-action.event';
 import { IItemYieldingEventListener, ItemYieldingActionEvent } from '../models/events/item-yielding-action.event';
+import * as _ from 'lodash';
 
 export class Inventory implements IItemConsumingEventListener,
     IItemRemovingEventListener,
@@ -23,8 +24,8 @@ export class Inventory implements IItemConsumingEventListener,
         }
 
         for (let i = 0; i < event.AmountOfItems; i++) {
-            // create a shallow copy of the item (ES6 only)
-            this.addItem(Object.assign({}, event.Item));
+            // create a deep copy of the item (we also need the functions to be copied)
+            this.addItem(_.cloneDeep(event.Item));
         }
     }
 

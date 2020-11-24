@@ -73,5 +73,9 @@ export class ItemYieldingActionBuilder<ReturnBuilderType extends ActionContainin
         if (!this.Action.getItem()) {
             throw new BuilderError('Action creation could not be finished. Item was not set.');
         }
+
+        if (!this.Action.getResponseAfterUse()) {
+            throw new BuilderError('Action creation could not be finished. ResponseAfterUse was not set.')
+        }
     }
 }

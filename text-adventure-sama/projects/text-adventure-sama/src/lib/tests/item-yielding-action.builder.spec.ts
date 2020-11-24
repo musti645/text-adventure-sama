@@ -176,9 +176,27 @@ describe('ItemYieldingActionBuilder.', () => {
 
     // finish
     it('should throw a builder error when trying to finish creation, due to missing item AND not finish the building process.', () => {
+        testBuilder.setTrigger(testAction.getTrigger())
+            .setResponse(testAction.getResponse())
+            .setInteractionType(testAction.getInteractionType())
+            .setResponseAfterUse(testAction.getResponseAfterUse())
+            .setWasTrigered(testAction.getWasTriggered());
+
         expect(() => testBuilder.finish()).toThrowError(BuilderError);
         expect(parentBuilder.Actions.length).toBe(0);
     });
+
+    it('should throw a builder error when trying to finish creation, due to missing ResponseAfterUse'
+        + ' AND not finish the building process.', () => {
+            testBuilder.setTrigger(testAction.getTrigger())
+                .setResponse(testAction.getResponse())
+                .setInteractionType(testAction.getInteractionType())
+                .setWasTrigered(testAction.getWasTriggered());
+            testBuilder.addItemToBuilder(testAction.getItem());
+
+            expect(() => testBuilder.finish()).toThrowError(BuilderError);
+            expect(parentBuilder.Actions.length).toBe(0);
+        });
 
     it('should add the action to the parent builder with everything set.', () => {
         testBuilder.setTrigger(testAction.getTrigger())
