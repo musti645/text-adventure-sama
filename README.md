@@ -1,5 +1,7 @@
 # TextAdventureSama #
 
+[![Build Status - Master](https://travis-ci.org/musti645/text-adventure-sama.svg?branch=development)](https://travis-ci.org/musti645/text-adventure-sama)
+
 An Angular library to add a Text Adventure to your Web Application.
 
 ## Getting Started ##
