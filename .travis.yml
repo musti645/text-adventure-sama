@@ -14,12 +14,11 @@ addons:
   chrome: stable
 
 before_script:
-  - cd ./text-adventure-sama/
   - npm install -g @angular/cli
-
-install:
+  - cd ./text-adventure-sama/
   - npm install
 
 script:
+  - cd ./text-adventure-sama/
   - ng lint
   - npm run test-ci
