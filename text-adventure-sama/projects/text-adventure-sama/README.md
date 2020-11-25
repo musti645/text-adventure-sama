@@ -14,14 +14,14 @@ We need to add the following to the `package.json` and `polyfills.ts`, in order 
 // package.json
 {
   "name": "something",
-  // BEGIN INSERT
+  ...
   "browser": {
     "fs": false,
     "os": false,
     "path": false,
     "webworker-threads": false
   },
-  //END INSERT
+  ...
 }
 ```
 

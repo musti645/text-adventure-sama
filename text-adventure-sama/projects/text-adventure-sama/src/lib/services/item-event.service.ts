@@ -18,7 +18,7 @@ export class ItemEventService implements IItemRemovingEventService,
 
     }
 
-    private static Instance: ItemEventService;
+    private static Instance: ItemEventService = undefined;
 
     private ItemConsumingActionEventSource = new Subject<ItemConsumingActionEvent>();
     private ItemYieldingActionEventSource = new Subject<ItemYieldingActionEvent>();

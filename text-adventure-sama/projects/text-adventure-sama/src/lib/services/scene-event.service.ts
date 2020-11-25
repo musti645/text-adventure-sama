@@ -13,7 +13,8 @@ export class SceneEventService implements IGatewayActionEventService {
     private constructor() {
     }
 
-    private static Instance: SceneEventService = new SceneEventService();
+    private static Instance: SceneEventService = undefined;
+
     private GatewayActionEventSource = new Subject<GatewayActionEvent>();
 
     public GatewayActionEvent$ = this.GatewayActionEventSource.asObservable();

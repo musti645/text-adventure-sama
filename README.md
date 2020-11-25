@@ -1,5 +1,7 @@
 # TextAdventureSama #
 
+<!-- IMPORTANT NOTE: There's a copy of this ReadMe in the library itself. Either automate the process or don't forget to replace that one with the updated version. -->
+
 [![Build Status - Master](https://travis-ci.org/musti645/text-adventure-sama.svg?branch=development)](https://travis-ci.org/musti645/text-adventure-sama)
 
 An Angular library to add a Text Adventure to your Web Application.
@@ -14,14 +16,14 @@ We need to add the following to the `package.json` and `polyfills.ts`, in order 
 // package.json
 {
   "name": "something",
-  // BEGIN INSERT
+  ...
   "browser": {
     "fs": false,
     "os": false,
     "path": false,
     "webworker-threads": false
   },
-  //END INSERT
+  ...
 }
 ```
 
