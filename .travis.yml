@@ -3,7 +3,7 @@ os: linux
 
 language: node_js
 node_js:
-  - '12'
+  - '14'
 
 branches:
   only:
@@ -22,4 +22,4 @@ install:
 
 script:
   - ng lint
-  - npm test-ci
+  - npm run test-ci
