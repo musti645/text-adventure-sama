@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { IDGeneratorService, TypeCountContainer } from './id-generator.service';
 import { SceneBuilder } from '../builder/scene.builder';
 import { Scene } from '../models/scene.model';
-import { InGameItem } from '../models/Item.model';
+import { InGameItem } from '../models/item.model';
 import { Action } from '../models/actions/action.model';
 import { Injectable } from '@angular/core';
 import { SceneEventService } from './scene-event.service';

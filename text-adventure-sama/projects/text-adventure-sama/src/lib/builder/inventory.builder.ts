@@ -1,7 +1,7 @@
 import { GameBuilder } from './game.builder';
 import { Game } from '../models/game.model';
 import { Inventory } from '../models/inventory.model';
-import { InGameItem } from '../models/Item.model';
+import { InGameItem } from '../models/item.model';
 import { BaseBuilder } from './base.builder';
 import { ItemContainingBuilder } from './interfaces/item-containing.builder';
 import { ItemBuilder } from './item.builder';

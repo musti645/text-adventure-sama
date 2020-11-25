@@ -1,4 +1,4 @@
-import { InGameItem } from '../Item.model';
+import { InGameItem } from '../item.model';
 import { ItemRemovingAction } from '../actions/item-removing-action.model';
 
 export class ItemRemovingActionEvent {

@@ -4,7 +4,7 @@ import { TestActionBuilder } from './helpers/test-action-builder';
 import * as _ from 'lodash';
 import { ItemConsumingAction } from '../models/actions/item-consuming-action.model';
 import { ItemBuilder } from '../builder/item.builder';
-import { InGameItem } from '../models/Item.model';
+import { InGameItem } from '../models/item.model';
 import { InteractionType } from '../models/interactions/interaction-type.enum';
 import { ItemConsumingActionBuilder } from '../builder/action-builders/item-consuming-action.builder';
 

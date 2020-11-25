@@ -1,4 +1,4 @@
-import { InGameItem } from './Item.model';
+import { InGameItem } from './item.model';
 import { ItemEventService } from '../services/item-event.service';
 import { IItemConsumingEventListener, ItemConsumingActionEvent } from '../models/events/item-consuming-action.event';
 import { IItemRemovingEventListener, ItemRemovingActionEvent } from '../models/events/item-removing-action.event';

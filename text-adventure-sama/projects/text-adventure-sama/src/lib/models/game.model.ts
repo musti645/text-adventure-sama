@@ -1,7 +1,7 @@
 import { Action } from './actions/action.model';
 import { Command } from './command.model';
 import { Inventory } from './inventory.model';
-import { InGameItem } from './Item.model';
+import { InGameItem } from './item.model';
 import { Stage } from './stage.model';
 
 /**

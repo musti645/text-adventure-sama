@@ -1,5 +1,5 @@
 import { OneTimeAction } from './one-time-action.model';
-import { InGameItem } from '../Item.model';
+import { InGameItem } from '../item.model';
 import { ItemConsumingActionEvent } from '../events/item-consuming-action.event';
 import { InteractionType } from '../interactions/interaction-type.enum';
 import { ItemEventService } from '../../services/item-event.service';

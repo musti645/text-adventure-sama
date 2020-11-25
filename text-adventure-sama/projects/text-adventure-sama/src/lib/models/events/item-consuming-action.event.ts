@@ -1,4 +1,4 @@
-import { InGameItem } from '../Item.model';
+import { InGameItem } from '../item.model';
 import { ItemConsumingAction } from '../actions/item-consuming-action.model';
 
 export class ItemConsumingActionEvent {

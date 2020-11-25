@@ -3,7 +3,7 @@ import { ActionContainingBuilder } from '../interfaces/action-containing.builder
 import { ItemContainingBuilder } from '../interfaces/item-containing.builder';
 import { ItemBuilder } from '../item.builder';
 import { ItemYieldingAction } from '../../models/actions/item-yielding-action.model';
-import { InGameItem } from '../../models/Item.model';
+import { InGameItem } from '../../models/item.model';
 import { BuilderError } from '../../models/errors/builder.error';
 import { InteractionType } from '../../models/interactions/interaction-type.enum';
 

@@ -6,7 +6,7 @@ import { Inventory } from '../models/inventory.model';
 import * as _ from 'lodash';
 import { ItemBuilder } from '../builder/item.builder';
 import { BuilderError } from '../models/errors/builder.error';
-import { InGameItem } from '../models/Item.model';
+import { InGameItem } from '../models/item.model';
 
 describe('InventoryBuilder.', () => {
     let parentBuilder: GameBuilderChild;

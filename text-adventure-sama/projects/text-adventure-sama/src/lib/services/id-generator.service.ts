@@ -1,6 +1,6 @@
 import { Game } from '../models/game.model';
 import { Scene } from '../models/scene.model';
-import { InGameItem } from '../models/Item.model';
+import { InGameItem } from '../models/item.model';
 import { Action } from '../models/actions/action.model';
 import { ItemYieldingAction } from '../models/actions/item-yielding-action.model';
 import { Injectable } from '@angular/core';

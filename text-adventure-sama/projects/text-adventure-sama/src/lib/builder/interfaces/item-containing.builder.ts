@@ -1,4 +1,4 @@
-import { InGameItem } from '../../models/Item.model';
+import { InGameItem } from '../../models/item.model';
 import { ItemBuilder } from '../item.builder';
 
 export interface ItemContainingBuilder {

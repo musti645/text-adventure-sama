@@ -1,4 +1,4 @@
-import { InGameItem } from '../Item.model';
+import { InGameItem } from '../item.model';
 import { ItemYieldingAction } from '../actions/item-yielding-action.model';
 
 export class ItemYieldingActionEvent {

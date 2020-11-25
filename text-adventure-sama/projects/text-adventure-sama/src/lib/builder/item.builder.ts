@@ -1,4 +1,4 @@
-import { InGameItem } from '../models/Item.model';
+import { InGameItem } from '../models/item.model';
 import { ItemContainingBuilder } from './interfaces/item-containing.builder';
 import { BaseBuilder } from './base.builder';
 import { BuilderError } from '../models/errors/builder.error';

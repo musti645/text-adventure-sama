@@ -3,7 +3,7 @@ import { BuilderError } from '../models/errors/builder.error';
 import { TestActionBuilder } from './helpers/test-action-builder';
 import * as _ from 'lodash';
 import { ItemBuilder } from '../builder/item.builder';
-import { InGameItem } from '../models/Item.model';
+import { InGameItem } from '../models/item.model';
 import { InteractionType } from '../models/interactions/interaction-type.enum';
 import { ItemRemovingAction } from '../models/actions/item-removing-action.model';
 import { ItemRemovingActionBuilder } from '../builder/action-builders/item-removing-action.builder';

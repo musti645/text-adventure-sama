@@ -4,7 +4,7 @@ import { ItemContainingBuilder } from '../interfaces/item-containing.builder';
 import { ItemBuilder } from '../item.builder';
 import { ItemConsumingAction } from '../../models/actions/item-consuming-action.model';
 import { InteractionType } from '../../models/interactions/interaction-type.enum';
-import { InGameItem } from '../../models/Item.model';
+import { InGameItem } from '../../models/item.model';
 import { BuilderError } from '../../models/errors/builder.error';
 
 export class ItemConsumingActionBuilder<ReturnBuilderType extends ActionContainingBuilder>

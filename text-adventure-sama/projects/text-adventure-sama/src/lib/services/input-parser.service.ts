@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { Action } from '../models/actions/action.model';
-import { InGameItem } from '../models/Item.model';
+import { InGameItem } from '../models/item.model';
 import { Game } from '../models/game.model';
 
 import * as natural from 'natural';

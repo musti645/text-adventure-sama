@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { BaseBuilder } from '../builder/base.builder';
 import { ItemContainingBuilder } from '../builder/interfaces/item-containing.builder';
 import { ItemBuilder } from '../builder/item.builder';
-import { InGameItem } from '../models/Item.model';
+import { InGameItem } from '../models/item.model';
 import * as _ from 'lodash';
 import { BuilderError } from '../models/errors/builder.error';
 
