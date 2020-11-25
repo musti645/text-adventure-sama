@@ -27,7 +27,7 @@
     "webworker-threads": false
   },
   "bugs": {
-    "url": "https://github.com/owner/project/issues"
+    "url": "https://github.com/musti645/text-adventure-sama/issues"
   },
   "private": true,
   "peerDependencies": {
