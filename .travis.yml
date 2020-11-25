@@ -13,15 +13,11 @@ branches:
 addons:
   chrome: stable
 
-cache:
-  directories:
-    - ./text-adventure-sama/node_modules
-
 before_script:
   - cd ./text-adventure-sama/
+  - npm install -g @angular/cli
 
 install:
-  - npm install -g @angular/cli
   - npm install
 
 script:
