@@ -17,10 +17,13 @@ cache:
   directories:
     - ./text-adventure-sama/node_modules
 
+before_script:
+  - cd ./text-adventure-sama/
+
 install:
+  - npm install -g @angular/cli
   - npm install
 
 script:
-  - cd ./text-adventure-sama/
   - ng lint
   - npm run test-ci
