@@ -1,1 +1,0 @@
-{"version":3,"file":"text-adventure.module.d.ts","sources":["text-adventure.module.d.ts"],"names":[],"mappings":";;;;AAAA;;;AACA","sourcesContent":["export declare class TextAdventureModule {\r\n}\r\n"]}

@@ -1,6 +1,0 @@
-export var TextInputType;
-(function (TextInputType) {
-    TextInputType["UserInput"] = "input";
-    TextInputType["Output"] = "output";
-})(TextInputType || (TextInputType = {}));
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidGV4dC1pbnB1dC5lbnVtLmpzIiwic291cmNlUm9vdCI6IkU6L0Rva3VtZW50ZS9SZXBvc2l0b3JpZXMvVGV4dEFkdmVudHVyZVNhbWEvdGV4dC1hZHZlbnR1cmUtc2FtYS9wcm9qZWN0cy90ZXh0LWFkdmVudHVyZS1zYW1hL3NyYy8iLCJzb3VyY2VzIjpbImxpYi9tb2RlbHMvb3RoZXIvdGV4dC1pbnB1dC5lbnVtLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLE1BQU0sQ0FBTixJQUFZLGFBR1g7QUFIRCxXQUFZLGFBQWE7SUFDckIsb0NBQW1CLENBQUE7SUFDbkIsa0NBQWlCLENBQUE7QUFDckIsQ0FBQyxFQUhXLGFBQWEsS0FBYixhQUFhLFFBR3hCIiwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0IGVudW0gVGV4dElucHV0VHlwZSB7XHJcbiAgICBVc2VySW5wdXQgPSAnaW5wdXQnLFxyXG4gICAgT3V0cHV0ID0gJ291dHB1dCdcclxufVxyXG4iXX0=
