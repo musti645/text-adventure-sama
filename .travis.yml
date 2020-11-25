@@ -21,5 +21,6 @@ install:
   - npm install
 
 script:
+  - cd ./text-adventure-sama/
   - ng lint
   - npm run test-ci
