@@ -1,5 +1,7 @@
 # TextAdventureSama #
 
+<!-- IMPORTANT NOTE: There's a copy of this ReadMe in the library itself. Either automate the process or don't forget to replace that one with the updated version. -->
+
 [![Build Status - Master](https://travis-ci.org/musti645/text-adventure-sama.svg?branch=development)](https://travis-ci.org/musti645/text-adventure-sama)
 
 An Angular library to add a Text Adventure to your Web Application.
@@ -246,8 +248,8 @@ Classification is the process, where the InputType is derived from the user`s in
 In order to use your own ClassificationTrainer, just implement the interface and pass the created object into the game component.
 
 ```HTML
-<text-adventure-sama [Game]="Game" [ClassificationTrainer]="MyClassificationTrainer">
-</text-adventure-sama>
+<tas-text-adventure [Game]="Game" [ClassificationTrainer]="MyClassificationTrainer">
+</tas-text-adventure>
 ```
 
 *If you've got additions for the built in ClassificationTrainer, feel free to add them!*

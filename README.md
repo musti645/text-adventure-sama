@@ -248,8 +248,8 @@ Classification is the process, where the InputType is derived from the user`s in
 In order to use your own ClassificationTrainer, just implement the interface and pass the created object into the game component.
 
 ```HTML
-<text-adventure-sama [Game]="Game" [ClassificationTrainer]="MyClassificationTrainer">
-</text-adventure-sama>
+<tas-text-adventure [Game]="Game" [ClassificationTrainer]="MyClassificationTrainer">
+</tas-text-adventure>
 ```
 
 *If you've got additions for the built in ClassificationTrainer, feel free to add them!*
