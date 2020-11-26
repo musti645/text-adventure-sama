@@ -60,9 +60,6 @@ export class TextAdventureComponent implements OnInit {
 
   ngOnInit(): void {
     this.startLoading();
-    if (!this.Game) {
-      throw new GameError('Game not found.');
-    }
     this.startGame();
   }
 
@@ -107,13 +104,20 @@ export class TextAdventureComponent implements OnInit {
   }
 
   private startGame(): void {
+    if (!this.Game) {
+      throw new GameError('Game not found.');
+    }
     this.inputParserService.setGame(this.Game);
     this.OnGameStartEvent.emit(new GameStartEvent());
     this.printOutput(this.Game.getTitle()).then(() => this.printOutput(this.Game.getIntroduction())).then(() => this.stopLoading());
   }
 
   private printOutput(output: string, useTypewriteAnimationOnOutput: boolean = true): Promise<void> {
-    return new Promise<void>((outerResolve) => {
+    return new Promise<void>((outerResolve, outerReject) => {
+      if (!output) {
+        outerReject('Output was not defined. Make sure to have set the required responses in the game.');
+      }
+
       if (useTypewriteAnimationOnOutput && this.UseTypewritingAnimation) {
         const outputLines = output.split('\r\n');
         // we create a promise chain, in order to avoid printing new lines written as '<br>'

@@ -16,6 +16,8 @@ describe('TextAdventureComponent', () => {
     fixture = TestBed.createComponent(TextAdventureComponent);
     component = fixture.componentInstance;
     component.Game = new Game();
+    component.Game.setTitle('Title');
+    component.Game.setIntroduction('Introduction');
     fixture.detectChanges();
   });
 

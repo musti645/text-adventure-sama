@@ -36,6 +36,10 @@ And
 
 See [here](https://github.com/angular/angular-cli/issues/8160) for more information on the *polyfills.ts* part
 
+### Installing the Library ###
+
+Use the command `npm i text-adventure-sama` to add the library to your project.
+
 ### Adding the Component ###
 
 Import the `TextAdventureModule` to the Module that is to contain the component.

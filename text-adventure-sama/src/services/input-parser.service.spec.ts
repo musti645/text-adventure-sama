@@ -11,10 +11,11 @@ describe('InputParserService', () => {
   });
 
   // test the training
-  it('should initialize successfully', () => {
+  it('should initialize successfully', (done) => {
     const service: InputParserService = TestBed.inject(InputParserService);
     service.initialize(new ClassificationTrainer()).then(result => {
       expect(result).toBeTrue();
+      done();
     });
   });
 
