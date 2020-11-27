@@ -8,12 +8,13 @@ import * as natural from 'natural';
 import { InteractionType } from '../models/interactions/interaction-type.enum';
 import { IClassificationTrainer } from './classification-trainer.interface';
 import { ParseInputResult } from '../models/other/parse-input-result.model';
+import { ClassificationResult } from 'src/models/natural/classification-result.model';
+import { SpellcheckHelperService } from './spellcheck-helper.service';
 const language = 'EN';
 // see Penn Treebank Part-of-Speech Tags for more info on the tags
 const defaultCategory = 'N';
 const defaultCategoryCapitalized = 'NNP';
-const nounCategories = ['N', 'NN', 'NNS', 'NNP', 'NNPS'];
-const verbCategories = ['VB', 'VBD', 'VBG', 'VBN', 'VBO', 'VBZ'];
+
 
 /**
  * Helps to parse text input and call the corresponding action, returning a response
@@ -22,21 +23,41 @@ const verbCategories = ['VB', 'VBD', 'VBG', 'VBN', 'VBO', 'VBZ'];
     providedIn: 'root'
 })
 export class InputParserService {
-    private Game: Game;
+    protected nounCategories = ['N', 'NN', 'NNS', 'NNP', 'NNPS'];
+    protected verbCategories = ['VB', 'VBD', 'VBG', 'VBN', 'VBO', 'VBZ'];
+
+    protected Game: Game;
     private POSTagger: natural.BrillPOSTagger;
     private Tokenizer: natural.WordTokenizer;
     private Classifier: natural.BayesClassifier;
+    private Spellcheck: natural.Spellcheck;
 
     constructor() {
+        this.Tokenizer = new natural.WordTokenizer();
+        const lexicon = new natural.Lexicon(language, defaultCategory, defaultCategoryCapitalized);
+        const ruleSet = new natural.RuleSet('EN');
+        this.POSTagger = new natural.BrillPOSTagger(lexicon, ruleSet);
+        this.Classifier = new natural.BayesClassifier();
     }
 
     public initialize(trainer: IClassificationTrainer): Promise<boolean> {
         return new Promise<boolean>((resolve) => {
-            this.Tokenizer = new natural.WordTokenizer();
-            const lexicon = new natural.Lexicon(language, defaultCategory, defaultCategoryCapitalized);
-            const ruleSet = new natural.RuleSet('EN');
-            this.POSTagger = new natural.BrillPOSTagger(lexicon, ruleSet);
-            this.Classifier = new natural.BayesClassifier();
+            let words = [];
+            const gameStrings = this.Game.getInputRelevantStrings();
+
+            // tokenize strings and push each word into the words array
+            gameStrings.map(val => {
+                words = words.concat(this.Tokenizer.tokenize(val));
+            });
+
+            words = words.concat(SpellcheckHelperService.getInputRelevantWords());
+
+            // get only distinct words
+            const uniqueWords = [...new Set(words)];
+
+            // using all relevant unique words in the game as our spellchecker`s corpus
+            this.Spellcheck = new natural.Spellcheck(uniqueWords);
+
             trainer.trainClassifier(this.Classifier).then(() => resolve(true));
         });
     }
@@ -47,18 +68,12 @@ export class InputParserService {
     }
 
     public parseInput(input: string): ParseInputResult {
+        input = input.trim();
+
         const commandsResult = this.getCommandsResponse(input);
         if (commandsResult) {
             return commandsResult;
         }
-
-        // because imperatives are not so common in the brown/penn corpus, we add a 'they ' before
-        // the whole sentence, in order to make it a legitimate sentence and identify imperatives as verbs instead of nouns
-        input = 'they ' + input;
-
-        const taggedTokens = this.POSTagger.tag(this.Tokenizer.tokenize(input)).taggedWords;
-        // we get verbs and nouns, because in many cases a noun may be mistaken to be a verb and vice versa e.g. (a) stick & (to) stick
-        const nounsAndVerbs = this.getNounsAndVerbsFromTokenizedInput(taggedTokens);
 
         const interactionType = this.getInteractionType(input);
 
@@ -70,19 +85,19 @@ export class InputParserService {
         switch (interactionType) {
             case InteractionType.GO_TO:
                 // scenes/gateway actions
-                return this.getGoToResponse(nounsAndVerbs);
+                return this.getGoToResponse(input);
             case InteractionType.LOOK_AT:
                 // item description
-                return this.getLookAtResponse(nounsAndVerbs);
+                return this.getLookAtResponse(input);
             case InteractionType.PICK_UP:
                 // add item to inventory
-                return this.getPickUpResponse(nounsAndVerbs);
+                return this.getPickUpResponse(input);
             case InteractionType.USE:
                 // use item in inventory or in scene
-                return this.getUseResponse(nounsAndVerbs);
+                return this.getUseResponse(input);
             default:
                 // do something
-                return this.getDoResponse(nounsAndVerbs);
+                return this.getDoResponse(input);
         }
 
     }
@@ -101,7 +116,7 @@ export class InputParserService {
         return commandsResult;
     }
 
-    protected getGoToResponse(relevantWords: string[]): ParseInputResult {
+    protected getGoToResponse(input: string): ParseInputResult {
         const result = new ParseInputResult('');
         // get gateway actions
         const gatewayActions = this.Game.getActionsInScene().filter(val => {
@@ -113,50 +128,42 @@ export class InputParserService {
             return result;
         }
 
-        const actionDistances = this.getActionDistancesFromNouns(relevantWords, gatewayActions);
+        const action = this.getLikelyAction(input, gatewayActions);
 
-        if (!actionDistances || actionDistances.length <= 0) {
+        if (!action) {
             result.Result = this.Game.getGatewayTargetNotFoundResponse();
             return result;
         }
 
-        const action = actionDistances[0].Action;
-
         result.Result = action.trigger();
         result.IsEndGameResult = action.getIsEndGameAction();
         return result;
-
     }
 
-    protected getLookAtResponse(relevantWords: string[]): ParseInputResult {
+    protected getLookAtResponse(input: string): ParseInputResult {
         const result = new ParseInputResult('');
 
-        const itemDistances = this.getItemDistancesFromNouns(relevantWords,
-            this.Game.getItemsInScene(),
-            this.Game.getItemsInInventory());
+        const item = this.getLikelyItem(input, this.Game.getItemsInScene().concat(this.Game.getItemsInInventory()));
 
-        if (!itemDistances || itemDistances.length <= 0) {
+        if (!item) {
             result.Result = this.Game.getItemNotFoundResponse();
             return result;
         }
 
-        result.Result = itemDistances[0].Item.getDescription();
+        result.Result = item.getDescription();
         return result;
     }
 
-    protected getPickUpResponse(relevantWords: string[]): ParseInputResult {
+    protected getPickUpResponse(input: string): ParseInputResult {
         const result = new ParseInputResult('');
 
-        const itemDistances = this.getItemDistancesFromNouns(relevantWords,
-            this.Game.getItemsInScene(),
-            undefined);
 
-        if (!itemDistances || itemDistances.length <= 0) {
+        const item = this.getLikelyItem(input, this.Game.getItemsInScene());
+
+        if (!item) {
             result.Result = this.Game.getItemNotFoundResponse();
             return result;
         }
-
-        const item = itemDistances[0].Item;
 
         if (!item.getCanPickUp()) {
             result.Result = item.getCannotPickUpResponse();
@@ -177,37 +184,33 @@ export class InputParserService {
         return result;
     }
 
-    protected getUseResponse(relevantWords: string[]): ParseInputResult {
+    protected getUseResponse(input: string): ParseInputResult {
         const result = new ParseInputResult('');
 
-        const itemDistances = this.getItemDistancesFromNouns(relevantWords,
-            this.Game.getItemsInScene(),
-            this.Game.getItemsInInventory());
+        const item = this.getLikelyItem(input, this.Game.getItemsInScene().concat(this.Game.getItemsInInventory()));
 
-        if (!itemDistances || itemDistances.length <= 0) {
+        if (!item) {
             result.Result = this.Game.getItemNotFoundResponse();
             return result;
         }
 
-        const currentItem = itemDistances[0].Item;
-
-        if (!currentItem.CanUseFunction(currentItem, this.Game.getStage().getCurrentScene(), this.Game.getInventory())) {
-            result.Result = currentItem.getCannotUseItemResponse();
+        if (!item.CanUseFunction(item, this.Game.getStage().getCurrentScene(), this.Game.getInventory())) {
+            result.Result = item.getCannotUseItemResponse();
             return result;
         }
 
-        result.Result = currentItem.use();
+        result.Result = item.use();
 
         // if the item was in the inventory and has no usages left anymore -> remove it from inventory
-        if (currentItem.WasPickedUp && currentItem.getUsagesLeft() <= 0) {
-            result.Result += `\r\n${currentItem.getNoUsagesLeftResponse()}`;
-            this.Game.removeItemFromInventory(currentItem);
+        if (item.WasPickedUp && item.getUsagesLeft() <= 0) {
+            result.Result += `\r\n${item.getNoUsagesLeftResponse()}`;
+            this.Game.removeItemFromInventory(item);
         }
 
         return result;
     }
 
-    protected getDoResponse(relevantWords: string[]): ParseInputResult {
+    protected getDoResponse(input: string): ParseInputResult {
         const result = new ParseInputResult('');
 
         const actions = this.Game.getActionsInScene().filter(val => {
@@ -219,77 +222,104 @@ export class InputParserService {
             return result;
         }
 
-        const actionDistances = this.getActionDistancesFromNouns(relevantWords, actions);
+        const action = this.getLikelyAction(input, actions);
 
-        if (!actionDistances || actionDistances.length <= 0) {
+        if (!action) {
             result.Result = this.Game.getActionNotRecognizedResponse();
             return result;
         }
-
-        const action = actionDistances[0].Action;
 
         result.Result = action.trigger();
         result.IsEndGameResult = action.getIsEndGameAction();
         return result;
     }
 
-    protected getNounsAndVerbsFromTokenizedInput(taggedTokens: TaggedToken[]): any {
-        return taggedTokens.reduce<string[]>((result, token) => {
-            if (nounCategories.includes(token.tag) || verbCategories.includes(token.tag)) {
-                result.push(token.token);
+    protected getLikelyAction(input: string, actions: Action[]): Action {
+        // we're using the logistic regression classifier here in order to get the maximum probability of 1
+        // this allows us to filter out later on, in order to also have cases, where none of the actions match the input
+        const actionClassifier = new natural.LogisticRegressionClassifier();
+        for (const action of actions) {
+            const taggedWordsTrigger = this.Tokenizer.tokenize(action.getTrigger());
+            actionClassifier.addDocument(taggedWordsTrigger, action.getTrigger());
+            for (const trigger of action.getAlternativeTriggers()) {
+                const taggedWordsAlternativeTrigger = this.Tokenizer.tokenize(trigger);
+                actionClassifier.addDocument(taggedWordsAlternativeTrigger, action.getTrigger());
             }
-
-            return result;
-        }, []);
-    }
-
-    private getItemDistancesFromNouns(relevantWords: string[], sceneItems: InGameItem[], inventoryItems: InGameItem[]): ItemDistance[] {
-        const itemDistances: ItemDistance[] = [];
-
-        let items = [];
-        if (sceneItems) {
-            items = items.concat(sceneItems);
         }
 
-        if (inventoryItems) {
-            items = items.concat(inventoryItems);
+        actionClassifier.train();
+
+        let classifications: ClassificationResult[] = actionClassifier.getClassifications(input);
+        classifications = classifications.filter((val) => {
+            return val.value >= 0.8;
+        });
+        if (classifications.length <= 0) {
+            input = this.spellcheckInput(input);
+
+            classifications = actionClassifier.getClassifications(input);
+            classifications = classifications.filter((val) => {
+                return val.value >= 0.8;
+            });
         }
 
-        items.map(val => {
-            const taggedName = this.POSTagger.tag(this.Tokenizer.tokenize(val.Name)).taggedWords;
-            taggedName.map(name => {
-                relevantWords.map(input => {
-                    const distance = natural.DamerauLevenshteinDistance(input,
-                        name.token, { transposition_cost: 0 });
-                    if (distance <= 1) {
-                        itemDistances.push(new ItemDistance(val, distance));
-                    }
-                });
-            });
-
+        const result = classifications[0];
+        if (!result) {
+            return undefined;
+        }
+        return actions.find((val) => {
+            return val.getTrigger() === result.label;
         });
-
-        return itemDistances.sort(val => val.Distance);
     }
 
-    private getActionDistancesFromNouns(relevantWords: string[], actions: Action[]): ActionDistance[] {
-        const actionDistances: ActionDistance[] = [];
+    protected getLikelyItem(input: string, items: InGameItem[]): InGameItem {
+        const itemClassifier = new natural.LogisticRegressionClassifier();
+        for (const item of items) {
+            const taggedWordsTrigger = this.Tokenizer.tokenize(item.getName());
+            itemClassifier.addDocument(taggedWordsTrigger, item.getName());
+        }
 
-        actions.map(val => {
-            const taggedTrigger = this.POSTagger.tag(this.Tokenizer.tokenize(val.getTrigger())).taggedWords;
+        itemClassifier.train();
 
-            taggedTrigger.map(trigger => {
-                relevantWords.map(input => {
-                    const distance = natural.DamerauLevenshteinDistance(input,
-                        trigger.token, { transposition_cost: 0 });
-                    if (distance <= 1) {
-                        actionDistances.push(new ActionDistance(val, distance));
-                    }
-                });
-            });
+        let classifications: ClassificationResult[] = itemClassifier.getClassifications(input);
+        classifications = classifications.filter((val) => {
+            return val.value >= 0.8;
         });
 
-        return actionDistances.sort(val => val.Distance);
+        if (classifications.length <= 0) {
+            input = this.spellcheckInput(input);
+
+            classifications = itemClassifier.getClassifications(input);
+            classifications = classifications.filter((val) => {
+                return val.value >= 0.8;
+            });
+        }
+
+
+        const result = classifications[0];
+        if (!result) {
+            return undefined;
+        }
+        return items.find((val) => {
+            return val.getName() === result.label;
+        });
+    }
+
+    protected spellcheckInput(input: string): string {
+        const tokenizedInput: string[] = this.Tokenizer.tokenize(input);
+        let correctedInputString = '';
+        tokenizedInput.map(val => {
+            if (!this.Spellcheck.isCorrect(val)) {
+                const corrections = this.Spellcheck.getCorrections(val, 1);
+                if (corrections.length >= 1) {
+                    val = corrections[0];
+                }
+            }
+            correctedInputString += (val + ' ');
+        });
+
+        correctedInputString = correctedInputString.trim();
+
+        return correctedInputString;
     }
 
     protected getInteractionType(input: string): InteractionType {
@@ -313,51 +343,4 @@ export class InputParserService {
                 return InteractionType.DO;
         }
     }
-}
-
-
-class ActionTag {
-    public Action: Action;
-    public Tag: string;
-
-    public constructor(action: Action, tag: string) {
-        this.Action = action;
-        this.Tag = tag;
-    }
-}
-
-class ActionDistance {
-    public Action: Action;
-    public Distance: number;
-
-    public constructor(action: Action, distance: number) {
-        this.Action = action;
-        this.Distance = distance;
-    }
-}
-
-class ItemDistance {
-    public Item: InGameItem;
-    public Distance: number;
-
-    public constructor(item: InGameItem, distance: number) {
-        this.Item = item;
-        this.Distance = distance;
-    }
-}
-
-class ItemTag {
-    public Item: InGameItem;
-    public Tag: string;
-
-    public constructor(item: InGameItem, tag: string) {
-        this.Item = item;
-        this.Tag = tag;
-    }
-}
-
-class TaggedToken {
-    token: string;
-    tag: string;
-    distance: number;
 }

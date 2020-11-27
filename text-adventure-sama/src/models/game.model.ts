@@ -72,6 +72,27 @@ export class Game {
         this.Commands.push(sceneCommand);
     }
 
+    /**
+     * Returns a list of all strings, that may be relevant to spellchecking -> triggers & names
+     */
+    public getInputRelevantStrings(): string[] {
+        let strings = [];
+
+        this.getInventory().getItems().map(item => {
+            strings.push(item.getName());
+        });
+
+        this.getStage().getScenes().map(scene => {
+            strings.push(scene.getName());
+            scene.getActions().map((action) => {
+                strings.push(action.getTrigger());
+                strings = strings.concat(action.getAlternativeTriggers());
+            });
+        });
+
+        return strings;
+    }
+
     public getStage(): Stage {
         return this.Stage;
     }

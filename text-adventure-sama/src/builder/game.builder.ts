@@ -53,7 +53,7 @@ export class GameBuilder extends BaseBuilder implements CommandContainingBuilder
             throw new EvalError('Title was undefined.');
         }
 
-        this.Game.setTitle(title);
+        this.Game.setTitle(title.trim());
         return this;
     }
 
@@ -62,7 +62,7 @@ export class GameBuilder extends BaseBuilder implements CommandContainingBuilder
             throw new EvalError('Introduction was undefined.');
         }
 
-        this.Game.setIntroduction(intro);
+        this.Game.setIntroduction(intro.trim());
         return this;
     }
 
@@ -71,7 +71,7 @@ export class GameBuilder extends BaseBuilder implements CommandContainingBuilder
             throw new EvalError('ItemNotFoundInInventoryResponse was undefined.');
         }
 
-        this.Game.setItemNotFoundInInventoryResponse(response);
+        this.Game.setItemNotFoundInInventoryResponse(response.trim());
         return this;
     }
 
@@ -80,7 +80,7 @@ export class GameBuilder extends BaseBuilder implements CommandContainingBuilder
             throw new EvalError('ItemAddedToInventoryResponse was undefined.');
         }
 
-        this.Game.setItemAddedToInventoryResponse(response);
+        this.Game.setItemAddedToInventoryResponse(response.trim());
         return this;
     }
 
@@ -89,7 +89,7 @@ export class GameBuilder extends BaseBuilder implements CommandContainingBuilder
             throw new EvalError('GatewayTargetNotFoundResponse was undefined.');
         }
 
-        this.Game.setGatewayTargetNotFoundResponse(response);
+        this.Game.setGatewayTargetNotFoundResponse(response.trim());
         return this;
     }
 
@@ -98,7 +98,7 @@ export class GameBuilder extends BaseBuilder implements CommandContainingBuilder
             throw new EvalError('InventoryEmptyResponse was undefined.');
         }
 
-        this.Game.setInventoryEmptyResponse(response);
+        this.Game.setInventoryEmptyResponse(response.trim());
         return this;
     }
 

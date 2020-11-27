@@ -1,4 +1,4 @@
-import { TextInputType } from './text-input.enum';
+import { TextInputType } from './text-input-type.enum';
 
 export class TextInput {
     Value: string;

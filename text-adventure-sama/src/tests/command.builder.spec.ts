@@ -1,4 +1,3 @@
-import { TestBed } from '@angular/core/testing';
 import * as _ from 'lodash';
 import { BaseBuilder } from '../builder/base.builder';
 import { CommandBuilder } from '../builder/command.builder';
@@ -22,33 +21,28 @@ describe('CommandBuilder.', () => {
         testCommand.setDescription('testdescription');
         testCommand.setResponseFunction(() => 'responsefunctionresponse');
         testCommand.setUseTypeWritingAnimation(true);
-
-        TestBed.configureTestingModule({
-            providers: [
-            ]
-        });
     });
 
     // Trigger
-    it('should throw an error when trying to set an undefined Trigger AND not set the Property.', () => {
+    it('#setTrigger should throw an error when trying to set an undefined Trigger AND not set the Property.', () => {
         testBuilder.setTrigger(testCommand.getTrigger());
         expect(() => testBuilder.setTrigger(undefined)).toThrowError(EvalError);
         expect(testBuilder.getCommand().getTrigger()).toBe(testCommand.getTrigger());
     });
 
-    it('should throw an error when trying to set a null Trigger AND not set the Property.', () => {
+    it('#setTrigger should throw an error when trying to set a null Trigger AND not set the Property.', () => {
         testBuilder.setTrigger(testCommand.getTrigger());
         expect(() => testBuilder.setTrigger(null)).toThrowError(EvalError);
         expect(testBuilder.getCommand().getTrigger()).toBe(testCommand.getTrigger());
     });
 
-    it('should throw an error when trying to set an empty Trigger AND not set the Property.', () => {
+    it('#setTrigger should throw an error when trying to set an empty Trigger AND not set the Property.', () => {
         testBuilder.setTrigger(testCommand.getTrigger());
         expect(() => testBuilder.setTrigger('')).toThrowError(EvalError);
         expect(testBuilder.getCommand().getTrigger()).toBe(testCommand.getTrigger());
     });
 
-    it('should set the Trigger to the passed value', () => {
+    it('#setTrigger should set the Trigger to the passed value', () => {
         const trigger = 'someothertrigger';
         testBuilder.getCommand().setTrigger(testCommand.getTrigger());
         testBuilder.setTrigger(trigger);
@@ -56,25 +50,25 @@ describe('CommandBuilder.', () => {
     });
 
     // Response
-    it('should throw an error when trying to set an undefined Response AND not set the Property.', () => {
+    it('#setResponse should throw an error when trying to set an undefined Response AND not set the Property.', () => {
         testBuilder.setResponse(testCommand.getResponse());
         expect(() => testBuilder.setResponse(undefined)).toThrowError(EvalError);
         expect(testBuilder.getCommand().getResponse()).toBe(testCommand.getResponse());
     });
 
-    it('should throw an error when trying to set a null Response AND not set the Property.', () => {
+    it('#setResponse should throw an error when trying to set a null Response AND not set the Property.', () => {
         testBuilder.setResponse(testCommand.getResponse());
         expect(() => testBuilder.setResponse(null)).toThrowError(EvalError);
         expect(testBuilder.getCommand().getResponse()).toBe(testCommand.getResponse());
     });
 
-    it('should throw an error when trying to set an empty Response AND not set the Property.', () => {
+    it('#setResponse should throw an error when trying to set an empty Response AND not set the Property.', () => {
         testBuilder.setResponse(testCommand.getResponse());
         expect(() => testBuilder.setResponse('')).toThrowError(EvalError);
         expect(testBuilder.getCommand().getResponse()).toBe(testCommand.getResponse());
     });
 
-    it('should set the Response to the passed value', () => {
+    it('#setResponse should set the Response to the passed value', () => {
         const response = 'someresponse';
         testBuilder.getCommand().setResponse(testCommand.getResponse());
         testBuilder.setResponse(response);
@@ -82,7 +76,7 @@ describe('CommandBuilder.', () => {
     });
 
     // finish
-    it('should throw a builder error when trying to finish creation process of an command without a Trigger AND not add the command to the parent builder.', () => {
+    it('#finish should throw a builder error when trying to finish creation process of an command without a Trigger AND not add the command to the parent builder.', () => {
         testBuilder.setResponse(testCommand.getResponse())
         .setDescription(testCommand.getDescription())
         .setResponseFunction(testCommand.getResponseFunction())
@@ -92,7 +86,7 @@ describe('CommandBuilder.', () => {
         expect(parentBuilder.Commands.length).toBe(0);
     });
 
-    it('should throw a builder error when trying to finish creation process of an command with neither a Response nor a ResponseFunction AND not add the command to the parent builder.', () => {
+    it('#finish should throw a builder error when trying to finish creation process of an command with neither a Response nor a ResponseFunction AND not add the command to the parent builder.', () => {
         testBuilder.setTrigger(testCommand.getTrigger())
         .setDescription(testCommand.getDescription())
         .setUseTypeWritingAnimation(testCommand.getUseTypeWritingAnimation());
@@ -101,7 +95,7 @@ describe('CommandBuilder.', () => {
         expect(parentBuilder.Commands.length).toBe(0);
     });
 
-    it('should throw a builder error when trying to finish creation process of an command without a Description AND not add the command to the parent builder.', () => {
+    it('#finish should throw a builder error when trying to finish creation process of an command without a Description AND not add the command to the parent builder.', () => {
         testBuilder.setTrigger(testCommand.getTrigger())
         .setResponse(testCommand.getResponse())
         .setResponseFunction(testCommand.getResponseFunction())
@@ -111,7 +105,7 @@ describe('CommandBuilder.', () => {
         expect(parentBuilder.Commands.length).toBe(0);
     });
 
-    it('should add the command to the parent builder.', () => {
+    it('#finish should add the command to the parent builder.', () => {
         testBuilder.setTrigger(testCommand.getTrigger())
         .setResponse(testCommand.getResponse())
         .setDescription(testCommand.getDescription())

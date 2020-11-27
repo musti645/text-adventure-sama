@@ -23,7 +23,7 @@ export class ItemBuilder<ReturnBuilderType extends ItemContainingBuilder> extend
             throw new EvalError('Name was undefined');
         }
 
-        this.Item.setName(name);
+        this.Item.setName(name.trim());
         return this;
     }
 
@@ -32,7 +32,7 @@ export class ItemBuilder<ReturnBuilderType extends ItemContainingBuilder> extend
             throw new EvalError('Description was undefined');
         }
 
-        this.Item.setDescription(description);
+        this.Item.setDescription(description.trim());
         return this;
     }
 
@@ -67,7 +67,7 @@ export class ItemBuilder<ReturnBuilderType extends ItemContainingBuilder> extend
             throw new EvalError('ItemUsedResponse was undefined.');
         }
 
-        this.Item.setItemUsedResponse(response);
+        this.Item.setItemUsedResponse(response.trim());
         return this;
     }
 
@@ -77,7 +77,7 @@ export class ItemBuilder<ReturnBuilderType extends ItemContainingBuilder> extend
             throw new EvalError('NoUsagesLeftResponse was undefined.');
         }
 
-        this.Item.setNoUsagesLeftResponse(response);
+        this.Item.setNoUsagesLeftResponse(response.trim());
         return this;
     }
 
@@ -91,7 +91,7 @@ export class ItemBuilder<ReturnBuilderType extends ItemContainingBuilder> extend
             throw new EvalError('CannotPickUpResponse was undefined.');
         }
 
-        this.Item.setCannotPickUpResponse(response);
+        this.Item.setCannotPickUpResponse(response.trim());
         return this;
     }
 
@@ -100,7 +100,7 @@ export class ItemBuilder<ReturnBuilderType extends ItemContainingBuilder> extend
             throw new EvalError('InSceneDescription was undefined.');
         }
 
-        this.Item.setInSceneDescription(descr);
+        this.Item.setInSceneDescription(descr.trim());
         return this;
     }
 
@@ -119,7 +119,7 @@ export class ItemBuilder<ReturnBuilderType extends ItemContainingBuilder> extend
             throw new EvalError('CannotUseItemResponse was undefined');
         }
 
-        this.Item.setCannotUseItemResponse(response);
+        this.Item.setCannotUseItemResponse(response.trim());
         return this;
     }
 

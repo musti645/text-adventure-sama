@@ -25,7 +25,7 @@ export class OneTimeActionBuilder<ReturnBuilderType extends ActionContainingBuil
             throw new EvalError('No Response found.');
         }
 
-        this.Action.setResponseAfterUse(response);
+        this.Action.setResponseAfterUse(response.trim());
         return this;
     }
 

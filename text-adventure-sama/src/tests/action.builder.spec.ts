@@ -1,4 +1,3 @@
-import { TestBed } from '@angular/core/testing';
 import { BaseActionBuilder, } from '../builder/action-builders/base-action.builder';
 import * as _ from 'lodash';
 import { Action } from '../models/actions/action.model';
@@ -19,33 +18,29 @@ describe('BaseActionBuilder.', () => {
         testAction = new BaseActionChild();
         testAction.setTrigger('testtrigger');
         testAction.setResponse('testresponse');
-
-        TestBed.configureTestingModule({
-            providers: [
-            ]
-        });
+        testAction.setAlternativeTriggers(['trigger1', 'trigger2']);
     });
 
     // Trigger
-    it('should throw an error when trying to set an undefined Trigger AND not set the Property.', () => {
+    it('#setTrigger should throw an error when trying to set an undefined Trigger AND not set the Property.', () => {
         testBuilder.setTrigger(testAction.getTrigger());
         expect(() => testBuilder.setTrigger(undefined)).toThrowError(EvalError);
         expect(testBuilder.getAction().getTrigger()).toBe(testAction.getTrigger());
     });
 
-    it('should throw an error when trying to set a null Trigger AND not set the Property.', () => {
+    it('#setTrigger should throw an error when trying to set a null Trigger AND not set the Property.', () => {
         testBuilder.setTrigger(testAction.getTrigger());
         expect(() => testBuilder.setTrigger(null)).toThrowError(EvalError);
         expect(testBuilder.getAction().getTrigger()).toBe(testAction.getTrigger());
     });
 
-    it('should throw an error when trying to set an empty Trigger AND not set the Property.', () => {
+    it('#setTrigger should throw an error when trying to set an empty Trigger AND not set the Property.', () => {
         testBuilder.setTrigger(testAction.getTrigger());
         expect(() => testBuilder.setTrigger('')).toThrowError(EvalError);
         expect(testBuilder.getAction().getTrigger()).toBe(testAction.getTrigger());
     });
 
-    it('should set the Trigger to the passed value', () => {
+    it('#setTrigger should set the Trigger to the passed value', () => {
         const trigger = 'someothertrigger';
         testBuilder.getAction().setTrigger(testAction.getTrigger());
         testBuilder.setTrigger(trigger);
@@ -53,49 +48,76 @@ describe('BaseActionBuilder.', () => {
     });
 
     // Response
-    it('should throw an error when trying to set an undefined Response AND not set the Property.', () => {
+    it('#setResponse should throw an error when trying to set an undefined Response AND not set the Property.', () => {
         testBuilder.setResponse(testAction.getResponse());
         expect(() => testBuilder.setResponse(undefined)).toThrowError(EvalError);
         expect(testBuilder.getAction().getResponse()).toBe(testAction.getResponse());
     });
 
-    it('should throw an error when trying to set a null Response AND not set the Property.', () => {
+    it('#setResponse should throw an error when trying to set a null Response AND not set the Property.', () => {
         testBuilder.setResponse(testAction.getResponse());
         expect(() => testBuilder.setResponse(null)).toThrowError(EvalError);
         expect(testBuilder.getAction().getResponse()).toBe(testAction.getResponse());
     });
 
-    it('should throw an error when trying to set an empty Response AND not set the Property.', () => {
+    it('#setResponse should throw an error when trying to set an empty Response AND not set the Property.', () => {
         testBuilder.setResponse(testAction.getResponse());
         expect(() => testBuilder.setResponse('')).toThrowError(EvalError);
         expect(testBuilder.getAction().getResponse()).toBe(testAction.getResponse());
     });
 
-    it('should set the Response to the passed value', () => {
+    it('#setResponse should set the Response to the passed value', () => {
         const response = 'someresponse';
         testBuilder.getAction().setResponse(testAction.getResponse());
         testBuilder.setResponse(response);
         expect(testBuilder.getAction().getResponse()).toBe(response);
     });
 
+    // AlternativeTriggers
+    it('#setAlternativeTriggers should throw an error when trying to set undefined AlternativeTriggers AND not set the Property.', () => {
+        testBuilder.setAlternativeTriggers(testAction.getAlternativeTriggers());
+        expect(() => testBuilder.setAlternativeTriggers(undefined)).toThrowError(EvalError);
+        expect(testBuilder.getAction().getAlternativeTriggers()).toBe(testAction.getAlternativeTriggers());
+    });
+
+    it('#setAlternativeTriggers should throw an error when trying to set null AlternativeTriggers AND not set the Property.', () => {
+        testBuilder.setAlternativeTriggers(testAction.getAlternativeTriggers());
+        expect(() => testBuilder.setAlternativeTriggers(null)).toThrowError(EvalError);
+        expect(testBuilder.getAction().getAlternativeTriggers()).toBe(testAction.getAlternativeTriggers());
+    });
+
+    it('#setAlternativeTriggers should throw an error when trying to set empty AlternativeTriggers AND not set the Property.', () => {
+        testBuilder.setAlternativeTriggers(testAction.getAlternativeTriggers());
+        expect(() => testBuilder.setAlternativeTriggers([])).toThrowError(EvalError);
+        expect(testBuilder.getAction().getAlternativeTriggers()).toBe(testAction.getAlternativeTriggers());
+    });
+
+    it('#setAlternativeTriggers should set the AlternativeTriggers to the passed value', () => {
+        const triggers = ['someothertrigger', 'triggery'];
+        testBuilder.getAction().setAlternativeTriggers(testAction.getAlternativeTriggers());
+        testBuilder.setAlternativeTriggers(triggers);
+        expect(testBuilder.getAction().getAlternativeTriggers()).toBe(triggers);
+    });
+
     // finish
-    it('should throw a builder error when trying to finish creation process of an action without a Trigger AND not add the action to the parent builder.', () => {
+    it('#finish should throw a builder error when trying to finish creation process of an action without a Trigger AND not add the action to the parent builder.', () => {
         testBuilder.setResponse(testAction.getResponse());
 
         expect(() => testBuilder.finish()).toThrowError(BuilderError);
         expect(parentBuilder.Actions.length).toBe(0);
     });
 
-    it('should throw a builder error when trying to finish creation process of an action without a Response AND not add the action to the parent builder.', () => {
+    it('#finish should throw a builder error when trying to finish creation process of an action without a Response AND not add the action to the parent builder.', () => {
         testBuilder.setTrigger(testAction.getTrigger());
 
         expect(() => testBuilder.finish()).toThrowError(BuilderError);
         expect(parentBuilder.Actions.length).toBe(0);
     });
 
-    it('should add the action to the parent builder.', () => {
+    it('#finish should add the action to the parent builder.', () => {
         testBuilder.setTrigger(testAction.getTrigger());
         testBuilder.setResponse(testAction.getResponse());
+        testBuilder.setAlternativeTriggers(testAction.getAlternativeTriggers());
         testBuilder.finish();
 
         expect(parentBuilder.Actions.length).toBe(1);

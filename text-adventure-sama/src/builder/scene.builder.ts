@@ -86,7 +86,7 @@ export class SceneBuilder extends BaseBuilder implements ItemContainingBuilder, 
             throw new EvalError('Name was not set.');
         }
 
-        this.Scene.setName(name);
+        this.Scene.setName(name.trim());
         return this;
     }
 
@@ -95,7 +95,7 @@ export class SceneBuilder extends BaseBuilder implements ItemContainingBuilder, 
             throw new EvalError('Description was not set.');
         }
 
-        this.Scene.setDescription(description);
+        this.Scene.setDescription(description.trim());
         return this;
     }
 
@@ -104,7 +104,7 @@ export class SceneBuilder extends BaseBuilder implements ItemContainingBuilder, 
             throw new EvalError('ActionNotRecognizedResponse was not set.');
         }
 
-        this.Scene.setActionNotRecognizedResponse(response);
+        this.Scene.setActionNotRecognizedResponse(response.trim());
         return this;
     }
 
@@ -113,7 +113,7 @@ export class SceneBuilder extends BaseBuilder implements ItemContainingBuilder, 
             throw new EvalError('ItemNotFoundResponse was not set.');
         }
 
-        this.Scene.setItemNotFoundResponse(response);
+        this.Scene.setItemNotFoundResponse(response.trim());
         return this;
     }
 
@@ -122,7 +122,7 @@ export class SceneBuilder extends BaseBuilder implements ItemContainingBuilder, 
             throw new EvalError('InvalidInputResponse was not set.');
         }
 
-        this.Scene.setInvalidInputResponse(response);
+        this.Scene.setInvalidInputResponse(response.trim());
         return this;
     }
 

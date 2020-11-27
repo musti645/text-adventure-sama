@@ -1,4 +1,3 @@
-import { TestBed } from '@angular/core/testing';
 import { GameBuilder } from '../builder/game.builder';
 import { InventoryBuilder } from '../builder/inventory.builder';
 import { Game } from '../models/game.model';
@@ -19,30 +18,25 @@ describe('InventoryBuilder.', () => {
         testGame = new Game();
         testBuilder = new InventoryBuilderChild(parentBuilder, testGame);
         testInventory = new Inventory();
-
-        TestBed.configureTestingModule({
-            providers: [
-            ]
-        });
     });
 
-    it('should return an ItemBuilder upon calling addItem.', () => {
+    it('#addItem should return an ItemBuilder upon calling addItem.', () => {
         expect(testBuilder.addItem()).toBeInstanceOf(ItemBuilder);
     });
 
-    it('should throw a builder error when trying to add an undefined Item', () => {
+    it('#addItemToBuilder should throw a builder error when trying to add an undefined Item', () => {
         expect(() => testBuilder.addItemToBuilder(undefined)).toThrowError(BuilderError);
         testBuilder.finish();
         expect(testGame.getInventory().getItemCount()).toBe(0);
     });
 
-    it('should throw a builder error when trying to add an null Item', () => {
+    it('#addItemToBuilder should throw a builder error when trying to add an null Item', () => {
         expect(() => testBuilder.addItemToBuilder(null)).toThrowError(BuilderError);
         testBuilder.finish();
         expect(testGame.getInventory().getItemCount()).toBe(0);
     });
 
-    it('should add item to inventory', () => {
+    it('#addItemToBuilder should add item to inventory', () => {
         expect(() => testBuilder.addItemToBuilder(new InGameItem())).not.toThrow();
         testBuilder.finish();
         expect(testBuilder.getInventory().getItemCount()).toBe(1);

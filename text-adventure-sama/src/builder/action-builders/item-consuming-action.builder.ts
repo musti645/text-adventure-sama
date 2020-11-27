@@ -28,7 +28,7 @@ export class ItemConsumingActionBuilder<ReturnBuilderType extends ActionContaini
             throw new EvalError('No Response found.');
         }
 
-        this.Action.setResponseAfterUse(response);
+        this.Action.setResponseAfterUse(response.trim());
         return this;
     }
 

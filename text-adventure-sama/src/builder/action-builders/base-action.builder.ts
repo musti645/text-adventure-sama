@@ -18,7 +18,7 @@ export class BaseActionBuilder<T extends Action, ReturnBuilderType extends Actio
             throw new EvalError('No Trigger found.');
         }
 
-        this.Action.setTrigger(trigger);
+        this.Action.setTrigger(trigger.trim());
         return this;
     }
 
@@ -27,12 +27,23 @@ export class BaseActionBuilder<T extends Action, ReturnBuilderType extends Actio
             throw new EvalError('No Response found.');
         }
 
-        this.Action.setResponse(response);
+        this.Action.setResponse(response.trim());
         return this;
     }
 
     public setEndGameAction(): this {
         this.Action.setIsEndGameAction(true);
+        return this;
+    }
+
+    public setAlternativeTriggers(triggers: string[]): this {
+        if (!triggers || triggers.length <= 0) {
+            throw new EvalError('No AlternativeTriggers found.');
+        }
+
+        triggers.map(val => val = val.trim());
+
+        this.Action.setAlternativeTriggers(triggers);
         return this;
     }
 

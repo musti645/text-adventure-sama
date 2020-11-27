@@ -18,7 +18,7 @@ export class CommandBuilder<ReturnBuilderType extends CommandContainingBuilder> 
             throw new EvalError('Trigger was undefined.');
         }
 
-        this.Command.setTrigger(trigger);
+        this.Command.setTrigger(trigger.trim());
         return this;
     }
 
@@ -27,7 +27,7 @@ export class CommandBuilder<ReturnBuilderType extends CommandContainingBuilder> 
             throw new EvalError('Response was undefined.');
         }
 
-        this.Command.setResponse(response);
+        this.Command.setResponse(response.trim());
         return this;
     }
 
@@ -54,7 +54,7 @@ export class CommandBuilder<ReturnBuilderType extends CommandContainingBuilder> 
             throw new EvalError('Description was undefined');
         }
 
-        this.Command.setDescription(descr);
+        this.Command.setDescription(descr.trim());
         return this;
     }
 

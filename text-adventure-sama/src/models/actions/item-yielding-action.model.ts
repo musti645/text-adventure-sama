@@ -15,7 +15,7 @@ export class ItemYieldingAction extends OneTimeAction {
     constructor() {
         super();
         this.AmountOfItems = 1;
-        this.setInteractionType(InteractionType.DO);
+        this.setInteractionType(InteractionType.USE);
     }
 
     public trigger(): string {

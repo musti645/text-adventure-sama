@@ -22,6 +22,8 @@ export class RandomResponseActionBuilder<ReturnBuilderType extends ActionContain
             throw new EvalError('Responses Array may not be empty.');
         }
 
+        responses.map(val => val = val.trim());
+
         this.Action.setResponses(responses);
         return this;
     }

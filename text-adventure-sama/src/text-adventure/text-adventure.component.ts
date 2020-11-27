@@ -1,6 +1,6 @@
 import { Component, OnInit, ElementRef, ViewChild, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { TextInputType } from '../models/other/text-input.enum';
+import { TextInputType } from '../models/other/text-input-type.enum';
 import { TextInput } from '../models/other/text-input.model';
 import { Game } from '../models/game.model';
 import { GameBuilder } from '../builder/game.builder';
@@ -9,7 +9,6 @@ import { ClassificationTrainer } from '../services/classification-trainer.servic
 import { GameResetEvent } from '../models/events/game-reset.event';
 import { GameEndEvent } from '../models/events/game-end.event';
 import { GameStartEvent } from '../models/events/game-start.event';
-import { InteractionType } from '../models/interactions/interaction-type.enum';
 import { IClassificationTrainer } from '../services/classification-trainer.interface';
 import { GameError } from '../models/errors/game.error';
 
@@ -50,15 +49,19 @@ export class TextAdventureComponent implements OnInit {
   );
 
   constructor(private inputParserService: InputParserService) {
-    if (!this.ClassificationTrainer) {
-      inputParserService.initialize(new ClassificationTrainer());
-    }
-    else {
-      inputParserService.initialize(this.ClassificationTrainer);
-    }
   }
 
   ngOnInit(): void {
+    if (!this.Game) {
+      throw new GameError('Game not found.');
+    }
+
+    if (!this.ClassificationTrainer) {
+      this.inputParserService.initialize(new ClassificationTrainer());
+    }
+    else {
+      this.inputParserService.initialize(this.ClassificationTrainer);
+    }
     this.startLoading();
     this.startGame();
   }
@@ -104,9 +107,6 @@ export class TextAdventureComponent implements OnInit {
   }
 
   private startGame(): void {
-    if (!this.Game) {
-      throw new GameError('Game not found.');
-    }
     this.inputParserService.setGame(this.Game);
     this.OnGameStartEvent.emit(new GameStartEvent());
     this.printOutput(this.Game.getTitle()).then(() => this.printOutput(this.Game.getIntroduction())).then(() => this.stopLoading());

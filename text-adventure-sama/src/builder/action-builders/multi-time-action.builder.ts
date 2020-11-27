@@ -63,6 +63,8 @@ export class MultiTimeActionBuilder<ReturnBuilderType extends ActionContainingBu
             throw new EvalError('Responses Array may not be empty.');
         }
 
+        responses.map(val => val = val.trim());
+
         this.Action.setResponses(responses);
         return this;
     }

@@ -9,9 +9,11 @@ export abstract class Action {
     private Response: string;
     private InteractionType: InteractionType;
     private IsEndGameAction: boolean;
+    private AlternativeTriggers: string[];
 
     constructor() {
         this.IsEndGameAction = false;
+        this.AlternativeTriggers = [];
     }
 
     public abstract trigger(): string;
@@ -48,5 +50,13 @@ export abstract class Action {
 
     public getResponse(): string {
         return this.Response;
+    }
+
+    public setAlternativeTriggers(triggers: string[]): void {
+        this.AlternativeTriggers = triggers;
+    }
+
+    public getAlternativeTriggers(): string[] {
+        return this.AlternativeTriggers;
     }
 }

@@ -24,7 +24,7 @@ export class GatewayActionBuilder<ReturnBuilderType extends ActionContainingBuil
             throw new EvalError('TargetSceneName Value is invalid.');
         }
 
-        this.Action.setTargetSceneName(name);
+        this.Action.setTargetSceneName(name.trim());
         return this;
     }
 

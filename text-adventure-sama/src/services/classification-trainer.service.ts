@@ -96,7 +96,6 @@ export class ClassificationTrainer implements IClassificationTrainer {
             classifier.events.on('trainedWithDocument', () => resolve());
 
             classifier.train();
-            resolve();
         });
 
     }
