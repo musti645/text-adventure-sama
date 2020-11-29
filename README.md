@@ -1,6 +1,8 @@
 # TextAdventureSama #
 
-An Angular library to add a Text Adventure to your Web Application.
+An Angular library for Text Adventures.
+
+[![Build Status - Master](https://travis-ci.org/musti645/text-adventure-sama.svg?branch=development)](https://travis-ci.org/musti645/text-adventure-sama) [![Coverage Status](https://coveralls.io/repos/github/musti645/text-adventure-sama/badge.svg)](https://coveralls.io/github/musti645/text-adventure-sama)
 
 ## Getting Started ##
 
@@ -12,14 +14,14 @@ We need to add the following to the `package.json` and `polyfills.ts`, in order 
 // package.json
 {
   "name": "something",
-  // BEGIN INSERT
+  ...
   "browser": {
     "fs": false,
     "os": false,
     "path": false,
     "webworker-threads": false
   },
-  //END INSERT
+  ...
 }
 ```
 
@@ -31,6 +33,10 @@ And
 ```
 
 See [here](https://github.com/angular/angular-cli/issues/8160) for more information on the *polyfills.ts* part
+
+### Installing the Library ###
+
+Use the command `npm i text-adventure-sama` to add the library to your project.
 
 ### Adding the Component ###
 
@@ -224,10 +230,45 @@ User input is classified into the following, so called, *InteractionTypes*.
 Each Action has a predefined InteractionType, but may also be set to have another.
 These define, what the user has to write in order to trigger that specific action.
 
+The different InteractionTypes have the following meaning:
+
+|Type|Description|
+|---|---|
+|GO_TO|Trigger an Action in the current scene with that InteractionType - usually GatewayActions|
+|LOOK_AT|Gets the description of an Item, either in the inventory or in the current scene|
+|PICK_UP|Add an item from the scene to the inventory|
+|USE|Use an item either in the scene or in your inventory|
+|DO|Trigger an Action in the current scene with that InteractionType|
+
 ## Playing the Game ##
 
 The game is a Text-Adventure, so it is played in a console-like window.
 The Interaction with the game is done via imperatives, e.g. `look around` or `use stick`
+
+## Customizations ##
+
+### Typewriting Animation ###
+
+TextAdventureSama allows you to determine the typing speed of the Typewriter Animation (defaults to 40ms per character) or just not use it alltogether (defaults to true).
+
+```html
+<tas-text-adventure [Game]="Game"
+[UseTypewritingAnimation]="useTypewriter"
+[TypewriterSpeed]="typewriterSpeed"
+></tas-text-adventure>
+```
+
+### Classification ###
+
+If you're not liking the classification of your input, you can always pass your own ClassificationTrainer into the game.
+
+```html
+<tas-text-adventure [Game]="Game"
+[ClassificationTrainer]="classificationTrainer"
+></tas-text-adventure>
+```
+
+See [here](https://github.com/NaturalNode/natural#classifiers) for more Information about the BayesClassifier, that we're using, and about how to train it with NaturalNode.
 
 ## Limitations ##
 
@@ -244,8 +285,8 @@ Classification is the process, where the InputType is derived from the user`s in
 In order to use your own ClassificationTrainer, just implement the interface and pass the created object into the game component.
 
 ```HTML
-<text-adventure-sama [Game]="Game" [ClassificationTrainer]="MyClassificationTrainer">
-</text-adventure-sama>
+<tas-text-adventure [Game]="Game" [ClassificationTrainer]="MyClassificationTrainer">
+</tas-text-adventure>
 ```
 
 *If you've got additions for the built in ClassificationTrainer, feel free to add them!*
