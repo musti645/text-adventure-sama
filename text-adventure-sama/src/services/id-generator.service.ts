@@ -8,9 +8,7 @@ import { Injectable } from '@angular/core';
 /**
  * Assigns IDs to Objects by counting the amount of distinct types
  */
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class IDGeneratorService {
     private typeArray: TypeCountContainer[] = [];
 

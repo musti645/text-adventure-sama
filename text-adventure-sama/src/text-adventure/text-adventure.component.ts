@@ -125,7 +125,7 @@ export class TextAdventureComponent implements OnInit {
         for (const singleLine of outputLines) {
           outputPromise = outputPromise.then(() => this.printLineAnimated(singleLine));
         }
-        outputPromise = outputPromise.then(outerResolve);
+        outputPromise = outputPromise.then(() => outerResolve());
       } else {
         output = output.split('\r\n').join('<br>');
         this.OutputArray.push(new TextInput(output, TextInputType.Output));
@@ -145,6 +145,7 @@ export class TextAdventureComponent implements OnInit {
   private typewriteOutput(i: number, output: string, outputArray: TextInput[], resolveFunction): void {
     if (i >= output.length) {
       resolveFunction();
+      return;
     }
     const char = output.charAt(i);
     outputArray[outputArray.length - 1].Value += char;

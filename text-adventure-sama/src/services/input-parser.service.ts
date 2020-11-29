@@ -19,9 +19,7 @@ const defaultCategoryCapitalized = 'NNP';
 /**
  * Helps to parse text input and call the corresponding action, returning a response
  */
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class InputParserService {
     protected nounCategories = ['N', 'NN', 'NNS', 'NNP', 'NNPS'];
     protected verbCategories = ['VB', 'VBD', 'VBG', 'VBN', 'VBO', 'VBZ'];
@@ -63,7 +61,7 @@ export class InputParserService {
     }
 
 
-    setGame(game: Game): void {
+    public setGame(game: Game): void {
         this.Game = game;
     }
 

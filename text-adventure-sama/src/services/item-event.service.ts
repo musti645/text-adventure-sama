@@ -7,9 +7,7 @@ import { Injectable } from '@angular/core';
 /**
  * Singleton Service handling Item Events
  */
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class ItemEventService implements IItemRemovingEventService,
     IItemYieldingEventService,
     IItemConsumingEventService {

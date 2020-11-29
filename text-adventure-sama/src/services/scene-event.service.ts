@@ -5,9 +5,7 @@ import { Injectable } from '@angular/core';
 /**
  * Singleton Service handling Scene Events
  */
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class SceneEventService implements IGatewayActionEventService {
 
     private constructor() {

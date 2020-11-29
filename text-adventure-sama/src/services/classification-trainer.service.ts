@@ -2,9 +2,7 @@ import { Injectable } from '@angular/core';
 import { IClassificationTrainer } from './classification-trainer.interface';
 import * as natural from 'natural';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class ClassificationTrainer implements IClassificationTrainer {
     trainClassifier(classifier: natural.BayesClassifier): Promise<void> {
         return new Promise<void>((resolve) => {
