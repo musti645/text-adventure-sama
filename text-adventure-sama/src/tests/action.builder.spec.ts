@@ -100,19 +100,21 @@ describe('BaseActionBuilder.', () => {
     });
 
     // finish
-    it('#finish should throw a builder error when trying to finish creation process of an action without a Trigger AND not add the action to the parent builder.', () => {
-        testBuilder.setResponse(testAction.getResponse());
+    it('#finish should throw a builder error when trying to finish creation process of an action without a Trigger'
+        + ' AND not add the action to the parent builder.', () => {
+            testBuilder.setResponse(testAction.getResponse());
 
-        expect(() => testBuilder.finish()).toThrowError(BuilderError);
-        expect(parentBuilder.Actions.length).toBe(0);
-    });
+            expect(() => testBuilder.finish()).toThrowError(BuilderError);
+            expect(parentBuilder.Actions.length).toBe(0);
+        });
 
-    it('#finish should throw a builder error when trying to finish creation process of an action without a Response AND not add the action to the parent builder.', () => {
-        testBuilder.setTrigger(testAction.getTrigger());
+    it('#finish should throw a builder error when trying to finish creation process of an action without a Response'
+        + ' AND not add the action to the parent builder.', () => {
+            testBuilder.setTrigger(testAction.getTrigger());
 
-        expect(() => testBuilder.finish()).toThrowError(BuilderError);
-        expect(parentBuilder.Actions.length).toBe(0);
-    });
+            expect(() => testBuilder.finish()).toThrowError(BuilderError);
+            expect(parentBuilder.Actions.length).toBe(0);
+        });
 
     it('#finish should add the action to the parent builder.', () => {
         testBuilder.setTrigger(testAction.getTrigger());

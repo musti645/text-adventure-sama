@@ -1,10 +1,8 @@
 # TextAdventureSama #
 
-<!-- IMPORTANT NOTE: There's a copy of this ReadMe in the library itself. Either automate the process or don't forget to replace that one with the updated version. -->
+An Angular library for Text Adventures.
 
 [![Build Status - Master](https://travis-ci.org/musti645/text-adventure-sama.svg?branch=development)](https://travis-ci.org/musti645/text-adventure-sama) [![Coverage Status](https://coveralls.io/repos/github/musti645/text-adventure-sama/badge.svg)](https://coveralls.io/github/musti645/text-adventure-sama)
-
-An Angular library to add a Text Adventure to your Web Application.
 
 ## Getting Started ##
 

@@ -19,6 +19,6 @@ before_script:
   - npm install
 
 script:
-  - ng lint
+  - npm lint
   - npm run test-ci
   - npm run coverage-report

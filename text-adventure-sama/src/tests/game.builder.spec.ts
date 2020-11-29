@@ -94,23 +94,26 @@ describe('GameBuilder', () => {
         expect(testBuilder.getGame().getItemNotFoundInInventoryResponse()).toBe(testGame.getItemNotFoundInInventoryResponse());
     });
 
-    it('#setItemNotFoundInInventoryResponse should throw an error when trying to set an undefined ItemNotFoundInInventoryResponse AND not set the Property', () => {
-        testBuilder.getGame().setItemNotFoundInInventoryResponse(testGame.getItemNotFoundInInventoryResponse());
-        expect(() => testBuilder.setItemNotFoundInInventoryResponse(undefined)).toThrowError(EvalError);
-        expect(testBuilder.getGame().getItemNotFoundInInventoryResponse()).toBe(testGame.getItemNotFoundInInventoryResponse());
-    });
+    it('#setItemNotFoundInInventoryResponse should throw an error when trying to set an undefined ItemNotFoundInInventoryResponse'
+        + ' AND not set the Property', () => {
+            testBuilder.getGame().setItemNotFoundInInventoryResponse(testGame.getItemNotFoundInInventoryResponse());
+            expect(() => testBuilder.setItemNotFoundInInventoryResponse(undefined)).toThrowError(EvalError);
+            expect(testBuilder.getGame().getItemNotFoundInInventoryResponse()).toBe(testGame.getItemNotFoundInInventoryResponse());
+        });
 
-    it('#setItemNotFoundInInventoryResponse should throw an error when trying to set a null ItemNotFoundInInventoryResponse AND not set the Property', () => {
-        testBuilder.getGame().setItemNotFoundInInventoryResponse(testGame.getItemNotFoundInInventoryResponse());
-        expect(() => testBuilder.setItemNotFoundInInventoryResponse(null)).toThrowError(EvalError);
-        expect(testBuilder.getGame().getItemNotFoundInInventoryResponse()).toBe(testGame.getItemNotFoundInInventoryResponse());
-    });
+    it('#setItemNotFoundInInventoryResponse should throw an error when trying to set a null ItemNotFoundInInventoryResponse'
+        + ' AND not set the Property', () => {
+            testBuilder.getGame().setItemNotFoundInInventoryResponse(testGame.getItemNotFoundInInventoryResponse());
+            expect(() => testBuilder.setItemNotFoundInInventoryResponse(null)).toThrowError(EvalError);
+            expect(testBuilder.getGame().getItemNotFoundInInventoryResponse()).toBe(testGame.getItemNotFoundInInventoryResponse());
+        });
 
-    it('#setItemNotFoundInInventoryResponse should throw an error when trying to set an empty ItemNotFoundInInventoryResponse AND not set the Property', () => {
-        testBuilder.getGame().setItemNotFoundInInventoryResponse(testGame.getItemNotFoundInInventoryResponse());
-        expect(() => testBuilder.setItemNotFoundInInventoryResponse('')).toThrowError(EvalError);
-        expect(testBuilder.getGame().getItemNotFoundInInventoryResponse()).toBe(testGame.getItemNotFoundInInventoryResponse());
-    });
+    it('#setItemNotFoundInInventoryResponse should throw an error when trying to set an empty ItemNotFoundInInventoryResponse'
+        + ' AND not set the Property', () => {
+            testBuilder.getGame().setItemNotFoundInInventoryResponse(testGame.getItemNotFoundInInventoryResponse());
+            expect(() => testBuilder.setItemNotFoundInInventoryResponse('')).toThrowError(EvalError);
+            expect(testBuilder.getGame().getItemNotFoundInInventoryResponse()).toBe(testGame.getItemNotFoundInInventoryResponse());
+        });
 
     // ItemAddedToInventoryResponse
     it('#setItemAddedToInventoryResponse should set the ItemAddedToInventoryResponse of the Game to the passed value', () => {
@@ -118,23 +121,26 @@ describe('GameBuilder', () => {
         expect(testBuilder.getGame().getItemAddedToInventoryResponse()).toBe(testGame.getItemAddedToInventoryResponse());
     });
 
-    it('#setItemAddedToInventoryResponse should throw an error when trying to set an undefined ItemAddedToInventoryResponse AND not set the Property', () => {
-        testBuilder.getGame().setItemAddedToInventoryResponse(testGame.getItemAddedToInventoryResponse());
-        expect(() => testBuilder.setItemAddedToInventoryResponse(undefined)).toThrowError(EvalError);
-        expect(testBuilder.getGame().getItemAddedToInventoryResponse()).toBe(testGame.getItemAddedToInventoryResponse());
-    });
+    it('#setItemAddedToInventoryResponse should throw an error when trying to set an undefined ItemAddedToInventoryResponse'
+        + ' AND not set the Property', () => {
+            testBuilder.getGame().setItemAddedToInventoryResponse(testGame.getItemAddedToInventoryResponse());
+            expect(() => testBuilder.setItemAddedToInventoryResponse(undefined)).toThrowError(EvalError);
+            expect(testBuilder.getGame().getItemAddedToInventoryResponse()).toBe(testGame.getItemAddedToInventoryResponse());
+        });
 
-    it('#setItemAddedToInventoryResponse should throw an error when trying to set a null ItemAddedToInventoryResponse AND not set the Property', () => {
-        testBuilder.getGame().setItemAddedToInventoryResponse(testGame.getItemAddedToInventoryResponse());
-        expect(() => testBuilder.setItemAddedToInventoryResponse(null)).toThrowError(EvalError);
-        expect(testBuilder.getGame().getItemAddedToInventoryResponse()).toBe(testGame.getItemAddedToInventoryResponse());
-    });
+    it('#setItemAddedToInventoryResponse should throw an error when trying to set a null ItemAddedToInventoryResponse'
+        + ' AND not set the Property', () => {
+            testBuilder.getGame().setItemAddedToInventoryResponse(testGame.getItemAddedToInventoryResponse());
+            expect(() => testBuilder.setItemAddedToInventoryResponse(null)).toThrowError(EvalError);
+            expect(testBuilder.getGame().getItemAddedToInventoryResponse()).toBe(testGame.getItemAddedToInventoryResponse());
+        });
 
-    it('#setItemAddedToInventoryResponse should throw an error when trying to set an empty ItemAddedToInventoryResponse AND not set the Property', () => {
-        testBuilder.getGame().setItemAddedToInventoryResponse(testGame.getItemAddedToInventoryResponse());
-        expect(() => testBuilder.setItemAddedToInventoryResponse('')).toThrowError(EvalError);
-        expect(testBuilder.getGame().getItemAddedToInventoryResponse()).toBe(testGame.getItemAddedToInventoryResponse());
-    });
+    it('#setItemAddedToInventoryResponse should throw an error when trying to set an empty ItemAddedToInventoryResponse'
+        + ' AND not set the Property', () => {
+            testBuilder.getGame().setItemAddedToInventoryResponse(testGame.getItemAddedToInventoryResponse());
+            expect(() => testBuilder.setItemAddedToInventoryResponse('')).toThrowError(EvalError);
+            expect(testBuilder.getGame().getItemAddedToInventoryResponse()).toBe(testGame.getItemAddedToInventoryResponse());
+        });
 
     // GatewayTargetNotFoundResponse
     it('#setGatewayTargetNotFoundResponse should set the GatewayTargetNotFoundResponse of the Game to the passed value', () => {
@@ -142,23 +148,26 @@ describe('GameBuilder', () => {
         expect(testBuilder.getGame().getGatewayTargetNotFoundResponse()).toBe(testGame.getGatewayTargetNotFoundResponse());
     });
 
-    it('#setGatewayTargetNotFoundResponse should throw an error when trying to set an undefined GatewayTargetNotFoundResponse AND not set the Property', () => {
-        testBuilder.getGame().setGatewayTargetNotFoundResponse(testGame.getGatewayTargetNotFoundResponse());
-        expect(() => testBuilder.setGatewayTargetNotFoundResponse(undefined)).toThrowError(EvalError);
-        expect(testBuilder.getGame().getGatewayTargetNotFoundResponse()).toBe(testGame.getGatewayTargetNotFoundResponse());
-    });
+    it('#setGatewayTargetNotFoundResponse should throw an error when trying to set an undefined GatewayTargetNotFoundResponse'
+        + ' AND not set the Property', () => {
+            testBuilder.getGame().setGatewayTargetNotFoundResponse(testGame.getGatewayTargetNotFoundResponse());
+            expect(() => testBuilder.setGatewayTargetNotFoundResponse(undefined)).toThrowError(EvalError);
+            expect(testBuilder.getGame().getGatewayTargetNotFoundResponse()).toBe(testGame.getGatewayTargetNotFoundResponse());
+        });
 
-    it('#setGatewayTargetNotFoundResponse should throw an error when trying to set a null GatewayTargetNotFoundResponse AND not set the Property', () => {
-        testBuilder.getGame().setGatewayTargetNotFoundResponse(testGame.getGatewayTargetNotFoundResponse());
-        expect(() => testBuilder.setGatewayTargetNotFoundResponse(null)).toThrowError(EvalError);
-        expect(testBuilder.getGame().getGatewayTargetNotFoundResponse()).toBe(testGame.getGatewayTargetNotFoundResponse());
-    });
+    it('#setGatewayTargetNotFoundResponse should throw an error when trying to set a null GatewayTargetNotFoundResponse'
+        + ' AND not set the Property', () => {
+            testBuilder.getGame().setGatewayTargetNotFoundResponse(testGame.getGatewayTargetNotFoundResponse());
+            expect(() => testBuilder.setGatewayTargetNotFoundResponse(null)).toThrowError(EvalError);
+            expect(testBuilder.getGame().getGatewayTargetNotFoundResponse()).toBe(testGame.getGatewayTargetNotFoundResponse());
+        });
 
-    it('#setGatewayTargetNotFoundResponse should throw an error when trying to set an empty GatewayTargetNotFoundResponse AND not set the Property', () => {
-        testBuilder.getGame().setGatewayTargetNotFoundResponse(testGame.getGatewayTargetNotFoundResponse());
-        expect(() => testBuilder.setGatewayTargetNotFoundResponse('')).toThrowError(EvalError);
-        expect(testBuilder.getGame().getGatewayTargetNotFoundResponse()).toBe(testGame.getGatewayTargetNotFoundResponse());
-    });
+    it('#setGatewayTargetNotFoundResponse should throw an error when trying to set an empty GatewayTargetNotFoundResponse'
+        + ' AND not set the Property', () => {
+            testBuilder.getGame().setGatewayTargetNotFoundResponse(testGame.getGatewayTargetNotFoundResponse());
+            expect(() => testBuilder.setGatewayTargetNotFoundResponse('')).toThrowError(EvalError);
+            expect(testBuilder.getGame().getGatewayTargetNotFoundResponse()).toBe(testGame.getGatewayTargetNotFoundResponse());
+        });
 
     // InventoryEmptyResponse
     it('#setInventoryEmptyResponse should set the InventoryEmptyResponse of the Game to the passed value', () => {
@@ -179,11 +188,12 @@ describe('GameBuilder', () => {
         expect(testBuilder.getGame().getInventoryEmptyResponse()).toBe(testGame.getInventoryEmptyResponse());
     });
 
-    it('#setInventoryEmptyResponse should throw an error when trying to set an empty InventoryEmptyResponse AND not set the Property', () => {
-        testBuilder.getGame().setInventoryEmptyResponse(testGame.getInventoryEmptyResponse());
-        expect(() => testBuilder.setInventoryEmptyResponse('')).toThrowError(EvalError);
-        expect(testBuilder.getGame().getInventoryEmptyResponse()).toBe(testGame.getInventoryEmptyResponse());
-    });
+    it('#setInventoryEmptyResponse should throw an error when trying to set an empty InventoryEmptyResponse'
+        + ' AND not set the Property', () => {
+            testBuilder.getGame().setInventoryEmptyResponse(testGame.getInventoryEmptyResponse());
+            expect(() => testBuilder.setInventoryEmptyResponse('')).toThrowError(EvalError);
+            expect(testBuilder.getGame().getInventoryEmptyResponse()).toBe(testGame.getInventoryEmptyResponse());
+        });
 
     // finish
     it('#finish should throw a builder error when trying to finish creating a game without a Title', () => {

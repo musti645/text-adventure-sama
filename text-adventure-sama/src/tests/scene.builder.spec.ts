@@ -80,23 +80,26 @@ describe('SceneBuilder.', () => {
     });
 
 
-    it('#setActionNotRecognizedResponse should throw an error when trying to set an undefined ActionNotRecognizedResponse AND not set the Property.', () => {
-        testBuilder.setActionNotRecognizedResponse(testScene.getActionNotRecognizedResponse());
-        expect(() => testBuilder.setActionNotRecognizedResponse(undefined)).toThrowError(EvalError);
-        expect(testBuilder.getScene().getActionNotRecognizedResponse()).toBe(testScene.getActionNotRecognizedResponse());
-    });
+    it('#setActionNotRecognizedResponse should throw an error when trying to set an undefined ActionNotRecognizedResponse'
+        + ' AND not set the Property.', () => {
+            testBuilder.setActionNotRecognizedResponse(testScene.getActionNotRecognizedResponse());
+            expect(() => testBuilder.setActionNotRecognizedResponse(undefined)).toThrowError(EvalError);
+            expect(testBuilder.getScene().getActionNotRecognizedResponse()).toBe(testScene.getActionNotRecognizedResponse());
+        });
 
-    it('#setActionNotRecognizedResponse should throw an error when trying to set a null ActionNotRecognizedResponse AND not set the Property.', () => {
-        testBuilder.setActionNotRecognizedResponse(testScene.getActionNotRecognizedResponse());
-        expect(() => testBuilder.setActionNotRecognizedResponse(null)).toThrowError(EvalError);
-        expect(testBuilder.getScene().getActionNotRecognizedResponse()).toBe(testScene.getActionNotRecognizedResponse());
-    });
+    it('#setActionNotRecognizedResponse should throw an error when trying to set a null ActionNotRecognizedResponse'
+        + ' AND not set the Property.', () => {
+            testBuilder.setActionNotRecognizedResponse(testScene.getActionNotRecognizedResponse());
+            expect(() => testBuilder.setActionNotRecognizedResponse(null)).toThrowError(EvalError);
+            expect(testBuilder.getScene().getActionNotRecognizedResponse()).toBe(testScene.getActionNotRecognizedResponse());
+        });
 
-    it('#setActionNotRecognizedResponse should throw an error when trying to set an empty ActionNotRecognizedResponse AND not set the Property.', () => {
-        testBuilder.setActionNotRecognizedResponse(testScene.getActionNotRecognizedResponse());
-        expect(() => testBuilder.setActionNotRecognizedResponse('')).toThrowError(EvalError);
-        expect(testBuilder.getScene().getActionNotRecognizedResponse()).toBe(testScene.getActionNotRecognizedResponse());
-    });
+    it('#setActionNotRecognizedResponse should throw an error when trying to set an empty ActionNotRecognizedResponse'
+        + ' AND not set the Property.', () => {
+            testBuilder.setActionNotRecognizedResponse(testScene.getActionNotRecognizedResponse());
+            expect(() => testBuilder.setActionNotRecognizedResponse('')).toThrowError(EvalError);
+            expect(testBuilder.getScene().getActionNotRecognizedResponse()).toBe(testScene.getActionNotRecognizedResponse());
+        });
 
     // ItemNotFoundResponse
     it('#setItemNotFoundResponse should set the ItemNotFoundResponse of the Scene to the passed Value', () => {
@@ -151,55 +154,60 @@ describe('SceneBuilder.', () => {
     });
 
     // finish
-    it('#finish should throw a builder error when trying to finish creation process of an scene without a Name AND not add the scene to the parent builder.', () => {
-        testBuilder.setDescription(testScene.getDescription())
-            .setInvalidInputResponse(testScene.getInvalidInputResponse())
-            .setActionNotRecognizedResponse(testScene.getActionNotRecognizedResponse())
-            .setItemNotFoundResponse(testScene.getItemNotFoundResponse());
+    it('#finish should throw a builder error when trying to finish creation process of an scene without a Name'
+        + ' AND not add the scene to the parent builder.', () => {
+            testBuilder.setDescription(testScene.getDescription())
+                .setInvalidInputResponse(testScene.getInvalidInputResponse())
+                .setActionNotRecognizedResponse(testScene.getActionNotRecognizedResponse())
+                .setItemNotFoundResponse(testScene.getItemNotFoundResponse());
 
-        expect(() => testBuilder.finish()).toThrowError(BuilderError);
-        expect(testGame.getScenesCount()).toBe(0);
-    });
+            expect(() => testBuilder.finish()).toThrowError(BuilderError);
+            expect(testGame.getScenesCount()).toBe(0);
+        });
 
-    it('#finish should throw a builder error when trying to finish creation process of an scene without a Description AND not add the scene to the parent builder.', () => {
-        testBuilder.setName(testScene.getName())
-            .setInvalidInputResponse(testScene.getInvalidInputResponse())
-            .setActionNotRecognizedResponse(testScene.getActionNotRecognizedResponse())
-            .setItemNotFoundResponse(testScene.getItemNotFoundResponse());
+    it('#finish should throw a builder error when trying to finish creation process of an scene without a Description'
+        + ' AND not add the scene to the parent builder.', () => {
+            testBuilder.setName(testScene.getName())
+                .setInvalidInputResponse(testScene.getInvalidInputResponse())
+                .setActionNotRecognizedResponse(testScene.getActionNotRecognizedResponse())
+                .setItemNotFoundResponse(testScene.getItemNotFoundResponse());
 
-        expect(() => testBuilder.finish()).toThrowError(BuilderError);
-        expect(testGame.getScenesCount()).toBe(0);
-    });
+            expect(() => testBuilder.finish()).toThrowError(BuilderError);
+            expect(testGame.getScenesCount()).toBe(0);
+        });
 
-    it('#finish should throw a builder error when trying to finish creation process of an scene without a InvalidInputResponse AND not add the scene to the parent builder.', () => {
-        testBuilder.setName(testScene.getName())
-            .setDescription(testScene.getDescription())
-            .setActionNotRecognizedResponse(testScene.getActionNotRecognizedResponse())
-            .setItemNotFoundResponse(testScene.getItemNotFoundResponse());
+    it('#finish should throw a builder error when trying to finish creation process of an scene without a InvalidInputResponse'
+        + ' AND not add the scene to the parent builder.', () => {
+            testBuilder.setName(testScene.getName())
+                .setDescription(testScene.getDescription())
+                .setActionNotRecognizedResponse(testScene.getActionNotRecognizedResponse())
+                .setItemNotFoundResponse(testScene.getItemNotFoundResponse());
 
-        expect(() => testBuilder.finish()).toThrowError(BuilderError);
-        expect(testGame.getScenesCount()).toBe(0);
-    });
+            expect(() => testBuilder.finish()).toThrowError(BuilderError);
+            expect(testGame.getScenesCount()).toBe(0);
+        });
 
-    it('#finish should throw a builder error when trying to finish creation process of an scene without a ItemNotFoundresponse AND not add the scene to the parent builder.', () => {
-        testBuilder.setName(testScene.getName())
-            .setDescription(testScene.getDescription())
-            .setInvalidInputResponse(testScene.getInvalidInputResponse())
-            .setActionNotRecognizedResponse(testScene.getActionNotRecognizedResponse());
+    it('#finish should throw a builder error when trying to finish creation process of an scene without a ItemNotFoundresponse'
+        + ' AND not add the scene to the parent builder.', () => {
+            testBuilder.setName(testScene.getName())
+                .setDescription(testScene.getDescription())
+                .setInvalidInputResponse(testScene.getInvalidInputResponse())
+                .setActionNotRecognizedResponse(testScene.getActionNotRecognizedResponse());
 
-        expect(() => testBuilder.finish()).toThrowError(BuilderError);
-        expect(testGame.getScenesCount()).toBe(0);
-    });
+            expect(() => testBuilder.finish()).toThrowError(BuilderError);
+            expect(testGame.getScenesCount()).toBe(0);
+        });
 
-    it('#finish should throw a builder error when trying to finish creation process of an scene without a ActionNotRecognizedResponse AND not add the scene to the parent builder.', () => {
-        testBuilder.setName(testScene.getName())
-            .setDescription(testScene.getDescription())
-            .setInvalidInputResponse(testScene.getInvalidInputResponse())
-            .setItemNotFoundResponse(testScene.getItemNotFoundResponse());
+    it('#finish should throw a builder error when trying to finish creation process of an scene without a ActionNotRecognizedResponse'
+        + ' AND not add the scene to the parent builder.', () => {
+            testBuilder.setName(testScene.getName())
+                .setDescription(testScene.getDescription())
+                .setInvalidInputResponse(testScene.getInvalidInputResponse())
+                .setItemNotFoundResponse(testScene.getItemNotFoundResponse());
 
-        expect(() => testBuilder.finish()).toThrowError(BuilderError);
-        expect(testGame.getScenesCount()).toBe(0);
-    });
+            expect(() => testBuilder.finish()).toThrowError(BuilderError);
+            expect(testGame.getScenesCount()).toBe(0);
+        });
 
     it('#finish should add the scene to the parent builder.', () => {
         testBuilder.setName(testScene.getName())

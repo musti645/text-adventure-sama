@@ -41,11 +41,12 @@ describe('ItemBuilder.', () => {
         expect(testItem.getCannotPickUpResponse()).toBe(testItem.getCannotPickUpResponse());
     });
 
-    it('#setCannotPickUpResponse should throw an error when trying to set an undefined ActionNotRecognizedResponse AND not set the Property.', () => {
-        testBuilder.setCannotPickUpResponse(testItem.getCannotPickUpResponse());
-        expect(() => testBuilder.setCannotPickUpResponse(undefined)).toThrowError(EvalError);
-        expect(testBuilder.getItem().getCannotPickUpResponse()).toBe(testItem.getCannotPickUpResponse());
-    });
+    it('#setCannotPickUpResponse should throw an error when trying to set an undefined ActionNotRecognizedResponse'
+        + ' AND not set the Property.', () => {
+            testBuilder.setCannotPickUpResponse(testItem.getCannotPickUpResponse());
+            expect(() => testBuilder.setCannotPickUpResponse(undefined)).toThrowError(EvalError);
+            expect(testBuilder.getItem().getCannotPickUpResponse()).toBe(testItem.getCannotPickUpResponse());
+        });
 
     it('#setCannotPickUpResponse should throw an error when trying to set a null ActionNotRecognizedResponse'
         + ' AND not set the Property.', () => {
@@ -67,11 +68,12 @@ describe('ItemBuilder.', () => {
         expect(testItem.getCannotUseItemResponse()).toBe(testItem.getCannotUseItemResponse());
     });
 
-    it('#setCannotUseItemResponse should throw an error when trying to set an undefined ActionNotRecognizedResponse AND not set the Property.', () => {
-        testBuilder.setCannotUseItemResponse(testItem.getCannotUseItemResponse());
-        expect(() => testBuilder.setCannotUseItemResponse(undefined)).toThrowError(EvalError);
-        expect(testBuilder.getItem().getCannotUseItemResponse()).toBe(testItem.getCannotUseItemResponse());
-    });
+    it('#setCannotUseItemResponse should throw an error when trying to set an undefined ActionNotRecognizedResponse'
+        + ' AND not set the Property.', () => {
+            testBuilder.setCannotUseItemResponse(testItem.getCannotUseItemResponse());
+            expect(() => testBuilder.setCannotUseItemResponse(undefined)).toThrowError(EvalError);
+            expect(testBuilder.getItem().getCannotUseItemResponse()).toBe(testItem.getCannotUseItemResponse());
+        });
 
     it('#setCannotUseItemResponse should throw an error when trying to set a null ActionNotRecognizedResponse'
         + ' AND not set the Property.', () => {
@@ -184,11 +186,12 @@ describe('ItemBuilder.', () => {
         expect(testBuilder.getItem().getMaximumUsages()).toBe(testItem.getMaximumUsages());
     });
 
-    it('#setMaximumUsages should throw an error when trying to set a MaximumUsages Value less than the UsagesLeft Value AND not set the Property.', () => {
-        testBuilder.getItem().setUsagesLeft(testItem.getUsagesLeft());
-        expect(() => testBuilder.setMaximumUsages(testItem.getUsagesLeft() - 1)).toThrowError(EvalError);
-        expect(testBuilder.getItem().getMaximumUsages()).toBeUndefined();
-    });
+    it('#setMaximumUsages should throw an error when trying to set a MaximumUsages Value less than the UsagesLeft Value'
+        + ' AND not set the Property.', () => {
+            testBuilder.getItem().setUsagesLeft(testItem.getUsagesLeft());
+            expect(() => testBuilder.setMaximumUsages(testItem.getUsagesLeft() - 1)).toThrowError(EvalError);
+            expect(testBuilder.getItem().getMaximumUsages()).toBeUndefined();
+        });
 
     it('#setMaximumUsages should throw an error when trying to set an invalid MaximumUsages Value AND not set the Property.', () => {
         expect(() => testBuilder.setMaximumUsages(-29)).toThrowError(EvalError);
@@ -278,144 +281,152 @@ describe('ItemBuilder.', () => {
     });
 
     // finish
-    it('#finish should throw a builder error when trying to finish creation process of an scene without a Name AND not add the scene to the parent builder.', () => {
-        testBuilder
-            .setCanPickUp(testItem.getCanPickUp())
-            .setCanUseFunction(testItem.getCanUseFunction())
-            .setCannotPickUpResponse(testItem.getCannotPickUpResponse())
-            .setCannotUseItemResponse(testItem.getCannotUseItemResponse())
-            .setDescription(testItem.getDescription())
-            .setInSceneDescription(testItem.getInSceneDescription())
-            .setItemUsedResponse(testItem.getItemUsedResponse())
-            .setMaximumUsages(testItem.getMaximumUsages())
-            .setNoUsagesLeftResponse(testItem.getNoUsagesLeftResponse())
-            .setUsagesLeft(testItem.getUsagesLeft());
+    it('#finish should throw a builder error when trying to finish creation process of an scene without a Name'
+        + ' AND not add the scene to the parent builder.', () => {
+            testBuilder
+                .setCanPickUp(testItem.getCanPickUp())
+                .setCanUseFunction(testItem.getCanUseFunction())
+                .setCannotPickUpResponse(testItem.getCannotPickUpResponse())
+                .setCannotUseItemResponse(testItem.getCannotUseItemResponse())
+                .setDescription(testItem.getDescription())
+                .setInSceneDescription(testItem.getInSceneDescription())
+                .setItemUsedResponse(testItem.getItemUsedResponse())
+                .setMaximumUsages(testItem.getMaximumUsages())
+                .setNoUsagesLeftResponse(testItem.getNoUsagesLeftResponse())
+                .setUsagesLeft(testItem.getUsagesLeft());
 
-        expect(() => testBuilder.finish()).toThrowError(BuilderError);
-        expect(parentBuilder.Items.length).toBe(0);
-    });
+            expect(() => testBuilder.finish()).toThrowError(BuilderError);
+            expect(parentBuilder.Items.length).toBe(0);
+        });
 
-    it('#finish should throw a builder error when trying to finish creation process of an scene without a Description AND not add the scene to the parent builder.', () => {
-        testBuilder
-            .setCanPickUp(testItem.getCanPickUp())
-            .setCanUseFunction(testItem.getCanUseFunction())
-            .setCannotPickUpResponse(testItem.getCannotPickUpResponse())
-            .setCannotUseItemResponse(testItem.getCannotUseItemResponse())
-            .setInSceneDescription(testItem.getInSceneDescription())
-            .setItemUsedResponse(testItem.getItemUsedResponse())
-            .setMaximumUsages(testItem.getMaximumUsages())
-            .setName(testItem.getName())
-            .setNoUsagesLeftResponse(testItem.getNoUsagesLeftResponse())
-            .setUsagesLeft(testItem.getUsagesLeft());
+    it('#finish should throw a builder error when trying to finish creation process of an scene without a Description'
+        + ' AND not add the scene to the parent builder.', () => {
+            testBuilder
+                .setCanPickUp(testItem.getCanPickUp())
+                .setCanUseFunction(testItem.getCanUseFunction())
+                .setCannotPickUpResponse(testItem.getCannotPickUpResponse())
+                .setCannotUseItemResponse(testItem.getCannotUseItemResponse())
+                .setInSceneDescription(testItem.getInSceneDescription())
+                .setItemUsedResponse(testItem.getItemUsedResponse())
+                .setMaximumUsages(testItem.getMaximumUsages())
+                .setName(testItem.getName())
+                .setNoUsagesLeftResponse(testItem.getNoUsagesLeftResponse())
+                .setUsagesLeft(testItem.getUsagesLeft());
 
-        expect(() => testBuilder.finish()).toThrowError(BuilderError);
-        expect(parentBuilder.Items.length).toBe(0);
-    });
+            expect(() => testBuilder.finish()).toThrowError(BuilderError);
+            expect(parentBuilder.Items.length).toBe(0);
+        });
 
-    it('#finish should throw a builder error when trying to finish creation process of an scene without a CannotPickUpResponse AND not add the scene to the parent builder.', () => {
-        testBuilder
-            .setCanPickUp(false)
-            .setCanUseFunction(testItem.getCanUseFunction())
-            .setCannotUseItemResponse(testItem.getCannotUseItemResponse())
-            .setDescription(testItem.getDescription())
-            .setInSceneDescription(testItem.getInSceneDescription())
-            .setItemUsedResponse(testItem.getItemUsedResponse())
-            .setMaximumUsages(testItem.getMaximumUsages())
-            .setName(testItem.getName())
-            .setNoUsagesLeftResponse(testItem.getNoUsagesLeftResponse())
-            .setUsagesLeft(testItem.getUsagesLeft());
+    it('#finish should throw a builder error when trying to finish creation process of an scene without a CannotPickUpResponse'
+        + ' AND not add the scene to the parent builder.', () => {
+            testBuilder
+                .setCanPickUp(false)
+                .setCanUseFunction(testItem.getCanUseFunction())
+                .setCannotUseItemResponse(testItem.getCannotUseItemResponse())
+                .setDescription(testItem.getDescription())
+                .setInSceneDescription(testItem.getInSceneDescription())
+                .setItemUsedResponse(testItem.getItemUsedResponse())
+                .setMaximumUsages(testItem.getMaximumUsages())
+                .setName(testItem.getName())
+                .setNoUsagesLeftResponse(testItem.getNoUsagesLeftResponse())
+                .setUsagesLeft(testItem.getUsagesLeft());
 
-        expect(() => testBuilder.finish()).toThrowError(BuilderError);
-        expect(parentBuilder.Items.length).toBe(0);
-    });
+            expect(() => testBuilder.finish()).toThrowError(BuilderError);
+            expect(parentBuilder.Items.length).toBe(0);
+        });
 
-    it('#finish should throw a builder error when trying to finish creation process of an scene without a InSceneDescription AND not add the scene to the parent builder.', () => {
-        testBuilder
-            .setCanPickUp(testItem.getCanPickUp())
-            .setCanUseFunction(testItem.getCanUseFunction())
-            .setCannotUseItemResponse(testItem.getCannotUseItemResponse())
-            .setDescription(testItem.getDescription())
-            .setItemUsedResponse(testItem.getItemUsedResponse())
-            .setMaximumUsages(testItem.getMaximumUsages())
-            .setName(testItem.getName())
-            .setNoUsagesLeftResponse(testItem.getNoUsagesLeftResponse())
-            .setUsagesLeft(testItem.getUsagesLeft());
-
-
-        expect(() => testBuilder.finish()).toThrowError(BuilderError);
-        expect(parentBuilder.Items.length).toBe(0);
-    });
-
-    it('#finish should throw a builder error when trying to finish creation process of an scene without a ItemUsedResponse AND not add the scene to the parent builder.', () => {
-        testBuilder
-            .setCanPickUp(testItem.getCanPickUp())
-            .setCanUseFunction(testItem.getCanUseFunction())
-            .setCannotUseItemResponse(testItem.getCannotUseItemResponse())
-            .setDescription(testItem.getDescription())
-            .setInSceneDescription(testItem.getInSceneDescription())
-            .setMaximumUsages(testItem.getMaximumUsages())
-            .setName(testItem.getName())
-            .setNoUsagesLeftResponse(testItem.getNoUsagesLeftResponse())
-            .setUsagesLeft(testItem.getUsagesLeft());
-
-        expect(() => testBuilder.finish()).toThrowError(BuilderError);
-        expect(parentBuilder.Items.length).toBe(0);
-    });
-
-    it('#finish should throw a builder error when trying to finish creation process of an scene without a NoUsagesLeftResponse AND not add the scene to the parent builder.', () => {
-        testBuilder
-            .setCanPickUp(testItem.getCanPickUp())
-            .setCanUseFunction(testItem.getCanUseFunction())
-            .setCannotUseItemResponse(testItem.getCannotUseItemResponse())
-            .setDescription(testItem.getDescription())
-            .setInSceneDescription(testItem.getInSceneDescription())
-            .setItemUsedResponse(testItem.getItemUsedResponse())
-            .setMaximumUsages(testItem.getMaximumUsages())
-            .setName(testItem.getName())
-            .setUsagesLeft(testItem.getUsagesLeft());
-
-        expect(() => testBuilder.finish()).toThrowError(BuilderError);
-        expect(parentBuilder.Items.length).toBe(0);
-    });
-
-    it('#finish should throw a builder error when trying to finish creation process of an scene without a CannotUseItemResponse AND not add the scene to the parent builder.', () => {
-        testBuilder
-            .setCanPickUp(testItem.getCanPickUp())
-            .setCanUseFunction(testItem.getCanUseFunction())
-            .setCannotPickUpResponse(testItem.getCannotPickUpResponse())
-            .setDescription(testItem.getDescription())
-            .setInSceneDescription(testItem.getInSceneDescription())
-            .setItemUsedResponse(testItem.getItemUsedResponse())
-            .setMaximumUsages(testItem.getMaximumUsages())
-            .setName(testItem.getName())
-            .setNoUsagesLeftResponse(testItem.getNoUsagesLeftResponse())
-            .setUsagesLeft(testItem.getUsagesLeft());
-
-        expect(() => testBuilder.finish()).toThrowError(BuilderError);
-        expect(parentBuilder.Items.length).toBe(0);
-    });
+    it('#finish should throw a builder error when trying to finish creation process of an scene without a InSceneDescription'
+        + ' AND not add the scene to the parent builder.', () => {
+            testBuilder
+                .setCanPickUp(testItem.getCanPickUp())
+                .setCanUseFunction(testItem.getCanUseFunction())
+                .setCannotUseItemResponse(testItem.getCannotUseItemResponse())
+                .setDescription(testItem.getDescription())
+                .setItemUsedResponse(testItem.getItemUsedResponse())
+                .setMaximumUsages(testItem.getMaximumUsages())
+                .setName(testItem.getName())
+                .setNoUsagesLeftResponse(testItem.getNoUsagesLeftResponse())
+                .setUsagesLeft(testItem.getUsagesLeft());
 
 
-    it('#finish should throw a builder error when trying to finish creation process of an scene without a CannotUseItemResponse AND not add the scene to the parent builder.', () => {
-        testBuilder
-            .setCanPickUp(testItem.getCanPickUp())
-            .setCanUseFunction(testItem.getCanUseFunction())
-            .setCannotPickUpResponse(testItem.getCannotPickUpResponse())
-            .setCannotUseItemResponse(testItem.getCannotUseItemResponse())
-            .setDescription(testItem.getDescription())
-            .setInSceneDescription(testItem.getInSceneDescription())
-            .setItemUsedResponse(testItem.getItemUsedResponse())
-            .setMaximumUsages(testItem.getMaximumUsages())
-            .setName(testItem.getName())
-            .setNoUsagesLeftResponse(testItem.getNoUsagesLeftResponse())
-            .setUsagesLeft(testItem.getUsagesLeft());
+            expect(() => testBuilder.finish()).toThrowError(BuilderError);
+            expect(parentBuilder.Items.length).toBe(0);
+        });
 
-        expect(() => testBuilder.finish()).not.toThrowError(BuilderError);
-        expect(parentBuilder.Items.length).toBe(1);
+    it('#finish should throw a builder error when trying to finish creation process of an scene without a ItemUsedResponse'
+        + ' AND not add the scene to the parent builder.', () => {
+            testBuilder
+                .setCanPickUp(testItem.getCanPickUp())
+                .setCanUseFunction(testItem.getCanUseFunction())
+                .setCannotUseItemResponse(testItem.getCannotUseItemResponse())
+                .setDescription(testItem.getDescription())
+                .setInSceneDescription(testItem.getInSceneDescription())
+                .setMaximumUsages(testItem.getMaximumUsages())
+                .setName(testItem.getName())
+                .setNoUsagesLeftResponse(testItem.getNoUsagesLeftResponse())
+                .setUsagesLeft(testItem.getUsagesLeft());
 
-        const areEqual = _.isEqual(parentBuilder.Items[0], testItem);
-        expect(areEqual).toBeTrue();
-    });
+            expect(() => testBuilder.finish()).toThrowError(BuilderError);
+            expect(parentBuilder.Items.length).toBe(0);
+        });
+
+    it('#finish should throw a builder error when trying to finish creation process of an scene without a NoUsagesLeftResponse'
+        + ' AND not add the scene to the parent builder.', () => {
+            testBuilder
+                .setCanPickUp(testItem.getCanPickUp())
+                .setCanUseFunction(testItem.getCanUseFunction())
+                .setCannotUseItemResponse(testItem.getCannotUseItemResponse())
+                .setDescription(testItem.getDescription())
+                .setInSceneDescription(testItem.getInSceneDescription())
+                .setItemUsedResponse(testItem.getItemUsedResponse())
+                .setMaximumUsages(testItem.getMaximumUsages())
+                .setName(testItem.getName())
+                .setUsagesLeft(testItem.getUsagesLeft());
+
+            expect(() => testBuilder.finish()).toThrowError(BuilderError);
+            expect(parentBuilder.Items.length).toBe(0);
+        });
+
+    it('#finish should throw a builder error when trying to finish creation process of an scene without a CannotUseItemResponse'
+        + ' AND not add the scene to the parent builder.', () => {
+            testBuilder
+                .setCanPickUp(testItem.getCanPickUp())
+                .setCanUseFunction(testItem.getCanUseFunction())
+                .setCannotPickUpResponse(testItem.getCannotPickUpResponse())
+                .setDescription(testItem.getDescription())
+                .setInSceneDescription(testItem.getInSceneDescription())
+                .setItemUsedResponse(testItem.getItemUsedResponse())
+                .setMaximumUsages(testItem.getMaximumUsages())
+                .setName(testItem.getName())
+                .setNoUsagesLeftResponse(testItem.getNoUsagesLeftResponse())
+                .setUsagesLeft(testItem.getUsagesLeft());
+
+            expect(() => testBuilder.finish()).toThrowError(BuilderError);
+            expect(parentBuilder.Items.length).toBe(0);
+        });
+
+
+    it('#finish should throw a builder error when trying to finish creation process of an scene without a CannotUseItemResponse'
+        + ' AND not add the scene to the parent builder.', () => {
+            testBuilder
+                .setCanPickUp(testItem.getCanPickUp())
+                .setCanUseFunction(testItem.getCanUseFunction())
+                .setCannotPickUpResponse(testItem.getCannotPickUpResponse())
+                .setCannotUseItemResponse(testItem.getCannotUseItemResponse())
+                .setDescription(testItem.getDescription())
+                .setInSceneDescription(testItem.getInSceneDescription())
+                .setItemUsedResponse(testItem.getItemUsedResponse())
+                .setMaximumUsages(testItem.getMaximumUsages())
+                .setName(testItem.getName())
+                .setNoUsagesLeftResponse(testItem.getNoUsagesLeftResponse())
+                .setUsagesLeft(testItem.getUsagesLeft());
+
+            expect(() => testBuilder.finish()).not.toThrowError(BuilderError);
+            expect(parentBuilder.Items.length).toBe(1);
+
+            const areEqual = _.isEqual(parentBuilder.Items[0], testItem);
+            expect(areEqual).toBeTrue();
+        });
 });
 
 class ItemBuilderChild extends ItemBuilder<TestItemBuilder> {

@@ -93,22 +93,24 @@ describe('MultiTimeActionBuilder.', () => {
         expect(testBuilder.getAction().getMaximumUsages()).toBe(testAction.getMaximumUsages());
     });
 
-    it('#setMaximumUsages should throw an error when trying to set a MaximumUsages Value less than the UsagesLeft Value AND not set the Property.', () => {
-        testBuilder.getAction().setUsagesLeft(testAction.getUsagesLeft());
-        expect(() => testBuilder.setMaximumUsages(testAction.getUsagesLeft() - 1)).toThrowError(EvalError);
-        expect(testBuilder.getAction().getMaximumUsages()).toBeUndefined();
-    });
+    it('#setMaximumUsages should throw an error when trying to set a MaximumUsages Value less than the UsagesLeft Value'
+        + ' AND not set the Property.', () => {
+            testBuilder.getAction().setUsagesLeft(testAction.getUsagesLeft());
+            expect(() => testBuilder.setMaximumUsages(testAction.getUsagesLeft() - 1)).toThrowError(EvalError);
+            expect(testBuilder.getAction().getMaximumUsages()).toBeUndefined();
+        });
 
     it('#setMaximumUsages should throw an error when trying to set an invalid MaximumUsages Value AND not set the Property.', () => {
         expect(() => testBuilder.setMaximumUsages(-29)).toThrowError(EvalError);
         expect(testBuilder.getAction().getMaximumUsages()).toBeUndefined();
     });
 
-    it('#setMaximumUsages should throw an error when trying to set a MaximumUsages Value less in size than the Responses Array Length AND not set the Property.', () => {
-        testBuilder.getAction().setResponses(testAction.getResponses());
-        expect(() => testBuilder.setMaximumUsages(testAction.getResponses().length - 1)).toThrowError(EvalError);
-        expect(testBuilder.getAction().getMaximumUsages()).toBeUndefined();
-    });
+    it('#setMaximumUsages should throw an error when trying to set a MaximumUsages Value less in size than the Responses Array Length'
+        + ' AND not set the Property.', () => {
+            testBuilder.getAction().setResponses(testAction.getResponses());
+            expect(() => testBuilder.setMaximumUsages(testAction.getResponses().length - 1)).toThrowError(EvalError);
+            expect(testBuilder.getAction().getMaximumUsages()).toBeUndefined();
+        });
 
     it('#setMaximumUsages should set MaximumUsages to the passed value', () => {
         const usages = 24;

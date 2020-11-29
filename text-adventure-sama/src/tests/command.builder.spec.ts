@@ -76,42 +76,45 @@ describe('CommandBuilder.', () => {
     });
 
     // finish
-    it('#finish should throw a builder error when trying to finish creation process of an command without a Trigger AND not add the command to the parent builder.', () => {
-        testBuilder.setResponse(testCommand.getResponse())
-        .setDescription(testCommand.getDescription())
-        .setResponseFunction(testCommand.getResponseFunction())
-        .setUseTypeWritingAnimation(testCommand.getUseTypeWritingAnimation());
+    it('#finish should throw a builder error when trying to finish creation process of an command without a Trigger'
+        + ' AND not add the command to the parent builder.', () => {
+            testBuilder.setResponse(testCommand.getResponse())
+                .setDescription(testCommand.getDescription())
+                .setResponseFunction(testCommand.getResponseFunction())
+                .setUseTypeWritingAnimation(testCommand.getUseTypeWritingAnimation());
 
-        expect(() => testBuilder.finish()).toThrowError(BuilderError);
-        expect(parentBuilder.Commands.length).toBe(0);
-    });
+            expect(() => testBuilder.finish()).toThrowError(BuilderError);
+            expect(parentBuilder.Commands.length).toBe(0);
+        });
 
-    it('#finish should throw a builder error when trying to finish creation process of an command with neither a Response nor a ResponseFunction AND not add the command to the parent builder.', () => {
-        testBuilder.setTrigger(testCommand.getTrigger())
-        .setDescription(testCommand.getDescription())
-        .setUseTypeWritingAnimation(testCommand.getUseTypeWritingAnimation());
+    it('#finish should throw a builder error when trying to finish creation process of an command with neither a '
+        + 'Response nor a ResponseFunction' + ' AND not add the command to the parent builder.', () => {
+            testBuilder.setTrigger(testCommand.getTrigger())
+                .setDescription(testCommand.getDescription())
+                .setUseTypeWritingAnimation(testCommand.getUseTypeWritingAnimation());
 
-        expect(() => testBuilder.finish()).toThrowError(BuilderError);
-        expect(parentBuilder.Commands.length).toBe(0);
-    });
+            expect(() => testBuilder.finish()).toThrowError(BuilderError);
+            expect(parentBuilder.Commands.length).toBe(0);
+        });
 
-    it('#finish should throw a builder error when trying to finish creation process of an command without a Description AND not add the command to the parent builder.', () => {
-        testBuilder.setTrigger(testCommand.getTrigger())
-        .setResponse(testCommand.getResponse())
-        .setResponseFunction(testCommand.getResponseFunction())
-        .setUseTypeWritingAnimation(testCommand.getUseTypeWritingAnimation());
+    it('#finish should throw a builder error when trying to finish creation process of an command without a Description'
+        + ' AND not add the command to the parent builder.', () => {
+            testBuilder.setTrigger(testCommand.getTrigger())
+                .setResponse(testCommand.getResponse())
+                .setResponseFunction(testCommand.getResponseFunction())
+                .setUseTypeWritingAnimation(testCommand.getUseTypeWritingAnimation());
 
-        expect(() => testBuilder.finish()).toThrowError(BuilderError);
-        expect(parentBuilder.Commands.length).toBe(0);
-    });
+            expect(() => testBuilder.finish()).toThrowError(BuilderError);
+            expect(parentBuilder.Commands.length).toBe(0);
+        });
 
     it('#finish should add the command to the parent builder.', () => {
         testBuilder.setTrigger(testCommand.getTrigger())
-        .setResponse(testCommand.getResponse())
-        .setDescription(testCommand.getDescription())
-        .setResponseFunction(testCommand.getResponseFunction())
-        .setUseTypeWritingAnimation(testCommand.getUseTypeWritingAnimation())
-        .finish();
+            .setResponse(testCommand.getResponse())
+            .setDescription(testCommand.getDescription())
+            .setResponseFunction(testCommand.getResponseFunction())
+            .setUseTypeWritingAnimation(testCommand.getUseTypeWritingAnimation())
+            .finish();
 
         expect(parentBuilder.Commands.length).toBe(1);
 

@@ -92,10 +92,11 @@ describe('OneTimeActionBuilder.', () => {
     });
 
     // finish
-    it('#finish should throw a builder error when trying to finish creation without having set ResponseAfterUse AND not finish the building process.', () => {
-        expect(() => testBuilder.finish()).toThrowError(BuilderError);
-        expect(parentBuilder.Actions.length).toBe(0);
-    });
+    it('#finish should throw a builder error when trying to finish creation without having set ResponseAfterUse'
+        + ' AND not finish the building process.', () => {
+            expect(() => testBuilder.finish()).toThrowError(BuilderError);
+            expect(parentBuilder.Actions.length).toBe(0);
+        });
 
     it('#finish should add action to the parent builder.', () => {
         testBuilder.getAction().setInteractionType(testAction.getInteractionType());

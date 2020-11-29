@@ -1,4 +1,4 @@
-import { Action } from "../actions/action.model";
+import { Action } from '../actions/action.model';
 
 export class ActionDistance {
     public Action: Action;
