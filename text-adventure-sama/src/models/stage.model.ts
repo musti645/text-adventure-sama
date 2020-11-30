@@ -14,7 +14,7 @@ export class Stage implements IGatewayActionEventListener {
     // path the user took through the scenes
     private ScenePath: number[];
 
-    private SceneEventSubscription: Subscription;
+    SceneEventSubscription: Subscription;
 
     constructor() {
         this.ScenePath = [];
@@ -40,7 +40,8 @@ export class Stage implements IGatewayActionEventListener {
             throw new GameError('Scene could not be found.');
         }
 
-        this.ScenePath.push(id);
+        // add the current scene`s id to the path
+        this.ScenePath.push(this.getCurrentScene().getID());
 
         this.CurrentScene = nextScene;
         return this.CurrentScene;
@@ -57,7 +58,11 @@ export class Stage implements IGatewayActionEventListener {
     public getScenes(): Scene[] {
         return this.Scenes;
     }
-
+    
+    public getScenePath(): number[] {
+        return this.ScenePath;
+    }
+    
     public subscribeToEvents(): void {
         this.SceneEventSubscription = SceneEventService.getInstance().GatewayActionEvent$.subscribe((event) => this.OnSceneChange(event));
     }

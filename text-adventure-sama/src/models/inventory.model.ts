@@ -5,7 +5,6 @@ import { IItemRemovingEventListener, ItemRemovingActionEvent } from '../models/e
 import { IItemYieldingEventListener, ItemYieldingActionEvent } from '../models/events/item-yielding-action.event';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
-import { subscribeOn } from 'rxjs/operators';
 
 export class Inventory implements IItemConsumingEventListener,
     IItemRemovingEventListener,
