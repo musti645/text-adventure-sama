@@ -1,9 +1,8 @@
-import { BuilderError } from '../models/errors/builder.error';
-import { TestActionBuilder } from './helpers/test-action-builder';
-import * as _ from 'lodash';
-import { InteractionType } from '../models/interactions/interaction-type.enum';
-import { MultiTimeAction } from '../models/actions/multi-time-action.model';
-import { MultiTimeActionBuilder } from '../builder/action-builders/multi-time-action.builder';
+import { BuilderError } from '../../models/errors/builder.error';
+import { TestActionBuilder } from '../../tests/test-action-builder';
+import { InteractionType } from '../../models/interactions/interaction-type.enum';
+import { MultiTimeAction } from '../../models/actions/multi-time-action.model';
+import { MultiTimeActionBuilder } from './multi-time-action.builder';
 
 
 describe('MultiTimeActionBuilder.', () => {
@@ -143,9 +142,7 @@ describe('MultiTimeActionBuilder.', () => {
         testBuilder.getAction().setResponses(testAction.getResponses());
         testBuilder.setResponses(responses);
 
-        const areEqual = _.isEqual(responses, testBuilder.getAction().getResponses());
-
-        expect(areEqual).toBe(true);
+        expect(testBuilder.getAction().getResponses()).toEqual(responses);
     });
 
 
@@ -188,8 +185,7 @@ describe('MultiTimeActionBuilder.', () => {
         expect(() => testBuilder.finish()).not.toThrowError(BuilderError);
         expect(parentBuilder.Actions.length).toBe(1);
 
-        const areEqual = _.isEqual(parentBuilder.Actions[0], testAction);
-        expect(areEqual).toBeTrue();
+        expect(parentBuilder.Actions[0]).toEqual(testAction);
     });
 
 });

@@ -1,15 +1,14 @@
-import { BaseActionBuilder } from '../../builder/action-builders/base-action.builder';
-import { GatewayActionBuilder } from '../../builder/action-builders/gateway-action.builder';
-import { ItemConsumingActionBuilder } from '../../builder/action-builders/item-consuming-action.builder';
-import { ItemRemovingActionBuilder } from '../../builder/action-builders/item-removing-action.builder';
-import { ItemYieldingActionBuilder } from '../../builder/action-builders/item-yielding-action.builder';
-import { MultiTimeActionBuilder } from '../../builder/action-builders/multi-time-action.builder';
-import { OneTimeActionBuilder } from '../../builder/action-builders/one-time-action.builder';
-import { RandomResponseActionBuilder } from '../../builder/action-builders/random-response-action.builder';
-import { BaseBuilder } from '../../builder/base.builder';
-import { ActionContainingBuilder } from '../../builder/interfaces/action-containing.builder';
-import { Action } from '../../models/actions/action.model';
-
+import { BaseActionBuilder } from 'src/builder/action-builders/base-action.builder';
+import { GatewayActionBuilder } from 'src/builder/action-builders/gateway-action.builder';
+import { ItemConsumingActionBuilder } from 'src/builder/action-builders/item-consuming-action.builder';
+import { ItemRemovingActionBuilder } from 'src/builder/action-builders/item-removing-action.builder';
+import { ItemYieldingActionBuilder } from 'src/builder/action-builders/item-yielding-action.builder';
+import { MultiTimeActionBuilder } from 'src/builder/action-builders/multi-time-action.builder';
+import { OneTimeActionBuilder } from 'src/builder/action-builders/one-time-action.builder';
+import { RandomResponseActionBuilder } from 'src/builder/action-builders/random-response-action.builder';
+import { BaseBuilder } from 'src/builder/base.builder';
+import { ActionContainingBuilder } from 'src/builder/interfaces/action-containing.builder';
+import { Action } from 'src/models/actions/action.model';
 
 export class TestActionBuilder extends BaseBuilder implements ActionContainingBuilder {
     public Actions: Action[] = [];

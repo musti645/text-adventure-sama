@@ -3,7 +3,6 @@ import { SceneBuilder } from '../builder/scene.builder';
 import { BuilderError } from '../models/errors/builder.error';
 import { Game } from '../models/game.model';
 import { Scene } from '../models/scene.model';
-import * as _ from 'lodash';
 
 describe('SceneBuilder.', () => {
     let parentBuilder: GameBuilderChild;
@@ -23,6 +22,14 @@ describe('SceneBuilder.', () => {
         testScene.setActionNotRecognizedResponse('actionnotrecognized');
         testScene.setInvalidInputResponse('invalid input');
         testScene.setItemNotFoundResponse('item not found');
+    });
+
+
+    afterEach(() => {
+        testGame.getStage().unsubscribe();
+        testGame.getInventory().unsubscribe();
+        parentBuilder.getGame().getInventory().unsubscribe();
+        parentBuilder.getGame().getStage().unsubscribe();
     });
 
     // Name
@@ -219,8 +226,7 @@ describe('SceneBuilder.', () => {
 
         expect(testGame.getScenesCount()).toBe(1);
 
-        const areEqual = _.isEqual(testGame.getStage().getScenes()[0], testScene);
-        expect(areEqual).toBeTrue();
+        expect(testGame.getStage().getScenes()[0]).toEqual(testScene);
     });
 
 });

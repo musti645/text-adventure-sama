@@ -3,7 +3,6 @@ import { ItemConsumingAction } from '../actions/item-consuming-action.model';
 
 export class ItemConsumingActionEvent {
     Item: InGameItem;
-    ItemNotFoundResponse: string;
     Response: string;
     ResponseAfterUse: string;
     WasTriggered: boolean;

@@ -2,6 +2,7 @@ import { Scene } from './scene.model';
 import { GameError } from '../models/errors/game.error';
 import { SceneEventService } from '../services/scene-event.service';
 import { IGatewayActionEventListener, GatewayActionEvent } from '../models/events/gateway-action.event';
+import { Subscription } from 'rxjs';
 
 /**
  * The Stage contains all scenes (including a pointer to the current scene).
@@ -13,11 +14,13 @@ export class Stage implements IGatewayActionEventListener {
     // path the user took through the scenes
     private ScenePath: number[];
 
+    private SceneEventSubscription: Subscription;
+
     constructor() {
         this.ScenePath = [];
         this.Scenes = [];
 
-        SceneEventService.getInstance().GatewayActionEvent$.subscribe((event) => this.OnSceneChange(event));
+        this.subscribeToEvents();
     }
 
     OnSceneChange(event: GatewayActionEvent): void {
@@ -53,5 +56,16 @@ export class Stage implements IGatewayActionEventListener {
 
     public getScenes(): Scene[] {
         return this.Scenes;
+    }
+
+    public subscribeToEvents(): void {
+        this.SceneEventSubscription = SceneEventService.getInstance().GatewayActionEvent$.subscribe((event) => this.OnSceneChange(event));
+    }
+
+    public unsubscribe(): void {
+        if(this.SceneEventSubscription){
+            this.SceneEventSubscription.unsubscribe();
+            this.SceneEventSubscription = undefined;
+        }
     }
 }

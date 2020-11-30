@@ -1,8 +1,7 @@
-import { GatewayAction } from '../models/actions/gateway-action.model';
-import { BuilderError } from '../models/errors/builder.error';
-import { TestActionBuilder } from './helpers/test-action-builder';
-import * as _ from 'lodash';
-import { GatewayActionBuilder } from '../builder/action-builders/gateway-action.builder';
+import { GatewayAction } from '../../models/actions/gateway-action.model';
+import { BuilderError } from '../../models/errors/builder.error';
+import { TestActionBuilder } from '../../tests/test-action-builder';
+import { GatewayActionBuilder } from './gateway-action.builder';
 
 describe('GatewayActionBuilder.', () => {
     let parentBuilder: TestActionBuilder;
@@ -87,9 +86,7 @@ describe('GatewayActionBuilder.', () => {
         // workaround to delete a private property in typescript
         delete (testAction as any).TargetSceneName;
 
-        const areEqual = _.isEqual(testAction, parentBuilder.Actions[0]);
-
-        expect(areEqual).toBeTrue();
+        expect(parentBuilder.Actions[0]).toEqual(testAction);
     });
 
     it('#finish should add the action to the parent builder with only the TargetSceneId set.', () => {
@@ -101,9 +98,7 @@ describe('GatewayActionBuilder.', () => {
 
         delete (testAction as any).TargetSceneId;
 
-        const areEqual = _.isEqual(testAction, parentBuilder.Actions[0]);
-
-        expect(areEqual).toBeTrue();
+        expect(parentBuilder.Actions[0]).toEqual(testAction);
     });
 
     it('#finish should add the action to the parent builder, with everything set.', () => {
@@ -114,9 +109,7 @@ describe('GatewayActionBuilder.', () => {
         testBuilder.finish();
         expect(parentBuilder.Actions.length).toBe(1);
 
-        const areEqual = _.isEqual(testAction, parentBuilder.Actions[0]);
-
-        expect(areEqual).toBeTrue();
+        expect(parentBuilder.Actions[0]).toEqual(testAction);
     });
 });
 

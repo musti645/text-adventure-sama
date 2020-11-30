@@ -1,8 +1,7 @@
-import { BaseBuilder } from '../builder/base.builder';
-import { ItemContainingBuilder } from '../builder/interfaces/item-containing.builder';
-import { ItemBuilder } from '../builder/item.builder';
+import { BaseBuilder } from './base.builder';
+import { ItemContainingBuilder } from './interfaces/item-containing.builder';
+import { ItemBuilder } from './item.builder';
 import { InGameItem } from '../models/item.model';
-import * as _ from 'lodash';
 import { BuilderError } from '../models/errors/builder.error';
 
 describe('ItemBuilder.', () => {
@@ -424,8 +423,7 @@ describe('ItemBuilder.', () => {
             expect(() => testBuilder.finish()).not.toThrowError(BuilderError);
             expect(parentBuilder.Items.length).toBe(1);
 
-            const areEqual = _.isEqual(parentBuilder.Items[0], testItem);
-            expect(areEqual).toBeTrue();
+            expect(parentBuilder.Items[0]).toEqual(testItem);
         });
 });
 

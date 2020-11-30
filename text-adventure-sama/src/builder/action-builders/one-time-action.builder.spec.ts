@@ -1,9 +1,8 @@
-import { BuilderError } from '../models/errors/builder.error';
-import { TestActionBuilder } from './helpers/test-action-builder';
-import * as _ from 'lodash';
-import { InteractionType } from '../models/interactions/interaction-type.enum';
-import { OneTimeAction } from '../models/actions/one-time-action.model';
-import { OneTimeActionBuilder } from '../builder/action-builders/one-time-action.builder';
+import { BuilderError } from 'src/models/errors/builder.error';
+import { TestActionBuilder } from 'src/tests/test-action-builder';
+import { InteractionType } from 'src/models/interactions/interaction-type.enum';
+import { OneTimeAction } from 'src/models/actions/one-time-action.model';
+import { OneTimeActionBuilder } from 'src/builder/action-builders/one-time-action.builder';
 
 describe('OneTimeActionBuilder.', () => {
     let parentBuilder: TestActionBuilder;
@@ -108,8 +107,7 @@ describe('OneTimeActionBuilder.', () => {
         expect(() => testBuilder.finish()).not.toThrowError(BuilderError);
         expect(parentBuilder.Actions.length).toBe(1);
 
-        const areEqual = _.isEqual(parentBuilder.Actions[0], testAction);
-        expect(areEqual).toBeTrue();
+        expect(parentBuilder.Actions[0]).toEqual(testAction);
     });
 });
 
