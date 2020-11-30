@@ -1,5 +1,5 @@
 import { IGatewayActionEventService, GatewayActionEvent } from '../models/events/gateway-action.event';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
 
 /**
@@ -7,15 +7,15 @@ import { Injectable } from '@angular/core';
  */
 @Injectable()
 export class SceneEventService implements IGatewayActionEventService {
-
-    private constructor() {
-    }
-
     private static Instance: SceneEventService = undefined;
 
     private GatewayActionEventSource = new Subject<GatewayActionEvent>();
 
-    public GatewayActionEvent$ = this.GatewayActionEventSource.asObservable();
+    public GatewayActionEvent$: Observable<GatewayActionEvent>;
+
+    private constructor() {
+        this.GatewayActionEvent$ = this.GatewayActionEventSource.asObservable();
+    }
 
     public static getInstance(): SceneEventService {
         if (!SceneEventService.Instance) {
@@ -25,7 +25,19 @@ export class SceneEventService implements IGatewayActionEventService {
         return SceneEventService.Instance;
     }
 
+    public static Complete(): void {
+        if(!SceneEventService.Instance){
+            return;
+        }
+
+        // remove all subscribers
+        SceneEventService.Instance.GatewayActionEventSource.complete();
+        SceneEventService.Instance = undefined;
+    }
+
     public changeScene(event: GatewayActionEvent): void {
         this.GatewayActionEventSource.next(event);
     }
+
+
 }

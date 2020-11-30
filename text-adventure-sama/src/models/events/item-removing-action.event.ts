@@ -3,7 +3,6 @@ import { ItemRemovingAction } from '../actions/item-removing-action.model';
 
 export class ItemRemovingActionEvent {
     Item: InGameItem;
-    ItemNotFoundResponse: string;
     Response: string;
     ResponseAfterUse: string;
     WasTriggered: boolean;

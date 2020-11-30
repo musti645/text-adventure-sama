@@ -73,6 +73,13 @@ describe('InputParserService', () => {
 
   });
 
+  afterEach(() => {
+    game.getStage().unsubscribe();
+    game.getInventory().unsubscribe();
+    service.getGame().getStage().unsubscribe();
+    service.getGame().getInventory().unsubscribe();
+  });
+
   // Initialize and ClassificationTrainer Test
   it('#initialize should initialize successfully', (done) => {
     const serviceChild = new InputParserServiceChild();

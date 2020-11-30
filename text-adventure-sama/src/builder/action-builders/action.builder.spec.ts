@@ -1,9 +1,8 @@
-import { BaseActionBuilder, } from '../builder/action-builders/base-action.builder';
-import * as _ from 'lodash';
-import { Action } from '../models/actions/action.model';
-import { TestActionBuilder } from './helpers/test-action-builder';
-import { ActionContainingBuilder } from '../builder/interfaces/action-containing.builder';
-import { BuilderError } from '../models/errors/builder.error';
+import { BaseActionBuilder, } from './base-action.builder';
+import { Action } from '../../models/actions/action.model';
+import { TestActionBuilder } from '../../tests/test-action-builder';
+import { ActionContainingBuilder } from '../interfaces/action-containing.builder';
+import { BuilderError } from '../../models/errors/builder.error';
 
 
 describe('BaseActionBuilder.', () => {
@@ -124,8 +123,7 @@ describe('BaseActionBuilder.', () => {
 
         expect(parentBuilder.Actions.length).toBe(1);
 
-        const areEqual = _.isEqual(parentBuilder.Actions[0], testAction);
-        expect(areEqual).toBeTrue();
+        expect(parentBuilder.Actions[0]).toEqual(testAction);
     });
 
 });

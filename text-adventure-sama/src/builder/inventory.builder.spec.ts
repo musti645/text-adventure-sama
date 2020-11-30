@@ -1,23 +1,29 @@
-import { GameBuilder } from '../builder/game.builder';
-import { InventoryBuilder } from '../builder/inventory.builder';
+import { GameBuilder } from './game.builder';
+import { InventoryBuilder } from './inventory.builder';
 import { Game } from '../models/game.model';
 import { Inventory } from '../models/inventory.model';
-import * as _ from 'lodash';
-import { ItemBuilder } from '../builder/item.builder';
+import { ItemBuilder } from './item.builder';
 import { BuilderError } from '../models/errors/builder.error';
 import { InGameItem } from '../models/item.model';
 
 describe('InventoryBuilder.', () => {
     let parentBuilder: GameBuilderChild;
     let testBuilder: InventoryBuilderChild;
-    let testInventory: Inventory;
     let testGame: Game;
 
     beforeEach(() => {
         parentBuilder = new GameBuilderChild();
         testGame = new Game();
         testBuilder = new InventoryBuilderChild(parentBuilder, testGame);
-        testInventory = new Inventory();
+    });
+
+    
+    afterEach(() => {
+        testGame.getStage().unsubscribe();
+        testGame.getInventory().unsubscribe();
+        parentBuilder.getGame().getInventory().unsubscribe();
+        parentBuilder.getGame().getStage().unsubscribe();
+        testBuilder.getInventory().unsubscribe();
     });
 
     it('#addItem should return an ItemBuilder upon calling addItem.', () => {

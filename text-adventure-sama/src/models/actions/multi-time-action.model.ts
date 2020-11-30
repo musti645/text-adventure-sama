@@ -18,9 +18,10 @@ export class MultiTimeAction extends Action {
     }
 
     public trigger(): string {
-        if (this.UsagesLeft <= this.MaximumUsages) {
-            const responseString =  this.Responses[this.UsagesLeft];
-            this.UsagesLeft++;
+        if (this.UsagesLeft > 0) {
+            const usageNo = this.MaximumUsages - this.UsagesLeft;
+            const responseString = this.Responses[usageNo];
+            this.UsagesLeft--;
             return responseString;
         }
 

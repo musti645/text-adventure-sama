@@ -50,6 +50,14 @@ describe('TextAdventureComponent', () => {
       component.Game = game;
   });
 
+  
+  afterEach(() => {
+    component.Game.getStage().unsubscribe();
+    component.Game.getInventory().unsubscribe();
+    mockInputParserService.getGame()?.getStage().unsubscribe();
+    mockInputParserService.getGame()?.getInventory().unsubscribe();
+  });
+
   it('should create', async () => {
     await fixture.whenStable();
     expect(component).toBeTruthy();
@@ -147,6 +155,10 @@ class MockInputParserService {
 
   public setGame(game: Game): void {
     this.Game = game;
+  }
+
+  public getGame(): Game {
+    return this.Game;
   }
 
 }

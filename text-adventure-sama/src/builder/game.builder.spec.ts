@@ -1,11 +1,10 @@
-import { CommandBuilder } from '../builder/command.builder';
-import { GameBuilder } from '../builder/game.builder';
-import { InventoryBuilder } from '../builder/inventory.builder';
-import { SceneBuilder } from '../builder/scene.builder';
+import { CommandBuilder } from './command.builder';
+import { GameBuilder } from './game.builder';
+import { InventoryBuilder } from './inventory.builder';
+import { SceneBuilder } from './scene.builder';
 import { BuilderError } from '../models/errors/builder.error';
 import { Game } from '../models/game.model';
 import { Scene } from '../models/scene.model';
-import * as _ from 'lodash';
 
 describe('GameBuilder', () => {
     let testBuilder: GameBuilderChild;
@@ -25,10 +24,19 @@ describe('GameBuilder', () => {
         testGame.getStage().addScene(new Scene());
     });
 
+    afterEach(() => {
+        testGame.getStage().unsubscribe();
+        testGame.getInventory().unsubscribe();
+        testBuilder.getGame().getInventory().unsubscribe();
+        testBuilder.getGame().getStage().unsubscribe();
+    });
+
 
 
     it('#addInventory should return an InventoryBuilder when calling addInventory.', () => {
-        expect(testBuilder.addInventory()).toBeInstanceOf(InventoryBuilder);
+        const builder = testBuilder.addInventory();
+        expect(builder).toBeInstanceOf(InventoryBuilder);
+        builder.finish();
     });
 
     it('#addScene should return a SceneBuilder when calling addScene.', () => {
@@ -310,9 +318,12 @@ describe('GameBuilder', () => {
         delete (game as any).Commands;
         delete (testGame as any).Commands;
 
-        const areEqual = _.isEqual(game, testGame);
+        testGame.getStage().unsubscribe();
+        testGame.getInventory().unsubscribe();
+        testBuilder.getGame().getInventory().unsubscribe();
+        testBuilder.getGame().getStage().unsubscribe();
 
-        expect(areEqual).toBeTrue();
+        expect(game).toEqual(testGame);
     });
 
 });

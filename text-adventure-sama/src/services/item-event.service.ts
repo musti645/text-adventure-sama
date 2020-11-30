@@ -1,7 +1,7 @@
 import { ItemConsumingActionEvent, IItemConsumingEventService } from '../models/events/item-consuming-action.event';
 import { ItemYieldingActionEvent, IItemYieldingEventService } from '../models/events/item-yielding-action.event';
 import { ItemRemovingActionEvent, IItemRemovingEventService } from '../models/events/item-removing-action.event';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
 
 /**
@@ -13,6 +13,9 @@ export class ItemEventService implements IItemRemovingEventService,
     IItemConsumingEventService {
 
     private constructor() {
+        this.ItemRemovingActionEvent$ = this.ItemRemovingActionEventSource.asObservable();
+        this.ItemYieldingActionEvent$ = this.ItemYieldingActionEventSource.asObservable();
+        this.ItemConsumingActionEvent$ = this.ItemConsumingActionEventSource.asObservable();
 
     }
 
@@ -22,9 +25,9 @@ export class ItemEventService implements IItemRemovingEventService,
     private ItemYieldingActionEventSource = new Subject<ItemYieldingActionEvent>();
     private ItemRemovingActionEventSource = new Subject<ItemRemovingActionEvent>();
 
-    public ItemConsumingActionEvent$ = this.ItemConsumingActionEventSource.asObservable();
-    public ItemYieldingActionEvent$ = this.ItemYieldingActionEventSource.asObservable();
-    public ItemRemovingActionEvent$ = this.ItemRemovingActionEventSource.asObservable();
+    public ItemConsumingActionEvent$: Observable<ItemConsumingActionEvent>;
+    public ItemYieldingActionEvent$: Observable<ItemYieldingActionEvent>;
+    public ItemRemovingActionEvent$: Observable<ItemRemovingActionEvent>;
 
     public static getInstance(): ItemEventService {
         if (!ItemEventService.Instance) {
@@ -32,6 +35,19 @@ export class ItemEventService implements IItemRemovingEventService,
         }
 
         return ItemEventService.Instance;
+    }
+
+    public static Complete(): void {
+        if(!ItemEventService.Instance){
+            return;
+        }
+
+        // remove all subscribers
+        ItemEventService.Instance.ItemConsumingActionEventSource.complete();
+        ItemEventService.Instance.ItemYieldingActionEventSource.complete();
+        ItemEventService.Instance.ItemRemovingActionEventSource.complete();
+        
+        ItemEventService.Instance = undefined;
     }
 
     public consumeItem(event: ItemConsumingActionEvent): void {

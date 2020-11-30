@@ -1,30 +1,27 @@
-import { BuilderError } from '../models/errors/builder.error';
-import { TestActionBuilder } from './helpers/test-action-builder';
-import * as _ from 'lodash';
-import { ItemBuilder } from '../builder/item.builder';
-import { InGameItem } from '../models/item.model';
-import { InteractionType } from '../models/interactions/interaction-type.enum';
-import { ItemYieldingAction } from '../models/actions/item-yielding-action.model';
-import { ItemYieldingActionBuilder } from '../builder/action-builders/item-yielding-action.builder';
+import { BuilderError } from '../../models/errors/builder.error';
+import { TestActionBuilder } from '../../tests/test-action-builder';
+import { ItemConsumingAction } from '../../models/actions/item-consuming-action.model';
+import { ItemBuilder } from '../item.builder';
+import { InGameItem } from '../../models/item.model';
+import { InteractionType } from '../../models/interactions/interaction-type.enum';
+import { ItemConsumingActionBuilder } from './item-consuming-action.builder';
 
-
-describe('ItemYieldingActionBuilder.', () => {
+describe('ItemConsumingActionBuilder.', () => {
     let parentBuilder: TestActionBuilder;
-    let testBuilder: ItemYieldingActionBuilderChild;
-    let testAction: ItemYieldingAction;
+    let testBuilder: ItemConsumingActionBuilderChild;
+    let testAction: ItemConsumingAction;
 
     beforeEach(() => {
         parentBuilder = new TestActionBuilder();
-        testBuilder = new ItemYieldingActionBuilderChild(parentBuilder);
+        testBuilder = new ItemConsumingActionBuilderChild(parentBuilder);
 
-        testAction = new ItemYieldingAction();
+        testAction = new ItemConsumingAction();
         testAction.setTrigger('testtrigger');
         testAction.setResponse('testresponse');
         testAction.setResponseAfterUse('testresponseafteruse');
         testAction.setWasTriggered(false);
         testAction.setInteractionType(InteractionType.DO);
         testAction.setItem(new InGameItem());
-        testAction.setResetItemUsagesToMaximum(false);
     });
 
     // InteractionType
@@ -50,6 +47,7 @@ describe('ItemYieldingActionBuilder.', () => {
         testBuilder.setInteractionType(type);
         expect(testBuilder.getAction().getInteractionType()).toBe(type);
     });
+
     // WasTriggered
     it('#setWasTriggered should throw an error when trying to set a null WasTriggered Attribute.', () => {
         testBuilder.getAction().setWasTriggered(true);
@@ -114,51 +112,7 @@ describe('ItemYieldingActionBuilder.', () => {
         testBuilder.getAction().setItem(testAction.getItem());
         testBuilder.addItemToBuilder(item);
 
-        const areEqual = _.isEqual(item, testBuilder.getAction().getItem());
-        expect(areEqual).toBeTrue();
-    });
-
-    // AmountOfItems
-    it('#setAmountOfItems should throw an error when trying to set an undefined AmountOfItems AND not set the Property.', () => {
-        expect(() => testBuilder.setAmountOfItems(undefined)).toThrowError(EvalError);
-        expect(testBuilder.getAction().getAmountOfItems()).toBe(1);
-    });
-
-    it('#setAmountOfItems should throw an error when trying to set a null AmountOfItems AND not set the Property.', () => {
-        expect(() => testBuilder.setAmountOfItems(null)).toThrowError(EvalError);
-        expect(testBuilder.getAction().getAmountOfItems()).toBe(1);
-    });
-
-    it('#setAmountOfItems should throw an error when trying to set an invalid AmountOfItems AND not set the Property.', () => {
-        expect(() => testBuilder.setAmountOfItems(0)).toThrowError(EvalError);
-        expect(testBuilder.getAction().getAmountOfItems()).toBe(1);
-    });
-
-    it('#setAmountOfItems should set AmountOfItems to the passed value', () => {
-        const amount = 12;
-        testBuilder.getAction().setAmountOfItems(testAction.getAmountOfItems());
-        testBuilder.setAmountOfItems(amount);
-        expect(testBuilder.getAction().getAmountOfItems()).toBe(amount);
-    });
-
-    // ResetItemUsagesToMaximum
-    it('#setResetItemUsagesToMaximum should throw an error when trying to set undefined ResetItemUsagesToMaximum Property.', () => {
-        testBuilder.getAction().setResetItemUsagesToMaximum(true);
-        expect(() => testBuilder.setResetItemUsagesToMaximum(undefined)).toThrowError(EvalError);
-        expect(testBuilder.getAction().getResetItemUsagesToMaximum()).toBeTrue();
-    });
-
-    it('#setResetItemUsagesToMaximum should throw an error when trying to set null ResetItemUsagesToMaximum Property.', () => {
-        testBuilder.getAction().setResetItemUsagesToMaximum(true);
-        expect(() => testBuilder.setResetItemUsagesToMaximum(null)).toThrowError(EvalError);
-        expect(testBuilder.getAction().getResetItemUsagesToMaximum()).toBeTrue();
-    });
-
-    it('#setResetItemUsagesToMaximum should set ResetItemUsagesToMaximum to the passed value', () => {
-        const reset = true;
-        testBuilder.getAction().setResetItemUsagesToMaximum(testAction.getResetItemUsagesToMaximum());
-        testBuilder.setResetItemUsagesToMaximum(reset);
-        expect(testBuilder.getAction().getResetItemUsagesToMaximum()).toBe(reset);
+        expect(testBuilder.getAction().getItem()).toEqual(item);
     });
 
     // addItem
@@ -180,7 +134,7 @@ describe('ItemYieldingActionBuilder.', () => {
             expect(parentBuilder.Actions.length).toBe(0);
         });
 
-    it('#finish should throw a builder error when trying to finish creation, due to missing ResponseAfterUse'
+    it('#finish should throw a builder error when trying to finish creation, due to missing ResponseAfterUse '
         + ' AND not finish the building process.', () => {
             testBuilder.setTrigger(testAction.getTrigger())
                 .setResponse(testAction.getResponse())
@@ -192,26 +146,25 @@ describe('ItemYieldingActionBuilder.', () => {
             expect(parentBuilder.Actions.length).toBe(0);
         });
 
+
     it('#finish should add the action to the parent builder with everything set.', () => {
         testBuilder.setTrigger(testAction.getTrigger())
             .setResponse(testAction.getResponse())
             .setInteractionType(testAction.getInteractionType())
             .setResponseAfterUse(testAction.getResponseAfterUse())
-            .setWasTrigered(testAction.getWasTriggered())
-            .setResetItemUsagesToMaximum(testAction.getResetItemUsagesToMaximum());
+            .setWasTrigered(testAction.getWasTriggered());
         testBuilder.addItemToBuilder(testAction.getItem());
         testBuilder.finish();
 
         expect(parentBuilder.Actions.length).toBe(1);
 
-        const areEqual = _.isEqual(testAction, parentBuilder.Actions[0]);
-
-        expect(areEqual).toBeTrue();
+        expect(testBuilder.getAction()).toEqual(testAction);
     });
+
 });
 
-class ItemYieldingActionBuilderChild extends ItemYieldingActionBuilder<TestActionBuilder> {
-    public getAction(): ItemYieldingAction {
+class ItemConsumingActionBuilderChild extends ItemConsumingActionBuilder<TestActionBuilder> {
+    public getAction(): ItemConsumingAction {
         return this.Action;
     }
 }

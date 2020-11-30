@@ -4,18 +4,21 @@ import { IItemConsumingEventListener, ItemConsumingActionEvent } from '../models
 import { IItemRemovingEventListener, ItemRemovingActionEvent } from '../models/events/item-removing-action.event';
 import { IItemYieldingEventListener, ItemYieldingActionEvent } from '../models/events/item-yielding-action.event';
 import * as _ from 'lodash';
+import { Subscription } from 'rxjs';
+import { subscribeOn } from 'rxjs/operators';
 
 export class Inventory implements IItemConsumingEventListener,
     IItemRemovingEventListener,
     IItemYieldingEventListener {
     private Items: InGameItem[];
 
+    ItemYieldingEventSubscription: Subscription;
+    ItemConsumingEventSubscription: Subscription;
+    ItemRemovingEventSubscription: Subscription;
+
     constructor() {
         this.Items = [];
-
-        ItemEventService.getInstance().ItemYieldingActionEvent$.subscribe((event) => this.OnItemYield(event));
-        ItemEventService.getInstance().ItemRemovingActionEvent$.subscribe((event) => this.OnItemRemove(event));
-        ItemEventService.getInstance().ItemConsumingActionEvent$.subscribe((event) => this.OnItemConsume(event));
+        this.subscribeToEvents();
     }
 
     OnItemYield(event: ItemYieldingActionEvent): void {
@@ -61,6 +64,35 @@ export class Inventory implements IItemConsumingEventListener,
 
     public getItems(): InGameItem[] {
         return this.Items;
+    }
+
+    public subscribeToEvents(): void {
+        this.ItemYieldingEventSubscription = ItemEventService.getInstance()
+            .ItemYieldingActionEvent$.subscribe((event) => this.OnItemYield(event));
+
+        this.ItemRemovingEventSubscription = ItemEventService.getInstance()
+            .ItemRemovingActionEvent$.subscribe((event) => this.OnItemRemove(event));
+
+        this.ItemConsumingEventSubscription = ItemEventService.getInstance()
+            .ItemConsumingActionEvent$.subscribe((event) => this.OnItemConsume(event));
+    }
+
+    public unsubscribe(): void {
+        if (this.ItemYieldingEventSubscription) {
+            this.ItemYieldingEventSubscription.unsubscribe();
+            this.ItemYieldingEventSubscription = undefined;
+        }
+
+
+        if (this.ItemRemovingEventSubscription) {
+            this.ItemRemovingEventSubscription.unsubscribe();
+            this.ItemRemovingEventSubscription = undefined;
+        }
+
+        if (this.ItemConsumingEventSubscription) {
+            this.ItemConsumingEventSubscription.unsubscribe();
+            this.ItemConsumingEventSubscription = undefined;
+        }
     }
 
 }

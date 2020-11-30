@@ -1,7 +1,6 @@
-import * as _ from 'lodash';
-import { BaseBuilder } from '../builder/base.builder';
-import { CommandBuilder } from '../builder/command.builder';
-import { CommandContainingBuilder } from '../builder/interfaces/command-containing.builder';
+import { BaseBuilder } from './base.builder';
+import { CommandBuilder } from './command.builder';
+import { CommandContainingBuilder } from './interfaces/command-containing.builder';
 import { Command } from '../models/command.model';
 import { BuilderError } from '../models/errors/builder.error';
 
@@ -118,8 +117,7 @@ describe('CommandBuilder.', () => {
 
         expect(parentBuilder.Commands.length).toBe(1);
 
-        const areEqual = _.isEqual(parentBuilder.Commands[0], testCommand);
-        expect(areEqual).toBeTrue();
+        expect(parentBuilder.Commands[0]).toEqual(testCommand);
     });
 
 });

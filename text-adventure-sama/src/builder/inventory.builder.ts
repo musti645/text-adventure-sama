@@ -35,6 +35,9 @@ export class InventoryBuilder extends BaseBuilder implements ItemContainingBuild
 
 
     public finish(): GameBuilder {
+        if (this.Game.getInventory()) {
+            this.Game.getInventory().unsubscribe();
+        }
         this.Game.setInventory(this.Inventory);
         return this.GameBuilder;
     }

@@ -1,9 +1,8 @@
-import { BuilderError } from '../models/errors/builder.error';
-import { TestActionBuilder } from './helpers/test-action-builder';
-import * as _ from 'lodash';
-import { InteractionType } from '../models/interactions/interaction-type.enum';
-import { RandomResponseAction } from '../models/actions/random-response-action.model';
-import { RandomResponseActionBuilder } from '../builder/action-builders/random-response-action.builder';
+import { BuilderError } from 'src/models/errors/builder.error';
+import { TestActionBuilder } from 'src/tests/test-action-builder';
+import { InteractionType } from 'src/models/interactions/interaction-type.enum';
+import { RandomResponseAction } from 'src/models/actions/random-response-action.model';
+import { RandomResponseActionBuilder } from 'src/builder/action-builders/random-response-action.builder';
 
 
 describe('RandomResponseActionBuilder.', () => {
@@ -70,9 +69,7 @@ describe('RandomResponseActionBuilder.', () => {
         testBuilder.getAction().setResponses(testAction.getResponses());
         testBuilder.setResponses(responses);
 
-        const areEqual = _.isEqual(responses, testBuilder.getAction().getResponses());
-
-        expect(areEqual).toBe(true);
+        expect(testBuilder.getAction().getResponses()).toEqual(responses);
     });
 
 
@@ -92,8 +89,7 @@ describe('RandomResponseActionBuilder.', () => {
         expect(() => testBuilder.finish()).not.toThrowError(BuilderError);
         expect(parentBuilder.Actions.length).toBe(1);
 
-        const areEqual = _.isEqual(parentBuilder.Actions[0], testAction);
-        expect(areEqual).toBeTrue();
+        expect(parentBuilder.Actions[0]).toEqual(testAction);
     });
 });
 

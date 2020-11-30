@@ -1,11 +1,10 @@
-import { BuilderError } from '../models/errors/builder.error';
-import { TestActionBuilder } from './helpers/test-action-builder';
-import * as _ from 'lodash';
-import { ItemBuilder } from '../builder/item.builder';
-import { InGameItem } from '../models/item.model';
-import { InteractionType } from '../models/interactions/interaction-type.enum';
-import { ItemRemovingAction } from '../models/actions/item-removing-action.model';
-import { ItemRemovingActionBuilder } from '../builder/action-builders/item-removing-action.builder';
+import { BuilderError } from 'src/models/errors/builder.error';
+import { TestActionBuilder } from 'src/tests/test-action-builder';
+import { ItemBuilder } from 'src/builder/item.builder';
+import { InGameItem } from 'src/models/item.model';
+import { InteractionType } from 'src/models/interactions/interaction-type.enum';
+import { ItemRemovingAction } from 'src/models/actions/item-removing-action.model';
+import { ItemRemovingActionBuilder } from 'src/builder/action-builders/item-removing-action.builder';
 
 describe('ItemRemovingActionBuilder.', () => {
     let parentBuilder: TestActionBuilder;
@@ -112,8 +111,7 @@ describe('ItemRemovingActionBuilder.', () => {
         testBuilder.getAction().setItem(testAction.getItem());
         testBuilder.addItemToBuilder(item);
 
-        const areEqual = _.isEqual(item, testBuilder.getAction().getItem());
-        expect(areEqual).toBeTrue();
+        expect(testBuilder.getAction().getItem()).toEqual(item);
     });
 
     // addItem
@@ -160,9 +158,7 @@ describe('ItemRemovingActionBuilder.', () => {
 
         expect(parentBuilder.Actions.length).toBe(1);
 
-        const areEqual = _.isEqual(testAction, parentBuilder.Actions[0]);
-
-        expect(areEqual).toBeTrue();
+        expect(parentBuilder.Actions[0]).toEqual(testAction);
     });
 });
 
