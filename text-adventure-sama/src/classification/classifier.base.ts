@@ -1,6 +1,7 @@
 import { ClassificationError } from 'src/models/errors/classification.error';
 import { IClassifier } from './interfaces/classifier.interface';
 import * as natural from 'natural';
+import * as _ from 'lodash';
 import { TaggedToken } from 'src/models/other/tagged-token.model';
 import { ClassificationDocument } from 'src/classification/helpers/classification-document.model';
 import { ClassificationFeature } from './helpers/classification-feature.model';
@@ -23,16 +24,19 @@ export class BaseClassifier<ReturnType> implements IClassifier<ReturnType> {
     private language = 'EN';
     private defaultCategory = 'N';
     private defaultCategoryCapitalized = 'NNP';
-    protected allowedTags = ['N', 'NN', 'NNS', 'NNP', 'NNPS', 'VB', 'VBD', 'VBG', 'VBN', 'VBO', 'VBZ', 'JJ', 'JJR', 'JJS'];
+    protected AllowedTags = ['N', 'NN', 'NNS', 'NNP', 'NNPS', 'VB', 'VBD', 'VBG', 'VBN', 'VBO',
+        'VBZ', 'JJ', 'JJR', 'JJS', 'RB', 'RBR', 'RBS'];
+    protected FilterAllowedTags: boolean;
     protected Tokenizer: natural.Tokenizer;
     protected POSTagger: natural.BrillPOSTagger;
 
-    constructor(threshold: number = 0.7, tokenizer?: natural.Tokenizer) {
+    constructor(threshold: number = 0.7, tokenizer?: natural.Tokenizer, filterAllowedTags: boolean = true) {
         this.Documents = [];
         this.Features = [];
         this.Labels = [];
         this.ClassificationLabels = [];
         this.ClassificationThreshold = threshold;
+        this.FilterAllowedTags = filterAllowedTags;
 
         const lexicon = new natural.Lexicon(this.language, this.defaultCategory, this.defaultCategoryCapitalized);
         const ruleSet = new natural.RuleSet('EN');
@@ -85,7 +89,7 @@ export class BaseClassifier<ReturnType> implements IClassifier<ReturnType> {
         this.Documents = [];
 
         // get unique labels
-        this.Labels = [...new Set(this.Labels)];
+        this.Labels = _.uniqWith(this.Labels, _.isEqual);
 
         // set labelIds for each feature
         for (let i = 0; i < this.Labels.length; i++) {
@@ -103,6 +107,9 @@ export class BaseClassifier<ReturnType> implements IClassifier<ReturnType> {
             });
             this.ClassificationLabels.push(new ClassificationLabel<ReturnType>(i, label));
         }
+
+        // get unique features
+        this.Features = _.uniqWith(this.Features, _.isEqual);
 
         this.Labels = [];
 
@@ -144,7 +151,9 @@ export class BaseClassifier<ReturnType> implements IClassifier<ReturnType> {
         // tokenize and tag words
         let taggedTokens: TaggedToken[] = this.POSTagger.tag(this.Tokenizer.tokenize(input)).taggedWords;
 
-        taggedTokens = taggedTokens.filter(val => this.allowedTags.includes(val.tag));
+        if(this.FilterAllowedTags){
+            taggedTokens = taggedTokens.filter(val => this.AllowedTags.includes(val.tag));
+        }
 
         // for each token of the input get the labels, that have a feature matching the token`s value
         taggedTokens.map(token => {
@@ -153,20 +162,16 @@ export class BaseClassifier<ReturnType> implements IClassifier<ReturnType> {
                 if (feature.text === token.token) {
                     classificationResultsMap[feature.labelId].incrementScore();
                 }
-
-                if (feature.tag === token.tag) {
-                    classificationResultsMap[feature.labelId].incrementScore();
-                }
             });
         });
 
         let resultsArray: ClassificationResult<ReturnType>[] = [];
 
-        const maxScore = ((taggedTokens.length+1) * 2);
+        const maxScore = taggedTokens.length;
 
         for (let classificationLabel of this.ClassificationLabels) {
             let result: ClassificationResult<ReturnType> = classificationResultsMap[classificationLabel.labelId];
-            result.score = result.score/maxScore;
+            result.score = result.score / maxScore;
             resultsArray.push(result);
         }
 

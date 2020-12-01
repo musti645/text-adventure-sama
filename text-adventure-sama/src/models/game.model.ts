@@ -88,6 +88,7 @@ export class Game {
                 strings.push(action.getTrigger());
                 strings = strings.concat(action.getAlternativeTriggers());
             });
+            scene.getItems().map(item => strings.push(item.getName()));
         });
 
         return strings;

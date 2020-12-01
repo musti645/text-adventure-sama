@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { LookAtClassificationHelper } from 'src/classification/look-at-classification-helper.service';
 import { Action } from 'src/models/actions/action.model';
 import { GatewayAction } from 'src/models/actions/gateway-action.model';
 import { OneTimeAction } from 'src/models/actions/one-time-action.model';
@@ -18,9 +19,9 @@ describe('InputParserService', () => {
   let gatewayAction: GatewayAction;
   let oneTimeActionDoOpen: OneTimeAction;
   let oneTimeActionDoClose: OneTimeAction;
-  let oneTimeActionUseKey: OneTimeAction;
 
   let doorItem: InGameItem;
+  let keyItem: InGameItem;
   let stoneItem: InGameItem;
 
   beforeEach((done) => {
@@ -56,12 +57,14 @@ describe('InputParserService', () => {
     oneTimeActionDoClose.setResponse('response onetime action2');
     scene.getActions().push(oneTimeActionDoClose);
 
-    oneTimeActionUseKey = new OneTimeAction();
-    oneTimeActionUseKey.setResponse('Since the door was unlocked, you just put it in the lock, locked the door and unlocked it again.');
-    oneTimeActionUseKey.setResponseAfterUse('You did that already.');
-    oneTimeActionUseKey.setTrigger('key');
-    oneTimeActionUseKey.setInteractionType(InteractionType.USE);
-    scene.getActions().push(oneTimeActionUseKey);
+    keyItem = new InGameItem();
+    keyItem.setName('key');
+    keyItem.setItemUsedResponse('Since the door was unlocked, you just put it in the lock, locked the door and unlocked it again.');
+    keyItem.setNoUsagesLeftResponse('You did that already.');
+    keyItem.setDescription('Just an old key');
+    keyItem.setMaximumUsages(1);
+    keyItem.setUsagesLeft(1);
+    game.addItemToInventory(keyItem);
 
     gatewayAction = new GatewayAction();
     gatewayAction.setTrigger('house');
@@ -76,6 +79,8 @@ describe('InputParserService', () => {
     doorItem.setDescription('Just a simple door.');
     doorItem.setInSceneDescription('The door is made out of wood and looks like it\'s not locked.');
     doorItem.setCanPickUp(false);
+    doorItem.setMaximumUsages(1);
+    doorItem.setUsagesLeft(1);
     scene.getItems().push(doorItem);
 
     stoneItem = new InGameItem();
@@ -84,9 +89,18 @@ describe('InputParserService', () => {
     stoneItem.setDescription('An unnatural looking stone.');
     stoneItem.setInSceneDescription('Just infront of the door lays a stone. It\'s shape seems very unnatural to you.');
     stoneItem.setCanPickUp(true);
+    stoneItem.setMaximumUsages(1);
+    stoneItem.setUsagesLeft(1);
     scene.getItems().push(stoneItem);
 
     game.getStage().addScene(scene);
+
+    const scene2 = new Scene(2);
+    scene2.setName('scene2name');
+    scene2.setDescription('scene2descripiton');
+    scene2.setItemNotFoundResponse('itemnotfound');
+
+    game.getStage().addScene(scene2);
 
     service.setGame(game);
     service.initialize(new ClassificationTrainer()).then(() => {
@@ -139,7 +153,9 @@ describe('InputParserService', () => {
   it('#getLikelyItem should return the action with trigger nearly matching the input (1 char difference)', () => {
     const input = 'look at dooe';
 
-    const result = service.getLikelyItemPublic(input, scene.getItems());
+    const lookAtHelper = new LookAtClassificationHelper();
+
+    const result = service.getLikelyItemPublic(input, scene.getItems(), lookAtHelper.getLookAtClassificationStrings());
     expect(result).toBeDefined();
     expect(result).toEqual(doorItem);
   });
@@ -228,12 +244,6 @@ describe('InputParserService', () => {
 
   //getGoToResponse
   it('#getGoToResponse should return GatewayAction response with only one gateway action in the scene', () => {
-    const scene2 = new Scene(2);
-    scene2.setName('scene2name');
-    scene2.setDescription('scene2descripiton');
-
-    game.getStage().addScene(scene2);
-
     const input = 'go to house';
 
     const result = service.getGoToResponsePublic(input);
@@ -259,11 +269,6 @@ describe('InputParserService', () => {
       // add more gateway actions to the scene
       game.getStage().getCurrentScene().getActions().push(gatewayActionGarden);
       game.getStage().getCurrentScene().getActions().push(gatewayActionShop);
-
-      const scene2 = new Scene(2);
-      scene2.setName('scene2name');
-      scene2.setDescription('scene2descripiton');
-      game.getStage().addScene(scene2);
 
       const input = 'go to chouse';
 
@@ -293,7 +298,7 @@ describe('InputParserService', () => {
   });
 
   it('#getLookAtResponse should return Item Description when the input matches an items name with a spelling mistake', () => {
-    const input = 'look at sctone';
+    const input = 'look at stonee';
 
     const result = service.getLookAtResponsePublic(input);
 
@@ -302,7 +307,7 @@ describe('InputParserService', () => {
   });
 
   it('#getLookAtResponse should return ItemNotFoundResponse when input doesn\'t match anything', () => {
-    const input = 'look at insect';
+    const input = 'look at something';
 
     const result = service.getLookAtResponsePublic(input);
 
@@ -339,13 +344,13 @@ describe('InputParserService', () => {
   });
 
   //getUseResponse
-  it('#getUseResponse should return item Response with matching input', () => {
+  it('#getUseResponse should return ItemUsedResponse with matching input', () => {
     const input = 'use key';
 
     const result = service.getUseResponsePublic(input);
 
     expect(result.IsEndGameResult).toBeFalse();
-    expect(result.Result).toBe(oneTimeActionUseKey.getResponse());
+    expect(result.Result).toBe(keyItem.getItemUsedResponse() + '\r\n' + keyItem.getNoUsagesLeftResponse());
   });
 
   it('#getUseResponse should return item Response with matching input with a spelling mistake', () => {
@@ -354,7 +359,7 @@ describe('InputParserService', () => {
     const result = service.getUseResponsePublic(input);
 
     expect(result.IsEndGameResult).toBeFalse();
-    expect(result.Result).toBe(oneTimeActionUseKey.getResponse());
+    expect(result.Result).toBe(keyItem.getItemUsedResponse() + '\r\n' + keyItem.getNoUsagesLeftResponse());
   });
 
   it('#getUseResponse should return ItemNotFoundResposne when input does not match anything', () => {
@@ -376,7 +381,7 @@ describe('InputParserService', () => {
   });
 
   it('#getPickUpResponse should return ItemAddedToInventoryResponse with matching input and a spelling mistake', () => {
-    const input = 'pick up sctone';
+    const input = 'pick up ston';
 
     const result = service.getPickUpResponsePublic(input);
     expect(result.IsEndGameResult).toBeFalse();
@@ -452,12 +457,12 @@ class InputParserServiceChild extends InputParserService {
     return this.getInteractionType(input);
   }
 
-  public getLikelyActionPublic(input: string, actions: Action[]): Action {
-    return this.getLikelyAction(input, actions);
+  public getLikelyActionPublic(input: string, actions: Action[], additionalDocuments?: string[]): Action {
+    return this.getLikelyAction(input, actions, additionalDocuments);
   }
 
-  public getLikelyItemPublic(input: string, items: InGameItem[]): InGameItem {
-    return this.getLikelyItem(input, items);
+  public getLikelyItemPublic(input: string, items: InGameItem[], additionalDocuments?: string[]): InGameItem {
+    return this.getLikelyItem(input, items, additionalDocuments);
   }
 
   public getCommandsResponsePublic(input: string): ParseInputResult {

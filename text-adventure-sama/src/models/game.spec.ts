@@ -44,12 +44,18 @@ describe('Game', () => {
     it('#getInputRelevantStrings should return item names and action names', () => {
         game.addItemToInventory(item);
         scene.getActions().push(action);
+
+        const item2 = new InGameItem();
+        item2.setName('item2name');
+        scene.getItems().push(item2);
+
         game.getStage().addScene(scene);
         
         const result = game.getInputRelevantStrings();
 
         expect(result).toContain(item.getName());
         expect(result).toContain(action.getTrigger());
+        expect(result).toContain(item2.getName());
         
         for(const trigger of action.getAlternativeTriggers()){
             expect(result).toContain(trigger);

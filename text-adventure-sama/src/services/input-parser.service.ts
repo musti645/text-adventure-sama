@@ -4,6 +4,7 @@ import { Action } from '../models/actions/action.model';
 import { InGameItem } from '../models/item.model';
 import { Game } from '../models/game.model';
 
+import * as _ from 'lodash';
 import * as natural from 'natural';
 import { InteractionType } from '../models/interactions/interaction-type.enum';
 import { ParseInputResult } from '../models/other/parse-input-result.model';
@@ -11,6 +12,14 @@ import { SpellcheckHelperService } from './spellcheck-helper.service';
 import { IClassificationTrainer } from 'src/classification/interfaces/classification-trainer.interface';
 import { BaseClassifier } from 'src/classification/classifier.base';
 import { ClassificationResult } from 'src/classification/helpers/classification-result.model';
+import { IPickUpClassificationHelper } from 'src/classification/interfaces/pick-up-classification-helper.interface';
+import { IUseClassificationHelper } from 'src/classification/interfaces/use-classification-helper.interface';
+import { ILookAtClassificationHelper } from 'src/classification/interfaces/look-at-classification-helper.interface';
+import { UseClassificationHelper } from 'src/classification/use-classification-helper.service';
+import { PickUpClassificationHelper } from 'src/classification/pick-up-classification-helper.service';
+import { LookAtClassificationHelper } from 'src/classification/look-at-classification-helper.service';
+import { IGoToClassificationHelper } from 'src/classification/interfaces/go-to-classification-helper.interface';
+import { GoToClassificationHelper } from 'src/classification/go-to-classification-helper.service';
 
 
 /**
@@ -22,6 +31,11 @@ export class InputParserService {
     private Tokenizer: natural.WordTokenizer;
     private Classifier: natural.BayesClassifier;
     private Spellcheck: natural.Spellcheck;
+
+    private useHelper: IUseClassificationHelper;
+    private pickUpHelper: IPickUpClassificationHelper;
+    private lookAtHelper: ILookAtClassificationHelper;
+    private goToHelper: IGoToClassificationHelper;
 
     constructor() {
         this.Tokenizer = new natural.WordTokenizer();
@@ -41,10 +55,15 @@ export class InputParserService {
             words = words.concat(SpellcheckHelperService.getInputRelevantWords());
 
             // get only distinct words
-            const uniqueWords = [...new Set(words)];
+            const uniqueWords = _.uniq(words);
 
             // using all relevant unique words in the game as our spellchecker`s corpus
             this.Spellcheck = new natural.Spellcheck(uniqueWords);
+
+            this.useHelper = new UseClassificationHelper();
+            this.pickUpHelper = new PickUpClassificationHelper();
+            this.lookAtHelper = new LookAtClassificationHelper();
+            this.goToHelper = new GoToClassificationHelper();
 
             trainer.trainClassifier(this.Classifier).then(() => resolve(true));
         });
@@ -53,6 +72,34 @@ export class InputParserService {
 
     public setGame(game: Game): void {
         this.Game = game;
+    }
+
+    /**
+     * Because the classification of items is much harder than that of items, 
+     * we can increase the match score by adding common phrases to the classification process
+     * @param pickUpHelper gets common phrases and terms for PICK_UP type input
+     * @param useHelper gets common phrases and terms for USE type input
+     * @param lookAtHelper gets common phrases and terms for LOOK_AT type input
+     */
+    public setItemClassificationHelpers(pickUpHelper?: IPickUpClassificationHelper,
+        useHelper?: IUseClassificationHelper,
+        lookAtHelper?: ILookAtClassificationHelper,
+        goToHelper?: IGoToClassificationHelper): void {
+        if (pickUpHelper) {
+            this.pickUpHelper = pickUpHelper;
+        }
+
+        if (useHelper) {
+            this.useHelper = useHelper;
+        }
+
+        if (lookAtHelper) {
+            this.lookAtHelper = lookAtHelper;
+        }
+
+        if (goToHelper) {
+            this.goToHelper = goToHelper;
+        }
     }
 
     public parseInput(input: string): ParseInputResult {
@@ -116,7 +163,9 @@ export class InputParserService {
             return result;
         }
 
-        const action = this.getLikelyAction(input, gatewayActions);
+        const action = this.getLikelyAction(input,
+            gatewayActions,
+            this.goToHelper.getGoToClassificationStrings());
 
         if (!action) {
             result.Result = this.Game.getGatewayTargetNotFoundResponse();
@@ -131,7 +180,9 @@ export class InputParserService {
     protected getLookAtResponse(input: string): ParseInputResult {
         const result = new ParseInputResult('');
 
-        const item = this.getLikelyItem(input, this.Game.getItemsInScene().concat(this.Game.getItemsInInventory()));
+        const item = this.getLikelyItem(input,
+            this.Game.getItemsInScene().concat(this.Game.getItemsInInventory()),
+            this.lookAtHelper?.getLookAtClassificationStrings());
 
         if (!item) {
             result.Result = this.Game.getItemNotFoundResponse();
@@ -145,7 +196,9 @@ export class InputParserService {
     protected getPickUpResponse(input: string): ParseInputResult {
         const result = new ParseInputResult('');
 
-        const item = this.getLikelyItem(input, this.Game.getItemsInScene());
+        const item = this.getLikelyItem(input,
+            this.Game.getItemsInScene(),
+            this.pickUpHelper?.getPickUpClassificationStrings());
 
         if (!item) {
             result.Result = this.Game.getItemNotFoundResponse();
@@ -174,7 +227,9 @@ export class InputParserService {
     protected getUseResponse(input: string): ParseInputResult {
         const result = new ParseInputResult('');
 
-        const item = this.getLikelyItem(input, this.Game.getItemsInScene().concat(this.Game.getItemsInInventory()));
+        const item = this.getLikelyItem(input,
+            this.Game.getItemsInScene().concat(this.Game.getItemsInInventory()),
+            this.useHelper?.getUseClassificationStrings());
 
         if (!item) {
             result.Result = this.Game.getItemNotFoundResponse();
@@ -221,7 +276,7 @@ export class InputParserService {
         return result;
     }
 
-    protected getLikelyAction(input: string, actions: Action[]): Action {
+    protected getLikelyAction(input: string, actions: Action[], additionalClassificationDocuments?: string[]): Action {
         const actionClassifier = new BaseClassifier<Action>(0.75, this.Tokenizer);
         for (const action of actions) {
             const tokenizedTrigger: string[] = this.Tokenizer.tokenize(action.getTrigger());
@@ -230,33 +285,33 @@ export class InputParserService {
                 const tokenizedAlternativeTrigger: string[] = this.Tokenizer.tokenize(trigger);
                 actionClassifier.addDocuments(tokenizedAlternativeTrigger, action);
             }
+            if (additionalClassificationDocuments) {
+                actionClassifier.addDocuments(additionalClassificationDocuments, action);
+            }
         }
 
         actionClassifier.train();
+
         input = this.spellcheckInput(input);
 
-        let classifications: ClassificationResult<Action>[] = actionClassifier.getClassifications(input);
-
-        const result = classifications[0].label;
-        return result;
+        return actionClassifier.classify(input);
     }
 
-    protected getLikelyItem(input: string, items: InGameItem[]): InGameItem {
-        const itemClassifier = new BaseClassifier<InGameItem>(this.Tokenizer)
+    protected getLikelyItem(input: string, items: InGameItem[], additionalClassificationDocuments?: string[]): InGameItem {
+        const itemClassifier = new BaseClassifier<InGameItem>(0.75, this.Tokenizer)
         for (const item of items) {
             const tokenizedName: string[] = this.Tokenizer.tokenize(item.getName());
             itemClassifier.addDocuments(tokenizedName, item);
+            if (additionalClassificationDocuments) {
+                itemClassifier.addDocuments(additionalClassificationDocuments, item);
+            }
         }
 
         itemClassifier.train();
+
         input = this.spellcheckInput(input);
 
-        let classifications: ClassificationResult<InGameItem>[] = itemClassifier.getClassifications(input);
-        console.log(input);
-        console.log(classifications);
-
-        const result = classifications[0].label;
-        return result;
+        return itemClassifier.classify(input);
     }
 
     protected spellcheckInput(input: string): string {
