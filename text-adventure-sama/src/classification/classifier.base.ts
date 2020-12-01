@@ -1,14 +1,17 @@
-import { ClassificationError } from 'src/models/errors/classification.error';
-import { IClassifier } from './interfaces/classifier.interface';
+import { Injectable } from '@angular/core';
+
 import * as natural from 'natural';
 import * as _ from 'lodash';
-import { TaggedToken } from 'src/models/other/tagged-token.model';
-import { ClassificationDocument } from 'src/classification/helpers/classification-document.model';
+
+import { IClassifier } from './interfaces/classifier.interface';
+import { ClassificationDocument } from '../classification/helpers/classification-document.model';
 import { ClassificationFeature } from './helpers/classification-feature.model';
 import { ClassificationLabel } from './helpers/classification-label.model';
 import { ClassificationResult } from './helpers/classification-result.model';
+import { ClassificationError } from '../models/errors/classification.error';
+import { TaggedToken } from '../models/other/tagged-token.model';
 
-
+@Injectable()
 export class BaseClassifier<ReturnType> implements IClassifier<ReturnType> {
     protected Labels: ReturnType[];
     protected ClassificationLabels: ClassificationLabel<ReturnType>[];

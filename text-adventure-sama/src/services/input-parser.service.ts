@@ -1,25 +1,25 @@
 import { Injectable } from '@angular/core';
 
+import * as _ from 'lodash';
+import * as natural from 'natural';
+
 import { Action } from '../models/actions/action.model';
 import { InGameItem } from '../models/item.model';
 import { Game } from '../models/game.model';
 
-import * as _ from 'lodash';
-import * as natural from 'natural';
 import { InteractionType } from '../models/interactions/interaction-type.enum';
 import { ParseInputResult } from '../models/other/parse-input-result.model';
 import { SpellcheckHelperService } from './spellcheck-helper.service';
-import { IClassificationTrainer } from 'src/classification/interfaces/classification-trainer.interface';
-import { BaseClassifier } from 'src/classification/classifier.base';
-import { ClassificationResult } from 'src/classification/helpers/classification-result.model';
-import { IPickUpClassificationHelper } from 'src/classification/interfaces/pick-up-classification-helper.interface';
-import { IUseClassificationHelper } from 'src/classification/interfaces/use-classification-helper.interface';
-import { ILookAtClassificationHelper } from 'src/classification/interfaces/look-at-classification-helper.interface';
-import { UseClassificationHelper } from 'src/classification/use-classification-helper.service';
-import { PickUpClassificationHelper } from 'src/classification/pick-up-classification-helper.service';
-import { LookAtClassificationHelper } from 'src/classification/look-at-classification-helper.service';
-import { IGoToClassificationHelper } from 'src/classification/interfaces/go-to-classification-helper.interface';
-import { GoToClassificationHelper } from 'src/classification/go-to-classification-helper.service';
+import { IClassificationTrainer } from '../classification/interfaces/classification-trainer.interface';
+import { BaseClassifier } from '../classification/classifier.base';
+import { IPickUpClassificationHelper } from '../classification/interfaces/pick-up-classification-helper.interface';
+import { IUseClassificationHelper } from '../classification/interfaces/use-classification-helper.interface';
+import { ILookAtClassificationHelper } from '../classification/interfaces/look-at-classification-helper.interface';
+import { UseClassificationHelper } from '../classification/use-classification-helper.service';
+import { PickUpClassificationHelper } from '../classification/pick-up-classification-helper.service';
+import { LookAtClassificationHelper } from '../classification/look-at-classification-helper.service';
+import { IGoToClassificationHelper } from '../classification/interfaces/go-to-classification-helper.interface';
+import { GoToClassificationHelper } from '../classification/go-to-classification-helper.service';
 
 
 /**
