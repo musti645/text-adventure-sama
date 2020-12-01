@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IClassificationTrainer } from './classification-trainer.interface';
+import { IClassificationTrainer } from './interfaces/classification-trainer.interface';
 import * as natural from 'natural';
 
 @Injectable()

@@ -5,12 +5,12 @@ import { TextInput } from '../models/other/text-input.model';
 import { Game } from '../models/game.model';
 import { GameBuilder } from '../builder/game.builder';
 import { InputParserService } from '../services/input-parser.service';
-import { ClassificationTrainer } from '../services/classification-trainer.service';
+import { ClassificationTrainer } from '../classification/classification-trainer.service';
 import { GameResetEvent } from '../models/events/game-reset.event';
 import { GameEndEvent } from '../models/events/game-end.event';
 import { GameStartEvent } from '../models/events/game-start.event';
-import { IClassificationTrainer } from '../services/classification-trainer.interface';
 import { GameError } from '../models/errors/game.error';
+import { IClassificationTrainer } from 'src/classification/interfaces/classification-trainer.interface';
 
 /**
  * Main Component, that contains the input and output of the game.

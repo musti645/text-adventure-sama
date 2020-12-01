@@ -6,14 +6,11 @@ import { Game } from '../models/game.model';
 
 import * as natural from 'natural';
 import { InteractionType } from '../models/interactions/interaction-type.enum';
-import { IClassificationTrainer } from './classification-trainer.interface';
 import { ParseInputResult } from '../models/other/parse-input-result.model';
-import { ClassificationResult } from 'src/models/natural/classification-result.model';
 import { SpellcheckHelperService } from './spellcheck-helper.service';
-const language = 'EN';
-// see Penn Treebank Part-of-Speech Tags for more info on the tags
-const defaultCategory = 'N';
-const defaultCategoryCapitalized = 'NNP';
+import { IClassificationTrainer } from 'src/classification/interfaces/classification-trainer.interface';
+import { BaseClassifier } from 'src/classification/classifier.base';
+import { ClassificationResult } from 'src/models/other/classification-result.model';
 
 
 /**
@@ -21,20 +18,13 @@ const defaultCategoryCapitalized = 'NNP';
  */
 @Injectable()
 export class InputParserService {
-    protected nounCategories = ['N', 'NN', 'NNS', 'NNP', 'NNPS'];
-    protected verbCategories = ['VB', 'VBD', 'VBG', 'VBN', 'VBO', 'VBZ'];
-
     protected Game: Game;
-    private POSTagger: natural.BrillPOSTagger;
     private Tokenizer: natural.WordTokenizer;
     private Classifier: natural.BayesClassifier;
     private Spellcheck: natural.Spellcheck;
 
     constructor() {
         this.Tokenizer = new natural.WordTokenizer();
-        const lexicon = new natural.Lexicon(language, defaultCategory, defaultCategoryCapitalized);
-        const ruleSet = new natural.RuleSet('EN');
-        this.POSTagger = new natural.BrillPOSTagger(lexicon, ruleSet);
         this.Classifier = new natural.BayesClassifier();
     }
 
@@ -235,71 +225,41 @@ export class InputParserService {
     protected getLikelyAction(input: string, actions: Action[]): Action {
         // we're using the logistic regression classifier here in order to get the maximum probability of 1
         // this allows us to filter out later on, in order to also have cases, where none of the actions match the input
-        const actionClassifier = new natural.LogisticRegressionClassifier();
+        const actionClassifier = new BaseClassifier<Action>(this.Tokenizer);
         for (const action of actions) {
-            const taggedWordsTrigger = this.Tokenizer.tokenize(action.getTrigger());
-            actionClassifier.addDocument(taggedWordsTrigger, action.getTrigger());
+            const tokenizedTrigger: string[] = this.Tokenizer.tokenize(action.getTrigger());
+            actionClassifier.addDocuments(tokenizedTrigger, action);
             for (const trigger of action.getAlternativeTriggers()) {
-                const taggedWordsAlternativeTrigger = this.Tokenizer.tokenize(trigger);
-                actionClassifier.addDocument(taggedWordsAlternativeTrigger, action.getTrigger());
+                const tokenizedAlternativeTrigger: string[] = this.Tokenizer.tokenize(trigger);
+                actionClassifier.addDocuments(tokenizedAlternativeTrigger, action);
             }
         }
 
         actionClassifier.train();
+        input = this.spellcheckInput(input);
 
-        let classifications: ClassificationResult[] = actionClassifier.getClassifications(input);
-        classifications = classifications.filter((val) => {
-            return val.value >= 0.8;
-        });
-        if (classifications.length <= 0) {
-            input = this.spellcheckInput(input);
+        let classifications: ClassificationResult<Action>[] = actionClassifier.getClassifications(input);
 
-            classifications = actionClassifier.getClassifications(input);
-            classifications = classifications.filter((val) => {
-                return val.value >= 0.8;
-            });
-        }
-
-        const result = classifications[0];
-        if (!result) {
-            return undefined;
-        }
-        return actions.find((val) => {
-            return val.getTrigger() === result.label;
-        });
+        const result = classifications[0].label;
+        return result;
     }
 
     protected getLikelyItem(input: string, items: InGameItem[]): InGameItem {
-        const itemClassifier = new natural.LogisticRegressionClassifier();
+        const itemClassifier = new BaseClassifier<InGameItem>(this.Tokenizer)
         for (const item of items) {
-            const taggedWordsTrigger = this.Tokenizer.tokenize(item.getName());
-            itemClassifier.addDocument(taggedWordsTrigger, item.getName());
+            const tokenizedName: string[] = this.Tokenizer.tokenize(item.getName());
+            itemClassifier.addDocuments(tokenizedName, item);
         }
 
         itemClassifier.train();
+        input = this.spellcheckInput(input);
 
-        let classifications: ClassificationResult[] = itemClassifier.getClassifications(input);
-        classifications = classifications.filter((val) => {
-            return val.value >= 0.8;
-        });
+        let classifications: ClassificationResult<InGameItem>[] = itemClassifier.getClassifications(input);
+        console.log(input);
+        console.log(classifications);
 
-        if (classifications.length <= 0) {
-            input = this.spellcheckInput(input);
-
-            classifications = itemClassifier.getClassifications(input);
-            classifications = classifications.filter((val) => {
-                return val.value >= 0.8;
-            });
-        }
-
-
-        const result = classifications[0];
-        if (!result) {
-            return undefined;
-        }
-        return items.find((val) => {
-            return val.getName() === result.label;
-        });
+        const result = classifications[0].label;
+        return result;
     }
 
     protected spellcheckInput(input: string): string {

@@ -4,11 +4,11 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { ParseInputResult } from 'src/models/other/parse-input-result.model';
 import { Scene } from 'src/models/scene.model';
-import { IClassificationTrainer } from 'src/services/classification-trainer.interface';
 import { Game } from '../models/game.model';
 import { InputParserService } from 'src/services/input-parser.service';
 
 import { TextAdventureComponent } from './text-adventure.component';
+import { IClassificationTrainer } from 'src/classification/interfaces/classification-trainer.interface';
 
 describe('TextAdventureComponent', () => {
   let fixture: ComponentFixture<TextAdventureComponent>;
