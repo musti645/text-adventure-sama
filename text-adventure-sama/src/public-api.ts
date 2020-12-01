@@ -27,7 +27,7 @@ export * from './models/item.model';
 export * from './models/stage.model';
 
 /* ClassificationTrainerInterface */
-export * from './services/classification-trainer.interface';
+export * from './classification/interfaces/classifier.interface';
 
 
 /* Component & Module */

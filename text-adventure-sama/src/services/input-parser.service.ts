@@ -10,7 +10,7 @@ import { ParseInputResult } from '../models/other/parse-input-result.model';
 import { SpellcheckHelperService } from './spellcheck-helper.service';
 import { IClassificationTrainer } from 'src/classification/interfaces/classification-trainer.interface';
 import { BaseClassifier } from 'src/classification/classifier.base';
-import { ClassificationResult } from 'src/models/other/classification-result.model';
+import { ClassificationResult } from 'src/classification/helpers/classification-result.model';
 
 
 /**
@@ -145,7 +145,6 @@ export class InputParserService {
     protected getPickUpResponse(input: string): ParseInputResult {
         const result = new ParseInputResult('');
 
-
         const item = this.getLikelyItem(input, this.Game.getItemsInScene());
 
         if (!item) {
@@ -223,9 +222,7 @@ export class InputParserService {
     }
 
     protected getLikelyAction(input: string, actions: Action[]): Action {
-        // we're using the logistic regression classifier here in order to get the maximum probability of 1
-        // this allows us to filter out later on, in order to also have cases, where none of the actions match the input
-        const actionClassifier = new BaseClassifier<Action>(this.Tokenizer);
+        const actionClassifier = new BaseClassifier<Action>(0.75, this.Tokenizer);
         for (const action of actions) {
             const tokenizedTrigger: string[] = this.Tokenizer.tokenize(action.getTrigger());
             actionClassifier.addDocuments(tokenizedTrigger, action);

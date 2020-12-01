@@ -2,10 +2,11 @@ import { ClassificationError } from 'src/models/errors/classification.error';
 import { IClassifier } from './interfaces/classifier.interface';
 import * as natural from 'natural';
 import { TaggedToken } from 'src/models/other/tagged-token.model';
-import { ClassificationLabel } from 'src/models/other/classification-label.model';
-import { ClassificationDocument } from 'src/models/other/classification-document.model';
-import { ClassificationFeature } from 'src/models/other/classification-feature.model';
-import { ClassificationResult } from 'src/models/other/classification-result.model';
+import { ClassificationDocument } from 'src/classification/helpers/classification-document.model';
+import { ClassificationFeature } from './helpers/classification-feature.model';
+import { ClassificationLabel } from './helpers/classification-label.model';
+import { ClassificationResult } from './helpers/classification-result.model';
+
 
 export class BaseClassifier<ReturnType> implements IClassifier<ReturnType> {
     protected Labels: ReturnType[];
@@ -22,8 +23,7 @@ export class BaseClassifier<ReturnType> implements IClassifier<ReturnType> {
     private language = 'EN';
     private defaultCategory = 'N';
     private defaultCategoryCapitalized = 'NNP';
-    protected nounCategories = ['N', 'NN', 'NNS', 'NNP', 'NNPS'];
-    protected verbCategories = ['VB', 'VBD', 'VBG', 'VBN', 'VBO', 'VBZ'];
+    protected allowedTags = ['N', 'NN', 'NNS', 'NNP', 'NNPS', 'VB', 'VBD', 'VBG', 'VBN', 'VBO', 'VBZ', 'JJ', 'JJR', 'JJS'];
     protected Tokenizer: natural.Tokenizer;
     protected POSTagger: natural.BrillPOSTagger;
 
@@ -32,7 +32,7 @@ export class BaseClassifier<ReturnType> implements IClassifier<ReturnType> {
         this.Features = [];
         this.Labels = [];
         this.ClassificationLabels = [];
-        threshold = threshold;
+        this.ClassificationThreshold = threshold;
 
         const lexicon = new natural.Lexicon(this.language, this.defaultCategory, this.defaultCategoryCapitalized);
         const ruleSet = new natural.RuleSet('EN');
@@ -125,7 +125,7 @@ export class BaseClassifier<ReturnType> implements IClassifier<ReturnType> {
             return classificationResults[0].label;
         }
 
-        return null;
+        return undefined;
     }
 
     getClassifications(input: string): ClassificationResult<ReturnType>[] {
@@ -141,9 +141,10 @@ export class BaseClassifier<ReturnType> implements IClassifier<ReturnType> {
         for (const label of this.ClassificationLabels) {
             classificationResultsMap[label.labelId] = new ClassificationResult<ReturnType>(label.label);
         }
-
         // tokenize and tag words
-        const taggedTokens: TaggedToken[] = this.POSTagger.tag(this.Tokenizer.tokenize(input)).taggedWords;
+        let taggedTokens: TaggedToken[] = this.POSTagger.tag(this.Tokenizer.tokenize(input)).taggedWords;
+
+        taggedTokens = taggedTokens.filter(val => this.allowedTags.includes(val.tag));
 
         // for each token of the input get the labels, that have a feature matching the token`s value
         taggedTokens.map(token => {

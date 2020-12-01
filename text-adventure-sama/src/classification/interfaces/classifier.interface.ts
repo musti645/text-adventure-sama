@@ -1,4 +1,4 @@
-import { ClassificationResult } from 'src/models/other/classification-result.model';
+import { ClassificationResult } from '../helpers/classification-result.model';
 
 
 export interface IClassifier<ReturnType> {
