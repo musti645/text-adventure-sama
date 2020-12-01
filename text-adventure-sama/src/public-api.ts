@@ -25,6 +25,14 @@ export * from './models/command.model';
 export * from './models/inventory.model';
 export * from './models/item.model';
 export * from './models/stage.model';
+export * from './models/actions/action.model';
+export * from './models/actions/gateway-action.model';
+export * from './models/actions/item-consuming-action.model';
+export * from './models/actions/item-removing-action.model';
+export * from './models/actions/item-yielding-action.model';
+export * from './models/actions/multi-time-action.model';
+export * from './models/actions/one-time-action.model';
+export * from './models/actions/random-response-action.model';
 
 /* ClassificationTrainerInterface */
 export * from './classification/interfaces/classifier.interface';
