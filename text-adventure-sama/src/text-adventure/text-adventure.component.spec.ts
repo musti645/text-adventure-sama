@@ -133,6 +133,32 @@ describe('TextAdventureComponent', () => {
     expect(outputLine[outputLine.length - 1].innerText).toBe(result.Result);
   }));
 
+  it('#clearOutput should clear the screen from all output-lines and input-lines', fakeAsync(() => {
+    component.UseTypewritingAnimation = false;
+    fixture.detectChanges();
+    tick();
+
+    const userInputFormGroup = component.InputForm.get('userInput') as FormControl;
+    userInputFormGroup.setValue('some input');
+
+    // tell the component to clear the output
+    let result = new ParseInputResult('res', true, false, false, true);
+    mockInputParserService.parseInputResult = result;
+
+    let form = fixture.debugElement.query(By.css('form'));
+    form.triggerEventHandler('submit', null);
+    fixture.detectChanges();
+    tick();
+
+    fixture.detectChanges();
+
+    const outputLines = fixture.nativeElement.querySelectorAll('.output-line');
+    expect(outputLines).toHaveSize(0);
+
+    const inputLines = fixture.nativeElement.querySelectorAll('.input-line');
+    expect(inputLines).toHaveSize(0);
+  }));
+
 });
 
 describe('TextAdventureComponent - Hosted', () => {

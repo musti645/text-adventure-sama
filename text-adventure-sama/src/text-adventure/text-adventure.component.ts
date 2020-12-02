@@ -60,11 +60,19 @@ export class TextAdventureComponent implements OnInit, OnChanges, OnDestroy {
       ])
     }
   );
+  // used to track output lines in the ngFor
+  OutputLineId = 0;
 
-  // other
-  private IsGameInitialized: boolean;
+  protected IsGameInitialized: boolean;
 
   constructor(private inputParserService: InputParserService) {
+  }
+
+  /**
+   * Method to track the output lines
+   */
+  IdentifyOutput(index: number, line: TextInput) {
+    return line.Id;
   }
 
   ngOnInit(): void {
@@ -100,17 +108,20 @@ export class TextAdventureComponent implements OnInit, OnChanges, OnDestroy {
     const parseResult = this.inputParserService.parseInput(inputString);
 
     this.printOutput(parseResult.Result, parseResult.UseTypewriterAnimation).then(() => {
-      
-      if(parseResult.IsEndGameResult){
+      if (parseResult.IsEndGameResult) {
         this.endGame();
         return;
       }
 
-      if(parseResult.IsResetGameResult){
+      if (parseResult.IsResetGameResult) {
         this.resetGame();
         return;
       }
-      
+
+      if (parseResult.IsClearOutputResult) {
+        this.clearOutput();
+      }
+
       this.stopLoading();
     });
   }
@@ -131,7 +142,7 @@ export class TextAdventureComponent implements OnInit, OnChanges, OnDestroy {
     this.OnGameInitStartEvent.emit(new GameInitStartEvent(this.Game));
   }
 
-  private initGame(): void {
+  protected initGame(): void {
     this.OnGameInitStart();
 
     let classificationTrainer;
@@ -150,7 +161,7 @@ export class TextAdventureComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
-  private startGame(): void {
+  protected startGame(): void {
     this.inputParserService.setGame(this.Game);
     this.printOutput(this.Game.getTitle())
       .then(() => this.printOutput(this.Game.getIntroduction()))
@@ -158,24 +169,31 @@ export class TextAdventureComponent implements OnInit, OnChanges, OnDestroy {
       .then(() => this.OnGameStart());
   }
 
-  private resetGame(): void {
+  protected resetGame(): void {
+    this.IsGameInitialized = false;
     this.OnGameReset();
+    this.clearOutput();
+    this.initGame();
   }
 
-  private endGame(): void {
+  protected endGame(): void {
     this.OnGameEnd();
   }
 
-  private get userInput(): FormControl {
+  protected clearOutput(): void {
+    this.OutputArray = [];
+  }
+
+  protected get userInput(): FormControl {
     return this.InputForm.get('userInput') as FormControl;
   }
 
-  private startLoading(): void {
+  protected startLoading(): void {
     this.IsLoading = true;
     this.userInput.disable();
   }
 
-  private stopLoading(): void {
+  protected stopLoading(): void {
     this.IsLoading = false;
     this.userInput.enable();
     setTimeout(() => {
@@ -183,7 +201,7 @@ export class TextAdventureComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
-  private printOutput(output: string, useTypewriteAnimationOnOutput: boolean = true): Promise<void> {
+  protected printOutput(output: string, useTypewriteAnimationOnOutput: boolean = true): Promise<void> {
     return new Promise<void>((outerResolve, outerReject) => {
       if (!output) {
         outerReject('Output was not defined. Make sure to have set the required responses in the game.');
@@ -199,21 +217,21 @@ export class TextAdventureComponent implements OnInit, OnChanges, OnDestroy {
         outputPromise = outputPromise.then(() => outerResolve());
       } else {
         output = output.split('\r\n').join('<br>');
-        this.OutputArray.push(new TextInput(output, TextInputType.Output));
+        this.addOutput(output, TextInputType.Output);
         outerResolve();
       }
     });
   }
 
-  private printLineAnimated(line: string): Promise<void> {
+  protected printLineAnimated(line: string): Promise<void> {
     return new Promise<void>((resolve) => {
-      this.OutputArray.push(new TextInput('', TextInputType.Output));
+      this.addOutput('', TextInputType.Output);
       // exit the recursion with the "resolve" function of the promise
       this.typewriteOutput(0, line, this.OutputArray, resolve);
     });
   }
 
-  private typewriteOutput(i: number, output: string, outputArray: TextInput[], resolveFunction): void {
+  protected typewriteOutput(i: number, output: string, outputArray: TextInput[], resolveFunction): void {
     if (i >= output.length) {
       resolveFunction();
       return;
@@ -226,7 +244,12 @@ export class TextAdventureComponent implements OnInit, OnChanges, OnDestroy {
     }, this.TypewriterSpeed);
   }
 
-  private printInput(input: string): void {
-    this.OutputArray.push(new TextInput(input, TextInputType.UserInput));
+  protected printInput(input: string): void {
+    this.addOutput(input, TextInputType.UserInput);
+  }
+
+  protected addOutput(input: string, type: TextInputType) {
+    this.OutputArray.push(new TextInput(input, type, this.OutputLineId));
+    this.OutputLineId++;
   }
 }

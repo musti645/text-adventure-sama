@@ -3,7 +3,7 @@
     <div class="output-container">
       <table>
         <tbody>
-          <tr *ngFor="let line of OutputArray; let index = i"
+          <tr *ngFor="let line of OutputArray; let index = i; trackBy: IdentifyOutput;"
             [ngClass]="line.Type  === 'input'? 'input-line' : 'output-line'">
             <td [innerHTML]='line.Value'></td>
           </tr>

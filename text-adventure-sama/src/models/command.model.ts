@@ -9,6 +9,7 @@ export class Command {
     private Description: string;
     private EndsGame: boolean;
     private ResetsGame: boolean;
+    private ClearsOutput: boolean;
 
     public activate(): string {
         if (this.Response) {
@@ -75,6 +76,14 @@ export class Command {
 
     public getResetsGame(): boolean {
         return this.ResetsGame;
+    }
+
+    public setClearsOutput(clearsOutput: boolean): void {
+        this.ClearsOutput = clearsOutput;
+    }
+
+    public getClearsOutput(): boolean {
+        return this.ClearsOutput;
     }
 
 }

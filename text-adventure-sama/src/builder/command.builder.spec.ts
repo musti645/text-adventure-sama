@@ -67,6 +67,13 @@ describe('CommandBuilder.', () => {
         expect(testBuilder.getCommand().getResponse()).toBe(testCommand.getResponse());
     });
 
+    it('#setResponse should set the Response to the passed value', () => {
+        const response = 'someresponse';
+        testBuilder.getCommand().setResponse(testCommand.getResponse());
+        testBuilder.setResponse(response);
+        expect(testBuilder.getCommand().getResponse()).toBe(response);
+    });
+
     // EndsGame
     it('#setEndsGame should set the property to true', () => {
         testBuilder.setEndsGame();
@@ -79,11 +86,10 @@ describe('CommandBuilder.', () => {
         expect(testBuilder.getCommand().getResetsGame()).toBeTrue();
     });
 
-    it('#setResponse should set the Response to the passed value', () => {
-        const response = 'someresponse';
-        testBuilder.getCommand().setResponse(testCommand.getResponse());
-        testBuilder.setResponse(response);
-        expect(testBuilder.getCommand().getResponse()).toBe(response);
+    //ClearsOutput
+    it('#setClearsOutput should set the property to true', () => {
+        testBuilder.setClearsOutput();
+        expect(testBuilder.getCommand().getClearsOutput()).toBeTrue();
     });
 
     // finish

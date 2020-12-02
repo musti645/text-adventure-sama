@@ -68,6 +68,11 @@ export class CommandBuilder<ReturnBuilderType extends CommandContainingBuilder> 
         return this;
     }
 
+    public setClearsOutput(): this {
+        this.Command.setClearsOutput(true);
+        return this;
+    }
+
     public finish(): ReturnBuilderType {
         if (!this.Command.getTrigger()) {
             throw new BuilderError('Could not create Command. Trigger was not set.');
