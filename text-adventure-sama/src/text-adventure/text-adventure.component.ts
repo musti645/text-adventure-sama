@@ -155,14 +155,13 @@ export class TextAdventureComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     this.IsGameInitialized = true;
-
+    this.inputParserService.setGame(this.Game);
     this.inputParserService.initialize(classificationTrainer).then(() => {
       this.startGame();
     });
   }
 
   protected startGame(): void {
-    this.inputParserService.setGame(this.Game);
     this.printOutput(this.Game.getTitle())
       .then(() => this.printOutput(this.Game.getIntroduction()))
       .then(() => this.stopLoading())
