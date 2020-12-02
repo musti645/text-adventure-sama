@@ -8,7 +8,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased] ##
 
 - Switch to lodash-es
-- Clearing the output
 - Conditions for `GatewayActions` to pass through to another Scene
 - Name/Trigger collision check when adding new actions or items in a builder
 
@@ -20,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added all the events to the _public-api_
 - Added tests in which the component was hosted by another
 - Commands can now end or reset a game
+- Commands can now clear the output of the game
 
 ### Fixed ###
 
