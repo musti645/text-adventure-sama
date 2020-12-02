@@ -7,6 +7,8 @@ export class Command {
     private ResponseFunction: () => string;
     private UseTypeWritingAnimation: boolean;
     private Description: string;
+    private EndsGame: boolean;
+    private ResetsGame: boolean;
 
     public activate(): string {
         if (this.Response) {
@@ -57,6 +59,22 @@ export class Command {
 
     public setDescription(desc: string): void {
         this.Description = desc;
+    }
+
+    public setEndGame(endGame: boolean): void {
+        this.EndsGame = endGame;
+    }
+
+    public getEndsGame(): boolean {
+        return this.EndsGame;
+    }
+
+    public setResetsGame(resetGame: boolean): void {
+        this.ResetsGame = resetGame;
+    }
+
+    public getResetsGame(): boolean {
+        return this.ResetsGame;
     }
 
 }

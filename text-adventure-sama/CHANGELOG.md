@@ -7,9 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] ##
 
-- Command to Reset a game
+- Switch to lodash-es
+- Clearing the output
 - Conditions for `GatewayActions` to pass through to another Scene
 - Name/Trigger collision check when adding new actions or items in a builder
+
+## [0.0.6] - 2020-12-02 ##
+
+### Added ###
+
+- `GameInitStartEvent` has been added to the component
+- Added all the events to the _public-api_
+- Added tests in which the component was hosted by another
+- Commands can now end or reset a game
+
+### Fixed ###
+
+- The game was initialized even when the `Game` property was not set, which led to errors
 
 ## [0.0.5] - 2020-12-01 ##
 
@@ -26,6 +40,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed ###
 
 - Game `getRelevantStrings` didn't return scene item names
+- Resolved UMD warnings
 
 ### Removed ###
 

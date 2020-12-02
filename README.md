@@ -69,16 +69,6 @@ Add the Text-Adventure-Component to your DOM and pass it a Game Object via the c
 <tas-text-adventure [Game]="Game"></tas-text-adventure>
 ```
 
-Currently there are 3 Events, that you can listen to.
-
-```HTML
-<tas-text-adventure [Game]="Game"
-    (OnGameStartEvent)="onGameStart($event)"
-    (OnGameResetEvent)="onGameReset($event)"
-    (OnGameEndEvent)="onGameEnd($event)">
-</tas-text-adventure>
-```
-
 ### Creating a new Game ###
 
 To create a new Game, you'll want to use the Builders, that guide you through that process. The builders allow you to chain the method calls without interrupting it in any way from start to finish.
@@ -247,6 +237,26 @@ The Interaction with the game is done via imperatives, e.g. `look around` or `us
 
 ## Customizations ##
 
+### Events ###
+
+Currently there are 4 types of game-lifecycle, that you can listen to.
+
+```HTML
+<tas-text-adventure [Game]="Game"
+    (OnGameStartEvent)="onGameStart($event)"
+    (OnGameResetEvent)="onGameReset($event)"
+    (OnGameEndEvent)="onGameEnd($event)"
+    (OnGameInitStartEvent)="onGameInitStart($event)">
+</tas-text-adventure>
+```
+
+|Type|Description|
+|---|---|
+|OnGameInitStartEvent|Is called when the initialization of the game is starting.|
+|OnGameStartEvent|Is called when the initialization of the game is complete. The title and introduction have already been printed|
+|OnGameEndEvent|Is called when the game is over. This happens when an action is triggered, that's marked as an `EndGameAction`.|
+|OnGameResetEvent|Is called when the game is to be reset. After this event, the initialization is restarted. A reset usually occurs via a command.|
+
 ### Typewriting Animation ###
 
 TextAdventureSama allows you to determine the typing speed of the Typewriter Animation (defaults to 40ms per character) or just not use it alltogether (defaults to true).
@@ -254,8 +264,8 @@ TextAdventureSama allows you to determine the typing speed of the Typewriter Ani
 ```html
 <tas-text-adventure [Game]="Game"
 [UseTypewritingAnimation]="useTypewriter"
-[TypewriterSpeed]="typewriterSpeed"
-></tas-text-adventure>
+[TypewriterSpeed]="typewriterSpeed">
+</tas-text-adventure>
 ```
 
 ### Classification ###
@@ -264,15 +274,15 @@ If you're not liking the classification of your input, you can always pass your 
 
 ```html
 <tas-text-adventure [Game]="Game"
-[ClassificationTrainer]="classificationTrainer"
-></tas-text-adventure>
+[ClassificationTrainer]="classificationTrainer">
+</tas-text-adventure>
 ```
 
 See [here](https://github.com/NaturalNode/natural#classifiers) for more Information about the BayesClassifier, that we're using, and about how to train it with NaturalNode.
 
 ## Limitations ##
 
-We're using a Natural Language Processing Library for NodeJS called [Natural](https://github.com/NaturalNode/natural) to tag the user input. But because there aren't many imperatives in everyday language (and in the Corpora that are available to us), we face many difficulties getting the right tag for some words. We've also got some problems with Nouns being tagged as Verbs and vice versa.
+We're using a Natural Language Processing Library for NodeJS called [Natural](https://github.com/NaturalNode/natural) to tag the user input. But because there aren't many imperatives in everyday language (and in the Corpora that are available to us), we face many difficulties getting the right tag for some words. We've also got some problems with nouns being tagged as verbs and vice versa (or nouns being tagged as adverbs, or verbs being tagged as adjectives).
 
 ### Work-Arounds ###
 
@@ -285,7 +295,8 @@ Classification is the process, where the InputType is derived from the user`s in
 In order to use your own ClassificationTrainer, just implement the interface and pass the created object into the game component.
 
 ```HTML
-<tas-text-adventure [Game]="Game" [ClassificationTrainer]="MyClassificationTrainer">
+<tas-text-adventure [Game]="Game" 
+[ClassificationTrainer]="MyClassificationTrainer">
 </tas-text-adventure>
 ```
 
@@ -313,8 +324,6 @@ In order to remove the Build warnings regarding CommonJS, include the following 
         ]
     }
 ```
-
-<!-- TODO: install lodash-es, instead of lodash -->
 
 ## In Depth Look ##
 

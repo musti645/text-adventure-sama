@@ -58,6 +58,16 @@ export class CommandBuilder<ReturnBuilderType extends CommandContainingBuilder> 
         return this;
     }
 
+    public setEndsGame(): this {
+        this.Command.setEndGame(true);
+        return this;
+    }
+
+    public setResetsGame(): this {
+        this.Command.setResetsGame(true);
+        return this;
+    }
+
     public finish(): ReturnBuilderType {
         if (!this.Command.getTrigger()) {
             throw new BuilderError('Could not create Command. Trigger was not set.');

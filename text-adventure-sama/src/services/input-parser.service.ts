@@ -143,7 +143,10 @@ export class InputParserService {
         let commandsResult: ParseInputResult;
         this.Game.getCommands().some(command => {
             if (command.getTrigger().toLocaleLowerCase() === lowerCaseInput) {
-                commandsResult = new ParseInputResult(command.activate(), command.getUseTypeWritingAnimation());
+                commandsResult = new ParseInputResult(command.activate(),
+                    command.getUseTypeWritingAnimation(),
+                    command.getEndsGame(),
+                    command.getResetsGame());
                 return true;
             }
         });

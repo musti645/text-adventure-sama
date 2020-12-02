@@ -24,6 +24,7 @@ import { IClassificationTrainer } from '../classification/interfaces/classificat
 import { ClassificationTrainer } from '../classification/classification-trainer.service';
 
 import { InputParserService } from '../services/input-parser.service';
+import { parse } from 'path';
 
 /**
  * Main Component, that contains the input and output of the game.
@@ -99,7 +100,20 @@ export class TextAdventureComponent implements OnInit, OnChanges, OnDestroy {
 
     const parseResult = this.inputParserService.parseInput(inputString);
 
-    this.printOutput(parseResult.Result, parseResult.UseTypewriterAnimation).then(() => this.stopLoading());
+    this.printOutput(parseResult.Result, parseResult.UseTypewriterAnimation).then(() => {
+      
+      if(parseResult.IsEndGameResult){
+        this.endGame();
+        return;
+      }
+
+      if(parseResult.IsResetGameResult){
+        this.resetGame();
+        return;
+      }
+      
+      this.stopLoading();
+    });
   }
 
   OnGameReset(): void {
@@ -146,7 +160,11 @@ export class TextAdventureComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private resetGame(): void {
-    this.IsGameInitialized = false;
+    this.OnGameReset();
+  }
+
+  private endGame(): void {
+    this.OnGameEnd();
   }
 
   private get userInput(): FormControl {
