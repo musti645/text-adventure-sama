@@ -24,7 +24,6 @@ import { IClassificationTrainer } from '../classification/interfaces/classificat
 import { ClassificationTrainer } from '../classification/classification-trainer.service';
 
 import { InputParserService } from '../services/input-parser.service';
-import { parse } from 'path';
 
 /**
  * Main Component, that contains the input and output of the game.
