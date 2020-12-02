@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Game, GameBuilder, InteractionType } from 'text-adventure-sama';
 
 @Component({
@@ -6,11 +6,14 @@ import { Game, GameBuilder, InteractionType } from 'text-adventure-sama';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit{
   title = 'example-app';
   Game: Game;
 
   constructor() {
+  }
+
+  ngOnInit(): void {
     this.Game = this.buildGame();
   }
 

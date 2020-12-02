@@ -27,7 +27,7 @@
     "@angular/router": "~10.2.0",
     "natural": "^2.1.5",
     "rxjs": "~6.6.0",
-    "text-adventure-sama": "^0.0.6",
+    "text-adventure-sama": "^0.0.8",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.2"
   },
