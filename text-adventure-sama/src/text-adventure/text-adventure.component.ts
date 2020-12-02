@@ -1,16 +1,29 @@
-import { Component, OnInit, ElementRef, ViewChild, Input, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ElementRef,
+  ViewChild,
+  Input,
+  Output,
+  EventEmitter,
+  OnChanges,
+  OnDestroy,
+  SimpleChanges
+} from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+
 import { TextInputType } from '../models/other/text-input-type.enum';
 import { TextInput } from '../models/other/text-input.model';
 import { Game } from '../models/game.model';
-import { GameBuilder } from '../builder/game.builder';
-import { InputParserService } from '../services/input-parser.service';
-import { ClassificationTrainer } from '../classification/classification-trainer.service';
 import { GameResetEvent } from '../models/events/game-reset.event';
 import { GameEndEvent } from '../models/events/game-end.event';
 import { GameStartEvent } from '../models/events/game-start.event';
-import { GameError } from '../models/errors/game.error';
+import { GameInitStartEvent } from '../models/events/game-init-start.event';
+
 import { IClassificationTrainer } from '../classification/interfaces/classification-trainer.interface';
+import { ClassificationTrainer } from '../classification/classification-trainer.service';
+
+import { InputParserService } from '../services/input-parser.service';
 
 /**
  * Main Component, that contains the input and output of the game.
@@ -20,23 +33,23 @@ import { IClassificationTrainer } from '../classification/interfaces/classificat
   templateUrl: './text-adventure.component.html',
   styleUrls: ['./text-adventure.component.scss']
 })
-export class TextAdventureComponent implements OnInit {
+export class TextAdventureComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('input', { static: true }) inputElement: ElementRef;
-
-  OutputArray: TextInput[] = [];
-  IsLoading = false;
   @Input() UseTypewritingAnimation = true;
   @Input() TypewriterSpeed = 40;
 
   @Input() Game: Game;
+
   @Input() ClassificationTrainer: IClassificationTrainer;
 
+  @Output() OnGameInitStartEvent: EventEmitter<GameInitStartEvent> = new EventEmitter<GameInitStartEvent>();
   @Output() OnGameStartEvent: EventEmitter<GameStartEvent> = new EventEmitter<GameStartEvent>();
   @Output() OnGameResetEvent: EventEmitter<GameResetEvent> = new EventEmitter<GameResetEvent>();
   @Output() OnGameEndEvent: EventEmitter<GameEndEvent> = new EventEmitter<GameEndEvent>();
 
-  GameBuilder: GameBuilder;
-
+  // scope variables
+  OutputArray: TextInput[] = [];
+  IsLoading = false;
   InputForm: FormGroup = new FormGroup(
     {
       userInput: new FormControl({
@@ -48,22 +61,30 @@ export class TextAdventureComponent implements OnInit {
     }
   );
 
+  // other
+  private IsGameInitialized: boolean;
+
   constructor(private inputParserService: InputParserService) {
   }
 
   ngOnInit(): void {
-    if (!this.Game) {
-      throw new GameError('Game not found.');
+    this.startLoading();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (!changes.Game.currentValue || this.IsGameInitialized) {
+      return;
     }
 
-    if (!this.ClassificationTrainer) {
-      this.inputParserService.initialize(new ClassificationTrainer());
+    this.initGame();
+  }
+
+  ngOnDestroy(): void {
+    if (!this.Game) {
+      return;
     }
-    else {
-      this.inputParserService.initialize(this.ClassificationTrainer);
-    }
-    this.startLoading();
-    this.startGame();
+
+    this.Game.onDestroy();
   }
 
   OnSubmit(): void {
@@ -89,6 +110,45 @@ export class TextAdventureComponent implements OnInit {
     this.OnGameEndEvent.emit(new GameEndEvent(this.Game));
   }
 
+  OnGameStart(): void {
+    this.OnGameStartEvent.emit(new GameStartEvent(this.Game));
+  }
+
+  OnGameInitStart(): void {
+    this.OnGameInitStartEvent.emit(new GameInitStartEvent(this.Game));
+  }
+
+  private initGame(): void {
+    this.OnGameInitStart();
+
+    let classificationTrainer;
+
+    if (!this.ClassificationTrainer) {
+      classificationTrainer = new ClassificationTrainer();
+    }
+    else {
+      classificationTrainer = this.ClassificationTrainer;
+    }
+
+    this.IsGameInitialized = true;
+
+    this.inputParserService.initialize(classificationTrainer).then(() => {
+      this.startGame();
+    });
+  }
+
+  private startGame(): void {
+    this.inputParserService.setGame(this.Game);
+    this.printOutput(this.Game.getTitle())
+      .then(() => this.printOutput(this.Game.getIntroduction()))
+      .then(() => this.stopLoading())
+      .then(() => this.OnGameStart());
+  }
+
+  private resetGame(): void {
+    this.IsGameInitialized = false;
+  }
+
   private get userInput(): FormControl {
     return this.InputForm.get('userInput') as FormControl;
   }
@@ -104,12 +164,6 @@ export class TextAdventureComponent implements OnInit {
     setTimeout(() => {
       this.inputElement.nativeElement.focus();
     });
-  }
-
-  private startGame(): void {
-    this.inputParserService.setGame(this.Game);
-    this.OnGameStartEvent.emit(new GameStartEvent());
-    this.printOutput(this.Game.getTitle()).then(() => this.printOutput(this.Game.getIntroduction())).then(() => this.stopLoading());
   }
 
   private printOutput(output: string, useTypewriteAnimationOnOutput: boolean = true): Promise<void> {

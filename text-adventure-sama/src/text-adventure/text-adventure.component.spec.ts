@@ -1,14 +1,14 @@
-import { Component, ViewChild } from '@angular/core';
-import { ComponentFixture, discardPeriodicTasks, fakeAsync, flush, flushMicrotasks, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, discardPeriodicTasks, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { ParseInputResult } from 'src/models/other/parse-input-result.model';
-import { Scene } from 'src/models/scene.model';
+import { ParseInputResult } from '../models/other/parse-input-result.model';
+import { Scene } from '../models/scene.model';
 import { Game } from '../models/game.model';
 import { InputParserService } from 'src/services/input-parser.service';
 
 import { TextAdventureComponent } from './text-adventure.component';
-import { IClassificationTrainer } from 'src/classification/interfaces/classification-trainer.interface';
+import { IClassificationTrainer } from '../classification/interfaces/classification-trainer.interface';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 describe('TextAdventureComponent', () => {
   let fixture: ComponentFixture<TextAdventureComponent>;
@@ -31,26 +31,26 @@ describe('TextAdventureComponent', () => {
     })
       .compileComponents();
 
-      fixture = TestBed.createComponent(TextAdventureComponent);
-      component = fixture.componentInstance;
-      mockInputParserService = TestBed.inject(InputParserService);
-  
-      const game = new Game();
-      game.setTitle('Title');
-      game.setIntroduction('Intro');
-  
-      const scene = new Scene();
-      scene.setName('sceneName');
-      scene.setItemNotFoundResponse('item not found.');
-      scene.setActionNotRecognizedResponse('action not recognized response');
-      scene.setInvalidInputResponse('invalid input');
-      scene.setDescription('description of the scene');
-      game.getStage().addScene(scene);
-  
-      component.Game = game;
+    fixture = TestBed.createComponent(TextAdventureComponent);
+    component = fixture.componentInstance;
+    mockInputParserService = TestBed.inject(InputParserService);
+
+    const game = new Game();
+    game.setTitle('Title');
+    game.setIntroduction('Intro');
+
+    const scene = new Scene();
+    scene.setName('sceneName');
+    scene.setItemNotFoundResponse('item not found.');
+    scene.setActionNotRecognizedResponse('action not recognized response');
+    scene.setInvalidInputResponse('invalid input');
+    scene.setDescription('description of the scene');
+    game.getStage().addScene(scene);
+
+    component.Game = game;
   });
 
-  
+
   afterEach(() => {
     component.Game.getStage().unsubscribe();
     component.Game.getInventory().unsubscribe();
@@ -64,7 +64,7 @@ describe('TextAdventureComponent', () => {
   });
 
   // test input and output
-  it('#OnSubmit should print the input', async() => {
+  it('#OnSubmit should print the input', async () => {
     fixture.detectChanges();
     await fixture.whenStable();
 
@@ -135,6 +135,81 @@ describe('TextAdventureComponent', () => {
 
 });
 
+describe('TextAdventureComponent - Hosted', () => {
+  let fixture: ComponentFixture<TestHostComponent>;
+  let component: TestHostComponent;
+  let mockInputParserService: Partial<MockInputParserService>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [
+        FormsModule,
+        ReactiveFormsModule,
+      ],
+      declarations: [
+        TestHostComponent,
+        TextAdventureComponent
+      ],
+      providers: [
+        { provide: InputParserService, useClass: MockInputParserService }
+      ]
+    })
+      .compileComponents();
+
+    fixture = TestBed.createComponent(TestHostComponent);
+    component = fixture.componentInstance;
+    mockInputParserService = TestBed.inject(InputParserService);
+  });
+
+  afterEach(() => {
+    if (component.Game) {
+      component.Game.onDestroy();
+    }
+  });
+
+  it('should not start the game when there is no game set in the initialization of the component', (done) => {
+    fixture.detectChanges();
+    setTimeout(() => {
+      const outputLine = fixture.nativeElement.querySelectorAll('.output-line');
+      expect(outputLine).toHaveSize(0);
+      done();
+    });
+  });
+
+  it('should start initializing the game when there is a game set in the initialization of the component', fakeAsync((done) => {
+    spyOn(component, 'onGameInitStart');
+
+    component.buildGame();
+    fixture.detectChanges();
+    tick();
+
+    fixture.whenStable().then(() => {
+      expect(component.onGameInitStart).toHaveBeenCalled();
+      discardPeriodicTasks();
+    });
+  }));
+
+  it('should start initializing the game, when the game has been set afterwards', fakeAsync((done) => {
+    spyOn(component, 'onGameInitStart');
+    fixture.detectChanges();
+    // do nothing for a second
+    tick(1000);
+
+    expect(component.onGameInitStart).not.toHaveBeenCalled();
+
+    component.buildGame();
+    fixture.detectChanges();
+
+    tick();
+
+    fixture.whenStable().then(() => {
+      expect(component.onGameInitStart).toHaveBeenCalled();
+      discardPeriodicTasks();
+    });
+  }));
+
+});
+
 class MockInputParserService {
   public parseInputResult: ParseInputResult;
   public initializeResult: boolean;
@@ -161,4 +236,36 @@ class MockInputParserService {
     return this.Game;
   }
 
+}
+
+@Component({
+  selector: 'tas-host-component',
+  template: `<tas-text-adventure [Game]="Game" 
+  (OnGameInitStartEvent)="onGameInitStart($event)" 
+  [UseTypewritingAnimation]="false"></tas-text-adventure>`
+})
+export class TestHostComponent {
+  @ViewChild(TextAdventureComponent) textAdventureComponent: TextAdventureComponent;
+  Game: Game;
+
+  constructor() {
+  }
+  public onGameInitStart(): void {
+  }
+
+  public buildGame(): void {
+    const game = new Game();
+    game.setTitle('Title');
+    game.setIntroduction('Intro');
+
+    const scene = new Scene();
+    scene.setName('sceneName');
+    scene.setItemNotFoundResponse('item not found.');
+    scene.setActionNotRecognizedResponse('action not recognized response');
+    scene.setInvalidInputResponse('invalid input');
+    scene.setDescription('description of the scene');
+    game.getStage().addScene(scene);
+
+    this.Game = game;
+  }
 }

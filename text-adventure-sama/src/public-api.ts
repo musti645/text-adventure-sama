@@ -42,3 +42,9 @@ export * from './classification/interfaces/classifier.interface';
 export * from './text-adventure/text-adventure.module';
 export * from './text-adventure/text-adventure.component';
 
+/* Events */
+export * from './models/events/game-start.event';
+export * from './models/events/game-end.event';
+export * from './models/events/game-reset.event';
+export * from './models/events/game-init-start.event';
+

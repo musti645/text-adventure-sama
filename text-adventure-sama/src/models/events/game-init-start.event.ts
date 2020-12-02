@@ -1,6 +1,6 @@
 import { Game } from '../game.model';
 
-export class GameStartEvent {
+export class GameInitStartEvent {
     constructor(game: Game) {
     }
 }

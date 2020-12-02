@@ -205,4 +205,9 @@ export class Game {
     public setInventoryEmptyResponse(response: string): void {
         this.InventoryEmptyResponse = response;
     }
+
+    public onDestroy(): void {
+        this.getStage().unsubscribe();
+        this.getInventory().unsubscribe();
+    }
 }
