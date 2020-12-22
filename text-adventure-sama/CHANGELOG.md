@@ -11,6 +11,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Conditions for `GatewayActions` to pass through to another Scene
 - Name/Trigger collision check when adding new actions or items in a builder
 
+## [0.0.9] - 2020-12-22 ##
+
+### Added ###
+
+- Added mixins to change the theme of the text adventure
+
+### Changed ###
+
+- Using Angular Material theme to set typography and colors
+
 ## [0.0.8] - 2020-12-02 ##
 
 ### Fixed ###

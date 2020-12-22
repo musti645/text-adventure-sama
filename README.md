@@ -186,7 +186,6 @@ Items represent Objects within the game. This can be something fixed in a scene 
 Items can be used without being picked up.
 The player may have multiple instances of an Item in her inventory and use each of it 1 or more times.
 This maximum amount of uses and instances is free to choose for each Item.
-ene contains a certain number of actions, which the player can trigger.
 
 ### Actions ###
 
@@ -234,6 +233,22 @@ The different InteractionTypes have the following meaning:
 
 The game is a Text-Adventure, so it is played in a console-like window.
 The Interaction with the game is done via imperatives, e.g. `look around` or `use stick`
+
+### Interacting with Items ###
+
+You have multiple ways to interact with Items.
+`look at door` will give you the description of the Item.
+`use key` will trigger the `use` method of the Item.
+`pick up stone` will put the Item into your inventory, only if the item is in the Scene and can be picked up.
+
+The game is also able to understand other ways of trying to interact with Items, e.g. `inspect` instead of `look at`, but these ones are the most common.
+
+### Interacting with the Environment ###
+
+Actions are triggered by trying to match the trigger as much as possible.
+An action can be anything. You can have single word verbs as actions, such as `sleep`, or you can have multiple words like `open door.`
+
+To change the scene, you'd have to trigger a `GatewayAction`
 
 ## Customizations ##
 
@@ -295,7 +310,7 @@ Classification is the process, where the InputType is derived from the user`s in
 In order to use your own ClassificationTrainer, just implement the interface and pass the created object into the game component.
 
 ```HTML
-<tas-text-adventure [Game]="Game" 
+<tas-text-adventure [Game]="Game"
 [ClassificationTrainer]="MyClassificationTrainer">
 </tas-text-adventure>
 ```
@@ -304,7 +319,7 @@ In order to use your own ClassificationTrainer, just implement the interface and
 
 #### Using standardized input ####
 
-There's also the possibility to make sure, the user only uses standardized input, that has been used to train the classifier. This way, the InteractionTypes are more clearly distinguishable for the classifier and we don't get wront InteractionTypes for input.
+There's also the possibility to make sure, the user only uses standardized input, that has been used to train the classifier. This way, the InteractionTypes are more clearly distinguishable for the classifier and we don't get wrong InteractionTypes for input.
 
 ## Known Issues ##
 
