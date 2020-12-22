@@ -1,8 +1,8 @@
-import { BuilderError } from 'src/models/errors/builder.error';
-import { TestActionBuilder } from 'src/tests/test-action-builder';
-import { InteractionType } from 'src/models/interactions/interaction-type.enum';
-import { RandomResponseAction } from 'src/models/actions/random-response-action.model';
-import { RandomResponseActionBuilder } from 'src/builder/action-builders/random-response-action.builder';
+import { BuilderError } from '../../models/errors/builder.error';
+import { TestActionBuilder } from './test-action.builder';
+import { InteractionType } from '../../models/interactions/interaction-type.enum';
+import { RandomResponseAction } from '../../models/actions/random-response-action.model';
+import { RandomResponseActionBuilder } from './random-response-action.builder';
 
 
 describe('RandomResponseActionBuilder.', () => {

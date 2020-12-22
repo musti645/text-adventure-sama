@@ -1,10 +1,10 @@
-import { BuilderError } from 'src/models/errors/builder.error';
-import { TestActionBuilder } from 'src/tests/test-action-builder';
-import { ItemBuilder } from 'src/builder/item.builder';
-import { InGameItem } from 'src/models/item.model';
-import { InteractionType } from 'src/models/interactions/interaction-type.enum';
-import { ItemYieldingAction } from 'src/models/actions/item-yielding-action.model';
-import { ItemYieldingActionBuilder } from 'src/builder/action-builders/item-yielding-action.builder';
+import { BuilderError } from '../../models/errors/builder.error';
+import { TestActionBuilder } from './test-action.builder';
+import { ItemBuilder } from '../item.builder';
+import { InGameItem } from '../../models/item.model';
+import { InteractionType } from '../../models/interactions/interaction-type.enum';
+import { ItemYieldingAction } from '../../models/actions/item-yielding-action.model';
+import { ItemYieldingActionBuilder } from './item-yielding-action.builder';
 
 
 describe('ItemYieldingActionBuilder.', () => {

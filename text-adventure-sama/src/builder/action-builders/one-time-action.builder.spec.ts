@@ -1,8 +1,8 @@
-import { BuilderError } from 'src/models/errors/builder.error';
-import { TestActionBuilder } from 'src/tests/test-action-builder';
-import { InteractionType } from 'src/models/interactions/interaction-type.enum';
-import { OneTimeAction } from 'src/models/actions/one-time-action.model';
-import { OneTimeActionBuilder } from 'src/builder/action-builders/one-time-action.builder';
+import { BuilderError } from '../../models/errors/builder.error';
+import { TestActionBuilder } from './test-action.builder';
+import { InteractionType } from '../../models/interactions/interaction-type.enum';
+import { OneTimeAction } from '../../models/actions/one-time-action.model';
+import { OneTimeActionBuilder } from './one-time-action.builder';
 
 describe('OneTimeActionBuilder.', () => {
     let parentBuilder: TestActionBuilder;

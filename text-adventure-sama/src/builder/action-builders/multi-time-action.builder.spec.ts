@@ -1,5 +1,5 @@
 import { BuilderError } from '../../models/errors/builder.error';
-import { TestActionBuilder } from '../../tests/test-action-builder';
+import { TestActionBuilder } from './test-action.builder';
 import { InteractionType } from '../../models/interactions/interaction-type.enum';
 import { MultiTimeAction } from '../../models/actions/multi-time-action.model';
 import { MultiTimeActionBuilder } from './multi-time-action.builder';

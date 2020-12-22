@@ -1,6 +1,6 @@
 import { BaseActionBuilder, } from './base-action.builder';
 import { Action } from '../../models/actions/action.model';
-import { TestActionBuilder } from '../../tests/test-action-builder';
+import { TestActionBuilder } from './test-action.builder';
 import { ActionContainingBuilder } from '../interfaces/action-containing.builder';
 import { BuilderError } from '../../models/errors/builder.error';
 

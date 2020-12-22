@@ -1,6 +1,6 @@
 import { GatewayAction } from '../../models/actions/gateway-action.model';
 import { BuilderError } from '../../models/errors/builder.error';
-import { TestActionBuilder } from '../../tests/test-action-builder';
+import { TestActionBuilder } from './test-action.builder';
 import { GatewayActionBuilder } from './gateway-action.builder';
 
 describe('GatewayActionBuilder.', () => {

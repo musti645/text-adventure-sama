@@ -1,5 +1,5 @@
 import { BuilderError } from '../../models/errors/builder.error';
-import { TestActionBuilder } from '../../tests/test-action-builder';
+import { TestActionBuilder } from './test-action.builder';
 import { ItemConsumingAction } from '../../models/actions/item-consuming-action.model';
 import { ItemBuilder } from '../item.builder';
 import { InGameItem } from '../../models/item.model';

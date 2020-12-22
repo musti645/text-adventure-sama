@@ -1,14 +1,14 @@
-import { BaseActionBuilder } from 'src/builder/action-builders/base-action.builder';
-import { GatewayActionBuilder } from 'src/builder/action-builders/gateway-action.builder';
-import { ItemConsumingActionBuilder } from 'src/builder/action-builders/item-consuming-action.builder';
-import { ItemRemovingActionBuilder } from 'src/builder/action-builders/item-removing-action.builder';
-import { ItemYieldingActionBuilder } from 'src/builder/action-builders/item-yielding-action.builder';
-import { MultiTimeActionBuilder } from 'src/builder/action-builders/multi-time-action.builder';
-import { OneTimeActionBuilder } from 'src/builder/action-builders/one-time-action.builder';
-import { RandomResponseActionBuilder } from 'src/builder/action-builders/random-response-action.builder';
-import { BaseBuilder } from 'src/builder/base.builder';
-import { ActionContainingBuilder } from 'src/builder/interfaces/action-containing.builder';
-import { Action } from 'src/models/actions/action.model';
+import { BaseActionBuilder } from './base-action.builder';
+import { GatewayActionBuilder } from './gateway-action.builder';
+import { ItemConsumingActionBuilder } from './item-consuming-action.builder';
+import { ItemRemovingActionBuilder } from './item-removing-action.builder';
+import { ItemYieldingActionBuilder } from './item-yielding-action.builder';
+import { MultiTimeActionBuilder } from './multi-time-action.builder';
+import { OneTimeActionBuilder } from './one-time-action.builder';
+import { RandomResponseActionBuilder } from './random-response-action.builder';
+import { BaseBuilder } from '../base.builder';
+import { ActionContainingBuilder } from '../interfaces/action-containing.builder';
+import { Action } from '../../models/actions/action.model';
 
 export class TestActionBuilder extends BaseBuilder implements ActionContainingBuilder {
     public Actions: Action[] = [];

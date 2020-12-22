@@ -1,10 +1,10 @@
-import { BuilderError } from 'src/models/errors/builder.error';
-import { TestActionBuilder } from 'src/tests/test-action-builder';
-import { ItemBuilder } from 'src/builder/item.builder';
-import { InGameItem } from 'src/models/item.model';
-import { InteractionType } from 'src/models/interactions/interaction-type.enum';
-import { ItemRemovingAction } from 'src/models/actions/item-removing-action.model';
-import { ItemRemovingActionBuilder } from 'src/builder/action-builders/item-removing-action.builder';
+import { BuilderError } from '../../models/errors/builder.error';
+import { TestActionBuilder } from './test-action.builder';
+import { InteractionType } from '../../models/interactions/interaction-type.enum';
+import { ItemRemovingAction } from '../../models/actions/item-removing-action.model';
+import { ItemRemovingActionBuilder } from './item-removing-action.builder';
+import { InGameItem } from '../../models/item.model';
+import { ItemBuilder } from '../item.builder';
 
 describe('ItemRemovingActionBuilder.', () => {
     let parentBuilder: TestActionBuilder;
