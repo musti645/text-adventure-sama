@@ -15,6 +15,9 @@ export class ItemConsumingActionBuilder<ReturnBuilderType extends ActionContaini
     }
 
 
+    /**
+     * Determines if the action was triggered yet.
+     */
     public setWasTrigered(wasTriggered: boolean): this {
         if (wasTriggered === undefined || wasTriggered === null) {
             throw new EvalError('WasTriggered was not set.');
@@ -23,6 +26,9 @@ export class ItemConsumingActionBuilder<ReturnBuilderType extends ActionContaini
         return this;
     }
 
+    /**
+     * Sets the response, that is returned when after the action was triggered.
+     */
     public setResponseAfterUse(response: string): this {
         if (!response || response === '') {
             throw new EvalError('No Response found.');
@@ -33,6 +39,9 @@ export class ItemConsumingActionBuilder<ReturnBuilderType extends ActionContaini
     }
 
 
+    /**
+     * Set the interaction type of the action.
+     */
     public setInteractionType(type: InteractionType): this {
         if (!type || !Object.values(InteractionType).includes(type)) {
             throw new EvalError('InteractionType not set.');
@@ -42,6 +51,11 @@ export class ItemConsumingActionBuilder<ReturnBuilderType extends ActionContaini
         return this;
     }
 
+    /**
+     * Called by the ItemBuilder, that adds a finished item to this action.
+     * 
+     * DO NOT use this function, as the necessary checks have not been performed on the item.
+     */
     public addItemToBuilder(item: InGameItem): void {
         if (!item) {
             throw new BuilderError('Item could not be added to the Action. Item was not set.');
@@ -49,10 +63,20 @@ export class ItemConsumingActionBuilder<ReturnBuilderType extends ActionContaini
         this.Action.setItem(item);
     }
 
+    /**
+     * Add an item to the inventory.
+     * 
+     * Returns an ItemBuilder.
+     */
     public addItem(item?: InGameItem): ItemBuilder<ItemConsumingActionBuilder<ReturnBuilderType>> {
         return new ItemBuilder<ItemConsumingActionBuilder<ReturnBuilderType>>(this, item);
     }
-
+    
+    /**
+     * Called by the finish method.
+     * 
+     * DO NOT call this manually.
+     */
     public onFinish(): void {
         if (!this.Action.getItem()) {
             throw new BuilderError('Action creation could not be finished. Item was not set.');

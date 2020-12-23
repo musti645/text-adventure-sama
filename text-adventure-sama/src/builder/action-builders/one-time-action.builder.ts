@@ -12,6 +12,9 @@ export class OneTimeActionBuilder<ReturnBuilderType extends ActionContainingBuil
         super(builder, new OneTimeAction());
     }
 
+    /**
+     * Determines if the action was triggered yet.
+     */
     public setWasTrigered(wasTriggered: boolean): this {
         if (wasTriggered === undefined || wasTriggered === null) {
             throw new EvalError('WasTriggered was not set.');
@@ -19,7 +22,10 @@ export class OneTimeActionBuilder<ReturnBuilderType extends ActionContainingBuil
         this.Action.setWasTriggered(wasTriggered);
         return this;
     }
-
+    
+    /**
+     * Sets the response, that is returned when after the action was triggered.
+     */
     public setResponseAfterUse(response: string): this {
         if (!response || response === '') {
             throw new EvalError('No Response found.');
@@ -29,6 +35,9 @@ export class OneTimeActionBuilder<ReturnBuilderType extends ActionContainingBuil
         return this;
     }
 
+    /**
+     * Set the interaction type of the action.
+     */
     public setInteractionType(type: InteractionType): this {
         if (!type || !Object.values(InteractionType).includes(type)) {
             throw new EvalError('InteractionType not set.');
@@ -37,7 +46,12 @@ export class OneTimeActionBuilder<ReturnBuilderType extends ActionContainingBuil
         this.Action.setInteractionType(type);
         return this;
     }
-
+    
+    /**
+     * Called by the finish method.
+     * 
+     * DO NOT call this manually.
+     */
     public onFinish(): void {
         if (!this.Action.getResponseAfterUse()) {
             throw new BuilderError('Action creation could not be finished. ResponseAfterUse was not set.');

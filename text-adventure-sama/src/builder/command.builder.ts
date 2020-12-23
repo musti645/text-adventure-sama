@@ -13,6 +13,10 @@ export class CommandBuilder<ReturnBuilderType extends CommandContainingBuilder> 
         this.Builder = builder;
     }
 
+    /**
+     * Sets the trigger of the command.
+     * The trigger is a string, that has to be exactly match to activate (trigger) this command.
+     */
     public setTrigger(trigger: string): this {
         if (!trigger) {
             throw new EvalError('Trigger was undefined.');
@@ -22,6 +26,10 @@ export class CommandBuilder<ReturnBuilderType extends CommandContainingBuilder> 
         return this;
     }
 
+    /**
+     * Set the response, that is returned when the command was triggered.
+     * Either use this OR the ResponseFunction.
+     */
     public setResponse(response: string): this {
         if (!response) {
             throw new EvalError('Response was undefined.');
@@ -31,6 +39,11 @@ export class CommandBuilder<ReturnBuilderType extends CommandContainingBuilder> 
         return this;
     }
 
+    /**
+     * Sets the function, that is called when the command was triggered.
+     * This function is supposed to return the response.
+     * You could use it to return different responses or to generate a response out of something.
+     */
     public setResponseFunction(respFunc: () => string): this {
         if (!respFunc) {
             throw new EvalError('ResponseFunction was undefined.');
@@ -40,6 +53,11 @@ export class CommandBuilder<ReturnBuilderType extends CommandContainingBuilder> 
         return this;
     }
 
+    /**
+     * Determines if this specific command will use the TypeWritingAnimation when its being printed.
+     * 
+     * This is useful for long responses, like a "help" command.
+     */
     public setUseTypeWritingAnimation(use: boolean): this {
         if (use === undefined || use === null) {
             throw new EvalError('UseTypeWritingAnimation was undefined.');
@@ -49,6 +67,11 @@ export class CommandBuilder<ReturnBuilderType extends CommandContainingBuilder> 
         return this;
     }
 
+    /**
+     * Sets the description of this command.
+     * The description is currently used by the predefined "help" command.
+     * @param descr 
+     */
     public setDescription(descr: string): this {
         if (!descr) {
             throw new EvalError('Description was undefined');
@@ -58,21 +81,36 @@ export class CommandBuilder<ReturnBuilderType extends CommandContainingBuilder> 
         return this;
     }
 
+    /**
+     * Determines if this command ends the game when triggered.
+     */
     public setEndsGame(): this {
         this.Command.setEndGame(true);
         return this;
     }
 
+    /**
+     * Determines if this command resets the game when triggered.
+     */
     public setResetsGame(): this {
         this.Command.setResetsGame(true);
         return this;
     }
 
+    /**
+     * Determines if this command clears the output of the game when triggered.
+     */
     public setClearsOutput(): this {
         this.Command.setClearsOutput(true);
         return this;
     }
 
+    /**
+     * The finish method makes all the necessary checks on the current creation process 
+     * and throws errors, if something is undefined or falsy.
+     * 
+     * It returns the builder, that started this creation process.
+     */
     public finish(): ReturnBuilderType {
         if (!this.Command.getTrigger()) {
             throw new BuilderError('Could not create Command. Trigger was not set.');

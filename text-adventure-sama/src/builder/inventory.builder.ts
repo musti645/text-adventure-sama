@@ -19,10 +19,20 @@ export class InventoryBuilder extends BaseBuilder implements ItemContainingBuild
         this.Inventory = new Inventory();
     }
 
+    /**
+     * Add an item to the inventory.
+     * 
+     * Returns an ItemBuilder.
+     */
     public addItem(item?: InGameItem): ItemBuilder<InventoryBuilder> {
         return new ItemBuilder<InventoryBuilder>(this, item);
     }
 
+    /**
+     * Called by the ItemBuilder, that adds a finished item to the inventory.
+     * 
+     * DO NOT use this function, as the necessary checks have not been performed on the item.
+     */
     addItemToBuilder(item: InGameItem): void {
         if (!item) {
             throw new BuilderError('Could not add Item to Inventory. Item was not set.');
@@ -34,6 +44,12 @@ export class InventoryBuilder extends BaseBuilder implements ItemContainingBuild
     }
 
 
+    /**
+     * The finish method makes all the necessary checks on the current creation process 
+     * and throws errors, if something is undefined or falsy.
+     * 
+     * It returns the builder, that started this creation process.
+     */
     public finish(): GameBuilder {
         if (this.Game.getInventory()) {
             this.Game.getInventory().unsubscribe();

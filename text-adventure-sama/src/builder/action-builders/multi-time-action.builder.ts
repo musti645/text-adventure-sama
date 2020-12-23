@@ -12,6 +12,9 @@ export class MultiTimeActionBuilder<ReturnBuilderType extends ActionContainingBu
         super(builder, new MultiTimeAction());
     }
 
+    /**
+     * Sets the number of times left, that this item can be triggered
+     */
     public setUsagesLeft(count: number): this {
         if (count === undefined || count <= 0) {
             throw new EvalError('UsagesLeft Value has to be greater than 0.');
@@ -25,7 +28,9 @@ export class MultiTimeActionBuilder<ReturnBuilderType extends ActionContainingBu
         return this;
     }
 
-
+    /**
+     * Set the interaction type of the action.
+     */
     public setInteractionType(type: InteractionType): this {
         if (!type || !Object.values(InteractionType).includes(type)) {
             throw new EvalError('InteractionType not set.');
@@ -35,6 +40,9 @@ export class MultiTimeActionBuilder<ReturnBuilderType extends ActionContainingBu
         return this;
     }
 
+    /**
+     * Sets the maximum number of times this action can be triggered
+     */
     public setMaximumUsages(count: number): this {
         if (count === undefined || count <= 0) {
             throw new EvalError('MaximumUsages Value has to be greater than 0.');
@@ -54,6 +62,13 @@ export class MultiTimeActionBuilder<ReturnBuilderType extends ActionContainingBu
         return this;
     }
 
+    /**
+     * Set the responses, that are returned each time this action is triggered.
+     * Note: The order of the responses is end to beginning.
+     * So if the usages left is 5, the responses[4] will be returned (since arrays start with 0)
+     * 
+     * Once the usages left are 0, the "normal" response is returned
+     */
     public setResponses(responses: string[]): this {
         if (!responses) {
             throw new EvalError('Invalid Value for Responses. Has to be an Array of Strings.');
@@ -69,6 +84,11 @@ export class MultiTimeActionBuilder<ReturnBuilderType extends ActionContainingBu
         return this;
     }
 
+    /**
+     * Called by the finish method.
+     * 
+     * DO NOT call this manually.
+     */
     public onFinish(): void {
         if (!this.Action.getUsagesLeft()) {
             throw new BuilderError('Action creation could not be finished. UsagesLeft was not set.');
