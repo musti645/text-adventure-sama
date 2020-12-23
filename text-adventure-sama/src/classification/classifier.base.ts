@@ -32,14 +32,17 @@ export class BaseClassifier<ReturnType> implements IClassifier<ReturnType> {
     protected FilterAllowedTags: boolean;
     protected Tokenizer: natural.Tokenizer;
     protected POSTagger: natural.BrillPOSTagger;
+    protected IsCaseSensitive: boolean;
 
-    constructor(threshold: number = 0.7, tokenizer?: natural.Tokenizer, filterAllowedTags: boolean = true) {
+    constructor(threshold: number = 0.7, tokenizer?: natural.Tokenizer,
+        filterAllowedTags: boolean = true, isCaseSensitive: boolean = false) {
         this.Documents = [];
         this.Features = [];
         this.Labels = [];
         this.ClassificationLabels = [];
         this.ClassificationThreshold = threshold;
         this.FilterAllowedTags = filterAllowedTags;
+        this.IsCaseSensitive = isCaseSensitive;
 
         const lexicon = new natural.Lexicon(this.language, this.defaultCategory, this.defaultCategoryCapitalized);
         const ruleSet = new natural.RuleSet('EN');
@@ -57,10 +60,22 @@ export class BaseClassifier<ReturnType> implements IClassifier<ReturnType> {
         if (!document || document.length <= 0) {
             throw new ClassificationError('Document has to be of type string[] and may not be empty.');
         }
+        
+        const documentInvalid = document.some(val => {
+            if (!val || val === '' || typeof(val) !== 'string') {
+                return true;
+            }
+        });
+
+        if (documentInvalid){
+            throw new ClassificationError('The values of the Document have to be defined and of type string');
+        }
 
         if (!label) {
             throw new ClassificationError('Label has to be defined.');
         }
+
+
 
         this.Labels.push(label);
 
@@ -70,7 +85,7 @@ export class BaseClassifier<ReturnType> implements IClassifier<ReturnType> {
     }
 
     addDocument(document: string, label: ReturnType) {
-        if (!document) {
+        if (!document || typeof(document) !== 'string') {
             throw new ClassificationError('Document has to be of type string and may not be empty.');
         }
 
@@ -120,6 +135,9 @@ export class BaseClassifier<ReturnType> implements IClassifier<ReturnType> {
 
     protected documentToFeature(document: ClassificationDocument<ReturnType>): ClassificationFeature<ReturnType>[] {
         const features = [];
+        if (!this.IsCaseSensitive) {
+            document.text = document.text.toLocaleLowerCase();
+        }
         const taggedTokens: TaggedToken[] = this.POSTagger.tag(this.Tokenizer.tokenize(document.text)).taggedWords;
         for (const token of taggedTokens) {
             features.push(new ClassificationFeature(document.label, token.token, token.tag));
@@ -151,10 +169,15 @@ export class BaseClassifier<ReturnType> implements IClassifier<ReturnType> {
         for (const label of this.ClassificationLabels) {
             classificationResultsMap[label.labelId] = new ClassificationResult<ReturnType>(label.label);
         }
+
+        if (!this.IsCaseSensitive) {
+            input = input.toLocaleLowerCase();
+        }
+
         // tokenize and tag words
         let taggedTokens: TaggedToken[] = this.POSTagger.tag(this.Tokenizer.tokenize(input)).taggedWords;
 
-        if(this.FilterAllowedTags){
+        if (this.FilterAllowedTags) {
             taggedTokens = taggedTokens.filter(val => this.AllowedTags.includes(val.tag));
         }
 
