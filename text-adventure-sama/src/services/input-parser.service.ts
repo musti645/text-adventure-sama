@@ -6,6 +6,7 @@ import * as natural from 'natural';
 import { Action } from '../models/actions/action.model';
 import { InGameItem } from '../models/item.model';
 import { Game } from '../models/game.model';
+import { Command } from '../models/command.model';
 
 import { InteractionType } from '../models/interactions/interaction-type.enum';
 import { ParseInputResult } from '../models/other/parse-input-result.model';
@@ -28,6 +29,8 @@ import { GoToClassificationHelper } from '../classification/go-to-classification
 @Injectable()
 export class InputParserService {
     protected Game: Game;
+    protected IsCaseSensitive: boolean;
+
     private Tokenizer: natural.WordTokenizer;
     private Classifier: natural.BayesClassifier;
     private Spellcheck: natural.Spellcheck;
@@ -72,6 +75,10 @@ export class InputParserService {
 
     public setGame(game: Game): void {
         this.Game = game;
+    }
+
+    public setCaseSensitivity(val: boolean): void {
+        this.IsCaseSensitive = val;
     }
 
     /**
@@ -138,18 +145,24 @@ export class InputParserService {
     }
 
     protected getCommandsResponse(input: string): ParseInputResult {
-        const lowerCaseInput = input.toLocaleLowerCase();
-
         let commandsResult: ParseInputResult;
-        this.Game.getCommands().some(command => {
-            if (command.getTrigger().toLocaleLowerCase() === lowerCaseInput) {
-                commandsResult = new ParseInputResult(command.activate(),
-                    command.getUseTypeWritingAnimation(),
-                    command.getEndsGame(),
-                    command.getResetsGame());
-                return true;
-            }
-        });
+
+        let matchingCommand: Command;
+
+        if (!this.IsCaseSensitive) {
+            input = input.toLocaleLowerCase();
+            matchingCommand = this.Game.getCommands().find(command => command.getTrigger().toLocaleLowerCase() === input);
+        }
+        else {
+            matchingCommand = this.Game.getCommands().find(command => command.getTrigger() === input);
+        }
+
+        if (matchingCommand) {
+            commandsResult = new ParseInputResult(matchingCommand.activate(),
+                matchingCommand.getUseTypeWritingAnimation(),
+                matchingCommand.getEndsGame(),
+                matchingCommand.getResetsGame());
+        }
 
         return commandsResult;
     }
@@ -280,7 +293,7 @@ export class InputParserService {
     }
 
     protected getLikelyAction(input: string, actions: Action[], additionalClassificationDocuments?: string[]): Action {
-        const actionClassifier = new BaseClassifier<Action>(0.75, this.Tokenizer);
+        const actionClassifier = new BaseClassifier<Action>(0.75, this.Tokenizer, undefined, this.IsCaseSensitive);
         for (const action of actions) {
             const tokenizedTrigger: string[] = this.Tokenizer.tokenize(action.getTrigger());
             actionClassifier.addDocuments(tokenizedTrigger, action);
@@ -301,7 +314,7 @@ export class InputParserService {
     }
 
     protected getLikelyItem(input: string, items: InGameItem[], additionalClassificationDocuments?: string[]): InGameItem {
-        const itemClassifier = new BaseClassifier<InGameItem>(0.75, this.Tokenizer)
+        const itemClassifier = new BaseClassifier<InGameItem>(0.75, this.Tokenizer, undefined, this.IsCaseSensitive)
         for (const item of items) {
             const tokenizedName: string[] = this.Tokenizer.tokenize(item.getName());
             itemClassifier.addDocuments(tokenizedName, item);

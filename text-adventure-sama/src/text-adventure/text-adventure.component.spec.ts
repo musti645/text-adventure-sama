@@ -215,6 +215,30 @@ describe('TextAdventureComponent - Hosted', () => {
     });
   }));
 
+  it('should start initializing the game and set CaseSensitivity on the service to true', fakeAsync((done) => {
+    component.isCaseSensitive = true;
+    component.buildGame();
+    fixture.detectChanges();
+    tick();
+
+    fixture.whenStable().then(() => {
+      expect(mockInputParserService.getCaseSensitivty()).toBeTrue();
+      discardPeriodicTasks();
+    });
+  }));
+
+  it('should start initializing the game and set CaseSensitivity on the service to false', fakeAsync((done) => {
+    component.isCaseSensitive = false;
+    component.buildGame();
+    fixture.detectChanges();
+    tick();
+
+    fixture.whenStable().then(() => {
+      expect(mockInputParserService.getCaseSensitivty()).toBeFalse();
+      discardPeriodicTasks();
+    });
+  }));
+
   it('should start initializing the game, when the game has been set afterwards', fakeAsync((done) => {
     spyOn(component, 'onGameInitStart');
     fixture.detectChanges();
@@ -233,12 +257,12 @@ describe('TextAdventureComponent - Hosted', () => {
       discardPeriodicTasks();
     });
   }));
-
 });
 
 class MockInputParserService {
   public parseInputResult: ParseInputResult;
   public initializeResult: boolean;
+  public isCaseSensitive: boolean;
   protected Game: Game;
 
   constructor() {
@@ -262,17 +286,28 @@ class MockInputParserService {
     return this.Game;
   }
 
+  public setCaseSensitivity(val: boolean): void {
+    this.isCaseSensitive = val;
+  }
+
+  public getCaseSensitivty(): boolean {
+    return this.isCaseSensitive;
+  }
+
 }
 
 @Component({
   selector: 'tas-host-component',
   template: `<tas-text-adventure [Game]="Game" 
   (OnGameInitStartEvent)="onGameInitStart($event)" 
-  [UseTypewritingAnimation]="false"></tas-text-adventure>`
+  [UseTypewritingAnimation]="false"
+  [IsCaseSensitive]="isCaseSensitive"></tas-text-adventure>`
 })
 export class TestHostComponent {
   @ViewChild(TextAdventureComponent) textAdventureComponent: TextAdventureComponent;
   Game: Game;
+
+  public isCaseSensitive: boolean;
 
   constructor() {
   }

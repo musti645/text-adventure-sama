@@ -37,6 +37,7 @@ export class TextAdventureComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('input', { static: true }) inputElement: ElementRef;
   @Input() UseTypewritingAnimation = true;
   @Input() TypewriterSpeed = 40;
+  @Input() IsCaseSensitive = false;
 
   @Input() Game: Game;
 
@@ -156,6 +157,7 @@ export class TextAdventureComponent implements OnInit, OnChanges, OnDestroy {
 
     this.IsGameInitialized = true;
     this.inputParserService.setGame(this.Game);
+    this.inputParserService.setCaseSensitivity(this.IsCaseSensitive);
     this.inputParserService.initialize(classificationTrainer).then(() => {
       this.startGame();
     });
@@ -209,7 +211,7 @@ export class TextAdventureComponent implements OnInit, OnChanges, OnDestroy {
       if (useTypewriteAnimationOnOutput && this.UseTypewritingAnimation) {
         const outputLines = output.split('\r\n');
         // we create a promise chain, in order to avoid printing new lines written as '<br>'
-        let outputPromise = new Promise((resolve) => resolve());
+        let outputPromise = new Promise<void>((resolve) => resolve());
         for (const singleLine of outputLines) {
           outputPromise = outputPromise.then(() => this.printLineAnimated(singleLine));
         }

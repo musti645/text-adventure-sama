@@ -15,11 +15,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added ###
 
-- Added mixins to change the theme of the text adventure
+- Mixins to change the theme of the text adventure
+- Tests for the BaseClassifier
+- Possibility to set case sensitivity in the component via an input field
 
 ### Changed ###
 
 - Using Angular Material theme to set typography and colors
+
+### Fixed ###
+
+- Proper case sensitivity in `BaseClassifier`
 
 ## [0.0.8] - 2020-12-02 ##
 
