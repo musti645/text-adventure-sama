@@ -3,6 +3,8 @@ import { ItemContainingBuilder } from './interfaces/item-containing.builder';
 import { ItemBuilder } from './item.builder';
 import { InGameItem } from '../models/item.model';
 import { BuilderError } from '../models/errors/builder.error';
+import { Scene } from '../models/scene.model';
+import { Inventory } from '../models/inventory.model';
 
 describe('ItemBuilder.', () => {
     let parentBuilder: TestItemBuilder;
@@ -32,6 +34,15 @@ describe('ItemBuilder.', () => {
     it('#setCanUseFunction should set the CanUseFunction of the Scene to the passed Value', () => {
         testBuilder.setCanUseFunction(testItem.getCanUseFunction());
         expect(testItem.getCanUseFunction()).toBe(testItem.getCanUseFunction());
+    });
+
+    // setCannotUse
+    it('#setCannotUse should set the CanUseFunction to return false each time and should allow to NOT set the NoUsagesLeftResponse', () => {
+        testBuilder.setCannotUse();
+        expect(testBuilder.getItem().getCanUseFunction()).toBeDefined();
+        const canUseFunction = testBuilder.getItem().getCanUseFunction();
+        const result = canUseFunction(testItem, new Scene(), new Inventory());
+        expect(result).toBeFalse();
     });
 
     // CannotPickUpResponse
@@ -280,8 +291,8 @@ describe('ItemBuilder.', () => {
     });
 
     // finish
-    it('#finish should throw a builder error when trying to finish creation process of an scene without a Name'
-        + ' AND not add the scene to the parent builder.', () => {
+    it('#finish should throw a builder error when trying to finish creation process of an item without a Name'
+        + ' AND not add the item to the parent builder.', () => {
             testBuilder
                 .setCanPickUp(testItem.getCanPickUp())
                 .setCanUseFunction(testItem.getCanUseFunction())
@@ -298,8 +309,8 @@ describe('ItemBuilder.', () => {
             expect(parentBuilder.Items.length).toBe(0);
         });
 
-    it('#finish should throw a builder error when trying to finish creation process of an scene without a Description'
-        + ' AND not add the scene to the parent builder.', () => {
+    it('#finish should throw a builder error when trying to finish creation process of an item without a Description'
+        + ' AND not add the item to the parent builder.', () => {
             testBuilder
                 .setCanPickUp(testItem.getCanPickUp())
                 .setCanUseFunction(testItem.getCanUseFunction())
@@ -316,8 +327,8 @@ describe('ItemBuilder.', () => {
             expect(parentBuilder.Items.length).toBe(0);
         });
 
-    it('#finish should throw a builder error when trying to finish creation process of an scene without a CannotPickUpResponse'
-        + ' AND not add the scene to the parent builder.', () => {
+    it('#finish should throw a builder error when trying to finish creation process of an item without a CannotPickUpResponse'
+        + ' AND not add the item to the parent builder.', () => {
             testBuilder
                 .setCanPickUp(false)
                 .setCanUseFunction(testItem.getCanUseFunction())
@@ -334,8 +345,8 @@ describe('ItemBuilder.', () => {
             expect(parentBuilder.Items.length).toBe(0);
         });
 
-    it('#finish should throw a builder error when trying to finish creation process of an scene without a InSceneDescription'
-        + ' AND not add the scene to the parent builder.', () => {
+    it('#finish should throw a builder error when trying to finish creation process of an item without a InSceneDescription'
+        + ' AND not add the item to the parent builder.', () => {
             testBuilder
                 .setCanPickUp(testItem.getCanPickUp())
                 .setCanUseFunction(testItem.getCanUseFunction())
@@ -352,8 +363,8 @@ describe('ItemBuilder.', () => {
             expect(parentBuilder.Items.length).toBe(0);
         });
 
-    it('#finish should throw a builder error when trying to finish creation process of an scene without a ItemUsedResponse'
-        + ' AND not add the scene to the parent builder.', () => {
+    it('#finish should throw a builder error when trying to finish creation process of an item without a ItemUsedResponse'
+        + ' AND not add the item to the parent builder.', () => {
             testBuilder
                 .setCanPickUp(testItem.getCanPickUp())
                 .setCanUseFunction(testItem.getCanUseFunction())
@@ -369,8 +380,8 @@ describe('ItemBuilder.', () => {
             expect(parentBuilder.Items.length).toBe(0);
         });
 
-    it('#finish should throw a builder error when trying to finish creation process of an scene without a NoUsagesLeftResponse'
-        + ' AND not add the scene to the parent builder.', () => {
+    it('#finish should throw a builder error when trying to finish creation process of an item without a NoUsagesLeftResponse'
+        + ' AND not add the item to the parent builder.', () => {
             testBuilder
                 .setCanPickUp(testItem.getCanPickUp())
                 .setCanUseFunction(testItem.getCanUseFunction())
@@ -386,8 +397,8 @@ describe('ItemBuilder.', () => {
             expect(parentBuilder.Items.length).toBe(0);
         });
 
-    it('#finish should throw a builder error when trying to finish creation process of an scene without a CannotUseItemResponse'
-        + ' AND not add the scene to the parent builder.', () => {
+    it('#finish should throw a builder error when trying to finish creation process of an item without a CannotUseItemResponse'
+        + ' AND not add the item to the parent builder.', () => {
             testBuilder
                 .setCanPickUp(testItem.getCanPickUp())
                 .setCanUseFunction(testItem.getCanUseFunction())
@@ -405,8 +416,8 @@ describe('ItemBuilder.', () => {
         });
 
 
-    it('#finish should throw a builder error when trying to finish creation process of an scene without a CannotUseItemResponse'
-        + ' AND not add the scene to the parent builder.', () => {
+    it('#finish should create an item with setCannotUse function called but NoUsagesLeftResponse not set'
+        + ' AND add it to the parent builder', () => {
             testBuilder
                 .setCanPickUp(testItem.getCanPickUp())
                 .setCanUseFunction(testItem.getCanUseFunction())
@@ -417,14 +428,19 @@ describe('ItemBuilder.', () => {
                 .setItemUsedResponse(testItem.getItemUsedResponse())
                 .setMaximumUsages(testItem.getMaximumUsages())
                 .setName(testItem.getName())
-                .setNoUsagesLeftResponse(testItem.getNoUsagesLeftResponse())
+                .setCannotUse()
                 .setUsagesLeft(testItem.getUsagesLeft());
 
             expect(() => testBuilder.finish()).not.toThrowError(BuilderError);
             expect(parentBuilder.Items.length).toBe(1);
 
+            delete (testItem as any).NoUsagesLeftResponse;
+            delete (testItem as any).CanUseFunction;
+            delete (parentBuilder.Items[0] as any).CanUseFunction;
+
             expect(parentBuilder.Items[0]).toEqual(testItem);
         });
+
 });
 
 class ItemBuilderChild extends ItemBuilder<TestItemBuilder> {

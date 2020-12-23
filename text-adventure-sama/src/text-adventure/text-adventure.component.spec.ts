@@ -191,6 +191,8 @@ describe('TextAdventureComponent - Hosted', () => {
     if (component.Game) {
       component.Game.onDestroy();
     }
+    mockInputParserService.getGame()?.getStage().unsubscribe();
+    mockInputParserService.getGame()?.getInventory().unsubscribe();
   });
 
   it('should not start the game when there is no game set in the initialization of the component', (done) => {

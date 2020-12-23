@@ -1,10 +1,12 @@
 import { first } from 'rxjs/operators';
 import { InGameItem } from '../item.model';
-import { ItemEventService } from 'src/services/item-event.service';
+import { ItemEventService } from '../../services/item-event.service';
 import { ItemRemovingAction } from './item-removing-action.model';
+import { Subscription } from 'rxjs';
 
 describe('ItemRemovingAction', () => {
     let action: ItemRemovingAction;
+    let subscription: Subscription;
 
     beforeEach(() => {
         action = new ItemRemovingAction();
@@ -12,6 +14,12 @@ describe('ItemRemovingAction', () => {
         action.setResponseAfterUse('responseafteruse');
         action.setItem(new InGameItem());
     });
+
+    afterEach(() => {
+        if(subscription){
+            subscription.unsubscribe();
+        }
+    })
 
     it('#trigger should return the Response when triggered once', () => {
         expect(action.trigger()).toBe(action.getResponse());
@@ -24,7 +32,7 @@ describe('ItemRemovingAction', () => {
     });
 
     it('#trigger should call ItemEventService removeItem', (done) => {
-        ItemEventService.getInstance().ItemRemovingActionEvent$.pipe(first()).subscribe(event => {
+        subscription = ItemEventService.getInstance().ItemRemovingActionEvent$.pipe(first()).subscribe(event => {
             expect(event.Item).toEqual(action.getItem());
             expect(event.Response).toBe(action.getResponse());
             expect(event.ResponseAfterUse).toBe(action.getResponseAfterUse());

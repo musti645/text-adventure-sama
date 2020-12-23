@@ -10,6 +10,7 @@ export class ItemBuilder<ReturnBuilderType extends ItemContainingBuilder> extend
     private Builder: ReturnBuilderType;
     private RequireInSceneDescription: boolean;
     private IsCanUseFunctionReplaced: boolean;
+    private ItemCannotBeUsed: boolean;
 
     constructor(builder: ReturnBuilderType, item: InGameItem = new InGameItem(), requireInSceneDescription: boolean = false) {
         super();
@@ -135,10 +136,13 @@ export class ItemBuilder<ReturnBuilderType extends ItemContainingBuilder> extend
     }
 
     /**
-     * Doesn't allow the item to be used
+     * Doesn't allow the item to be used.
+     * When this is set the NoUsagesLeftResponse does not have to be set.
      */
-    public setCannotUse(){
+    public setCannotUse(): this {
         this.Item.setCanUseFunction(() => false);
+        this.ItemCannotBeUsed = true;
+        return this;
     }
 
     /**
@@ -151,6 +155,7 @@ export class ItemBuilder<ReturnBuilderType extends ItemContainingBuilder> extend
             throw new EvalError('CanUseFunction was undefined.');
         }
 
+        this.ItemCannotBeUsed = false;
         this.IsCanUseFunctionReplaced = true;
         this.Item.setCanUseFunction(func);
         return this;
@@ -188,7 +193,7 @@ export class ItemBuilder<ReturnBuilderType extends ItemContainingBuilder> extend
             throw new BuilderError('Item creation could not be finished. ItemUsedResponse was not set.');
         }
 
-        if (!this.Item.getNoUsagesLeftResponse()) {
+        if (!this.ItemCannotBeUsed && !this.Item.getNoUsagesLeftResponse()) {
             throw new BuilderError('Item creation could not be finished. NoUsagesLeftResponse was not set.');
         }
 

@@ -35,17 +35,52 @@ import { InputParserService } from '../services/input-parser.service';
 })
 export class TextAdventureComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('input', { static: true }) inputElement: ElementRef;
+
+  /**
+   * Determines if the game uses the typewriting animation when printing output 
+   */
   @Input() UseTypewritingAnimation = true;
+
+  /**
+   * The amount of milliseconds between each type of the typewriting animation
+   */
   @Input() TypewriterSpeed = 40;
+
+  /**
+   * Determines if the input parsing is case sensitive
+   */
   @Input() IsCaseSensitive = false;
 
+  /**
+   * To create a game use the "GameBuilder" and pass it into this component.
+   * 
+   * For more information on how to create a game, see the documentation.
+   */
   @Input() Game: Game;
 
+  /**
+   * Allows to pass own ClassificationTrainer to train the input classifier
+   */
   @Input() ClassificationTrainer: IClassificationTrainer;
 
+  /**
+   * Called when the game is initialized
+   */
   @Output() OnGameInitStartEvent: EventEmitter<GameInitStartEvent> = new EventEmitter<GameInitStartEvent>();
+
+  /**
+   * Called when the game starts
+   */
   @Output() OnGameStartEvent: EventEmitter<GameStartEvent> = new EventEmitter<GameStartEvent>();
+
+  /**
+   * Called when the game is reset
+   */
   @Output() OnGameResetEvent: EventEmitter<GameResetEvent> = new EventEmitter<GameResetEvent>();
+
+  /**
+   * Called when the game ends
+   */
   @Output() OnGameEndEvent: EventEmitter<GameEndEvent> = new EventEmitter<GameEndEvent>();
 
   // scope variables

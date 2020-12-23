@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Mixins to change the theme of the text adventure
 - Tests for the BaseClassifier
 - Possibility to set case sensitivity in the component via an input field
+- Doc comments to all builders and the game component
 
 ### Changed ###
 
@@ -26,6 +27,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed ###
 
 - Proper case sensitivity in `BaseClassifier`
+- One had to set `NoUsagesLeftResponse` in every Item, even if it could not be used. Added `setCannotUse` method to the builder, that allows skipping that.
+- Forgot to unsubscribe in some action tests. This lead to tests failing randomly.
 
 ## [0.0.8] - 2020-12-02 ##
 

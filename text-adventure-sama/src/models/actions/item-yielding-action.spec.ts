@@ -2,9 +2,11 @@ import { first } from 'rxjs/operators';
 import { InGameItem } from '../item.model';
 import { ItemEventService } from 'src/services/item-event.service';
 import { ItemYieldingAction } from './item-yielding-action.model';
+import { Subscription } from 'rxjs';
 
 describe('ItemYieldingAction', () => {
     let action: ItemYieldingAction;
+    let subscription: Subscription;
 
     beforeEach(() => {
         action = new ItemYieldingAction();
@@ -14,6 +16,12 @@ describe('ItemYieldingAction', () => {
         action.setAmountOfItems(2);
         action.setResetItemUsagesToMaximum(true);
     });
+
+    afterEach(() => {
+        if(subscription){
+            subscription.unsubscribe();
+        }
+    })
 
     it('#trigger should return the Response when triggered once', () => {
         expect(action.trigger()).toBe(action.getResponse());
@@ -26,7 +34,7 @@ describe('ItemYieldingAction', () => {
     });
 
     it('#trigger should call ItemEventService removeItem', (done) => {
-        ItemEventService.getInstance().ItemYieldingActionEvent$.pipe(first()).subscribe(event => {
+        subscription = ItemEventService.getInstance().ItemYieldingActionEvent$.pipe(first()).subscribe(event => {
             expect(event.Item).toEqual(action.getItem());
             expect(event.Response).toBe(action.getResponse());
             expect(event.ResponseAfterUse).toBe(action.getResponseAfterUse());
