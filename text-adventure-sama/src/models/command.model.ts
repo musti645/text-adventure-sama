@@ -1,5 +1,7 @@
 /**
  * Global commands within the game that are evaluated before all of the other elements
+ * 
+ * Use the CommandBuilder to create a command step by step.
  */
 export class Command {
     private Trigger: string;

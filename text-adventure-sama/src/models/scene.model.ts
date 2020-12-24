@@ -3,7 +3,9 @@ import { Action } from './actions/action.model';
 
 /**
  * A Scene is a container of actions and Items.
- * The player can only be inside one scene at a time.
+ * The player can only be in one scene at a time.
+ * 
+ * Use the SceneBuilder to create a scene step by step.
  */
 export class Scene {
     private ID: number;

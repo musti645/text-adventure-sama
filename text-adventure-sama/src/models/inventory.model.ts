@@ -6,6 +6,11 @@ import { IItemYieldingEventListener, ItemYieldingActionEvent } from '../models/e
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
 
+/**
+ * Stores all the items that the player takes with her to other scenes.
+ * 
+ * Use the InventoryBuilder to create an inventory step by step.
+ */
 export class Inventory implements IItemConsumingEventListener,
     IItemRemovingEventListener,
     IItemYieldingEventListener {

@@ -7,6 +7,8 @@ import { ItemEventService } from '../../services/item-event.service';
 /**
  * An ItemRemovingAction is only triggered once and removes an Item out of the players inventory without using it.
  * It can only be triggered, if the user has got the Item in her inventory.
+ * 
+ * Use the corresponding builder to create this action.
  */
 export class ItemRemovingAction extends OneTimeAction {
     private Item: InGameItem;

@@ -4,6 +4,8 @@ import { Action } from './action.model';
 /**
  * A OneTimeAction is only triggered once
  * Each subsequent trigger returns the same response.
+ * 
+ * Use the corresponding builder to create this action.
  */
 export class OneTimeAction extends Action {
     private WasTriggered: boolean;

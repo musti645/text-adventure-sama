@@ -11,18 +11,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Conditions for `GatewayActions` to pass through to another Scene
 - Name/Trigger collision check when adding new actions or items in a builder
 
-## [0.0.9] - 2020-12-22 ##
+## [0.0.9] - 2020-12-24 ##
 
 ### Added ###
 
 - Mixins to change the theme of the text adventure
 - Tests for the BaseClassifier
 - Possibility to set case sensitivity in the component via an input field
-- Doc comments to all builders and the game component
+- Doc comments to all files available via the public api
 
 ### Changed ###
 
 - Using Angular Material theme to set typography and colors
+- Setting the `UsagesLeft` value to the `MaximumUsages` value in the `ItemBuilder`
 
 ### Fixed ###
 

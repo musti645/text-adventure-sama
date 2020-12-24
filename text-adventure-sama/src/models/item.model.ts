@@ -3,6 +3,8 @@ import { Scene } from './scene.model';
 
 /**
  * This class represents an Item in the game.
+ * 
+ * Use an ItemBuilder to create an Item step by step.
  */
 export class InGameItem {
     private ID: number;

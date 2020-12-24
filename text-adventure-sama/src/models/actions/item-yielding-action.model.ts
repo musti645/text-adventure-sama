@@ -6,6 +6,8 @@ import { ItemEventService } from '../../services/item-event.service';
 
 /**
  * An ItemYieldingAction is only triggered once and adds an Item to the players inventory.
+ * 
+ * Use the corresponding builder to create this action.
  */
 export class ItemYieldingAction extends OneTimeAction {
     private Item: InGameItem;

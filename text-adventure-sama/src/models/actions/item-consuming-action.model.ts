@@ -7,6 +7,8 @@ import { ItemEventService } from '../../services/item-event.service';
 /**
  * An ItemConsumingAction is only triggered once and uses an Item (once) in the players inventory.
  * It can only be triggered, if the user has got the Item in her inventory.
+ * 
+ * Use the corresponding builder to create this action.
  */
 export class ItemConsumingAction extends OneTimeAction {
     private Item: InGameItem;

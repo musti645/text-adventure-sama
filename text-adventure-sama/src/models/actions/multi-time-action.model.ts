@@ -5,6 +5,8 @@ import { Action } from './action.model';
  * A MultiTimeAction can be activated multiple times.
  * The class allows you to pass an array of responses,
  * which will be returned one by one until the maximum usage count is reached.
+ * 
+ * Use the corresponding builder to create this action.
  */
 export class MultiTimeAction extends Action {
     private UsagesLeft: number;

@@ -5,6 +5,8 @@ import { SceneEventService } from '../../services/scene-event.service';
 
 /**
  * When a GatewayAction is triggered, the game moves on to another scene.
+ * 
+ * Use the corresponding builder to create this action.
  */
 export class GatewayAction extends Action {
     private TargetSceneId: number;

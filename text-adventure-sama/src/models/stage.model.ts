@@ -7,6 +7,8 @@ import { Subscription } from 'rxjs';
 /**
  * The Stage contains all scenes (including a pointer to the current scene).
  * It also manages the transition between scenes.
+ * 
+ * The game automatically creates a stage, so there is no need to create one.
  */
 export class Stage implements IGatewayActionEventListener {
     private Scenes: Scene[];

@@ -6,6 +6,8 @@ import { Stage } from './stage.model';
 
 /**
  * Represents the Game.
+ * 
+ * Use the GameBuilder to create a game step by step.
  */
 export class Game {
     private Title: string;

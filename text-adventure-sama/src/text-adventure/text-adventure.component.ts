@@ -26,7 +26,10 @@ import { ClassificationTrainer } from '../classification/classification-trainer.
 import { InputParserService } from '../services/input-parser.service';
 
 /**
- * Main Component, that contains the input and output of the game.
+ * The TextAdventureComponent is the only component, that is necessary to create a Text Adventure.
+ * Import the TextAdventureModule in order to use it.
+ * 
+ * For information on how to use this component, have a look at the docs.
  */
 @Component({
   selector: 'tas-text-adventure',
@@ -105,7 +108,7 @@ export class TextAdventureComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   /**
-   * Method to track the output lines
+   * Method to track the output lines, used in the template of the component.
    */
   IdentifyOutput(index: number, line: TextInput) {
     return line.Id;
@@ -131,6 +134,9 @@ export class TextAdventureComponent implements OnInit, OnChanges, OnDestroy {
     this.Game.onDestroy();
   }
 
+  /**
+   * Called when the user hits enter in the input field
+   */
   OnSubmit(): void {
     this.startLoading();
     const inputString = this.userInput.value;
@@ -178,6 +184,9 @@ export class TextAdventureComponent implements OnInit, OnChanges, OnDestroy {
     this.OnGameInitStartEvent.emit(new GameInitStartEvent(this.Game));
   }
 
+  /**
+   * Initializes the game
+   */
   protected initGame(): void {
     this.OnGameInitStart();
 
@@ -198,6 +207,9 @@ export class TextAdventureComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
+  /**
+   * Called after the initialization is complete to start the game.
+   */
   protected startGame(): void {
     this.printOutput(this.Game.getTitle())
       .then(() => this.printOutput(this.Game.getIntroduction()))
@@ -216,6 +228,9 @@ export class TextAdventureComponent implements OnInit, OnChanges, OnDestroy {
     this.OnGameEnd();
   }
 
+  /**
+   * Removes all output lines
+   */
   protected clearOutput(): void {
     this.OutputArray = [];
   }
@@ -237,6 +252,11 @@ export class TextAdventureComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
+  /**
+   * Prints the output to the screen either with or without using the typewriting animation.
+   * @param output the string that is to be printed onto the screen
+   * @param useTypewriteAnimationOnOutput determines if the output is printed character by character or all at once.
+   */
   protected printOutput(output: string, useTypewriteAnimationOnOutput: boolean = true): Promise<void> {
     return new Promise<void>((outerResolve, outerReject) => {
       if (!output) {
@@ -280,10 +300,19 @@ export class TextAdventureComponent implements OnInit, OnChanges, OnDestroy {
     }, this.TypewriterSpeed);
   }
 
+  /**
+   * Prints the screen as an input line.
+   * @param input string to be printed as an input line
+   */
   protected printInput(input: string): void {
     this.addOutput(input, TextInputType.UserInput);
   }
 
+  /**
+   * Used to both add output and input to the OutputArray.
+   * @param input 
+   * @param type 
+   */
   protected addOutput(input: string, type: TextInputType) {
     this.OutputArray.push(new TextInput(input, type, this.OutputLineId));
     this.OutputLineId++;
