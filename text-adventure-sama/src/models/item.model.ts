@@ -30,6 +30,8 @@ export class InGameItem {
     constructor(id?: number) {
         this.ID = id;
         this.CanPickUp = true;
+        this.UsagesLeft = -1;
+        this.MaximumUsages = -1;
     }
 
     public use(): string {

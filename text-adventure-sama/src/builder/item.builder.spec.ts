@@ -5,11 +5,13 @@ import { InGameItem } from '../models/item.model';
 import { BuilderError } from '../models/errors/builder.error';
 import { Scene } from '../models/scene.model';
 import { Inventory } from '../models/inventory.model';
+import { setMaxListeners } from 'process';
 
 describe('ItemBuilder.', () => {
     let parentBuilder: TestItemBuilder;
     let testBuilder: ItemBuilderChild;
     let testItem: InGameItem;
+    let inventory: Inventory;
 
     beforeEach(() => {
         parentBuilder = new TestItemBuilder();
@@ -30,6 +32,12 @@ describe('ItemBuilder.', () => {
         testItem.setUsagesLeft(2);
     });
 
+    afterEach(() => {
+        if(inventory) {
+            inventory.unsubscribe();
+        }
+    })
+
     // CanUseFunction
     it('#setCanUseFunction should set the CanUseFunction of the Scene to the passed Value', () => {
         testBuilder.setCanUseFunction(testItem.getCanUseFunction());
@@ -41,7 +49,8 @@ describe('ItemBuilder.', () => {
         testBuilder.setCannotUse();
         expect(testBuilder.getItem().getCanUseFunction()).toBeDefined();
         const canUseFunction = testBuilder.getItem().getCanUseFunction();
-        const result = canUseFunction(testItem, new Scene(), new Inventory());
+        inventory = new Inventory();
+        const result = canUseFunction(testItem, new Scene(), inventory);
         expect(result).toBeFalse();
     });
 
@@ -200,12 +209,12 @@ describe('ItemBuilder.', () => {
         + ' AND not set the Property.', () => {
             testBuilder.getItem().setUsagesLeft(testItem.getUsagesLeft());
             expect(() => testBuilder.setMaximumUsages(testItem.getUsagesLeft() - 1)).toThrowError(EvalError);
-            expect(testBuilder.getItem().getMaximumUsages()).toBeUndefined();
+            expect(testBuilder.getItem().getMaximumUsages()).toBe(-1);
         });
 
     it('#setMaximumUsages should throw an error when trying to set an invalid MaximumUsages Value AND not set the Property.', () => {
         expect(() => testBuilder.setMaximumUsages(-29)).toThrowError(EvalError);
-        expect(testBuilder.getItem().getMaximumUsages()).toBeUndefined();
+        expect(testBuilder.getItem().getMaximumUsages()).toBe(-1);
     });
 
 
@@ -269,7 +278,7 @@ describe('ItemBuilder.', () => {
 
     it('#setUsagesLeft should throw an error when trying to set an invalid UsagesLeft Value AND not set the Property.', () => {
         expect(() => testBuilder.setUsagesLeft(-29)).toThrowError(EvalError);
-        expect(testBuilder.getItem().getUsagesLeft()).toBeUndefined();
+        expect(testBuilder.getItem().getUsagesLeft()).toBe(-1);
     });
 
     it('#setUsagesLeft should throw an error when trying to set an undefined UsagesLeft Value AND not set the Property.', () => {
@@ -287,7 +296,7 @@ describe('ItemBuilder.', () => {
     it('#setUsagesLeft should throw an error when trying to set a UsagesLeft Value greater than the MaximumUsages Value.', () => {
         testBuilder.getItem().setMaximumUsages(testItem.getUsagesLeft() - 1);
         expect(() => testBuilder.setUsagesLeft(testItem.getUsagesLeft())).toThrowError(EvalError);
-        expect(testBuilder.getItem().getUsagesLeft()).toBeUndefined();
+        expect(testBuilder.getItem().getUsagesLeft()).toBe(-1);
     });
 
     // finish
@@ -420,7 +429,6 @@ describe('ItemBuilder.', () => {
         + ' AND add it to the parent builder', () => {
             testBuilder
                 .setCanPickUp(testItem.getCanPickUp())
-                .setCanUseFunction(testItem.getCanUseFunction())
                 .setCannotPickUpResponse(testItem.getCannotPickUpResponse())
                 .setCannotUseItemResponse(testItem.getCannotUseItemResponse())
                 .setDescription(testItem.getDescription())
@@ -437,6 +445,51 @@ describe('ItemBuilder.', () => {
             delete (testItem as any).NoUsagesLeftResponse;
             delete (testItem as any).CanUseFunction;
             delete (parentBuilder.Items[0] as any).CanUseFunction;
+
+            expect(parentBuilder.Items[0]).toEqual(testItem);
+        });
+
+        it('#finish should create an item with an unset UsagesLeft value AND an unset MaximumUsages value and set both to 1'
+        + ' AND add the item to the parent builder', () => {
+            testBuilder
+                .setCanPickUp(testItem.getCanPickUp())
+                .setCanUseFunction(testItem.getCanUseFunction())
+                .setCannotPickUpResponse(testItem.getCannotPickUpResponse())
+                .setCannotUseItemResponse(testItem.getCannotUseItemResponse())
+                .setDescription(testItem.getDescription())
+                .setInSceneDescription(testItem.getInSceneDescription())
+                .setItemUsedResponse(testItem.getItemUsedResponse())
+                .setName(testItem.getName())
+                .setNoUsagesLeftResponse(testItem.getNoUsagesLeftResponse());
+
+            expect(() => testBuilder.finish()).not.toThrowError(BuilderError);
+            expect(parentBuilder.Items.length).toBe(1);
+
+            testItem.setMaximumUsages(1);
+            testItem.setUsagesLeft(1);
+
+            expect(parentBuilder.Items[0]).toEqual(testItem);
+        });
+
+        
+        it('#finish should create an item with an unset UsagesLeft value and set it to the MaximumUsages value'
+        + ' AND add the item to the parent builder', () => {
+            testBuilder
+                .setCanPickUp(testItem.getCanPickUp())
+                .setCanUseFunction(testItem.getCanUseFunction())
+                .setCannotPickUpResponse(testItem.getCannotPickUpResponse())
+                .setCannotUseItemResponse(testItem.getCannotUseItemResponse())
+                .setDescription(testItem.getDescription())
+                .setInSceneDescription(testItem.getInSceneDescription())
+                .setItemUsedResponse(testItem.getItemUsedResponse())
+                .setMaximumUsages(testItem.getMaximumUsages())
+                .setName(testItem.getName())
+                .setNoUsagesLeftResponse(testItem.getNoUsagesLeftResponse());
+
+            expect(() => testBuilder.finish()).not.toThrowError(BuilderError);
+            expect(parentBuilder.Items.length).toBe(1);
+
+            testItem.setUsagesLeft(testItem.getMaximumUsages());
 
             expect(parentBuilder.Items[0]).toEqual(testItem);
         });

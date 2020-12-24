@@ -51,7 +51,7 @@ export class ItemBuilder<ReturnBuilderType extends ItemContainingBuilder> extend
             throw new EvalError('MaximumUsages Value has to be greater than 0.');
         }
 
-        if (this.Item.getUsagesLeft() && this.Item.getUsagesLeft() > maxUsages) {
+        if (this.Item.getUsagesLeft() >= 0 && this.Item.getUsagesLeft() > maxUsages) {
             throw new EvalError('MaximumUsages Value has to be greater or equal to the UsagesLeft Value');
         }
 
@@ -67,7 +67,7 @@ export class ItemBuilder<ReturnBuilderType extends ItemContainingBuilder> extend
             throw new EvalError('UsagesLeft Value has to be greater than or equal to 0.');
         }
 
-        if (this.Item.getMaximumUsages() && usagesLeft > this.Item.getMaximumUsages()) {
+        if (this.Item.getMaximumUsages() >= 0 && usagesLeft > this.Item.getMaximumUsages()) {
             throw new EvalError('UsagesLeft Value has to be less or equal to the MaximumUsages Value.');
         }
 
@@ -189,7 +189,18 @@ export class ItemBuilder<ReturnBuilderType extends ItemContainingBuilder> extend
             throw new BuilderError('Item creation could not be finished. Description was not set.');
         }
 
-        if (this.Item.getUsagesLeft() > 0 && !this.Item.getItemUsedResponse()) {
+        // if maximum usages has not been initialized, set it to 1
+        if (this.Item.getMaximumUsages() < 0) {
+            this.Item.setMaximumUsages(1);
+            this.Item.setUsagesLeft(1);
+        }
+
+        // if only usages left has not been initialized, set it to the max value
+        if (this.Item.getUsagesLeft() < 0) {
+            this.Item.setUsagesLeft(this.Item.getMaximumUsages());
+        }
+
+        if (!this.ItemCannotBeUsed && !this.Item.getItemUsedResponse()) {
             throw new BuilderError('Item creation could not be finished. ItemUsedResponse was not set.');
         }
 
@@ -206,17 +217,10 @@ export class ItemBuilder<ReturnBuilderType extends ItemContainingBuilder> extend
             throw new BuilderError('Item creation could not be finished. InSceneDescription was not set.');
         }
 
-        if (this.IsCanUseFunctionReplaced && !this.Item.getCannotUseItemResponse()) {
+        if ((this.IsCanUseFunctionReplaced || this.ItemCannotBeUsed) && !this.Item.getCannotUseItemResponse()) {
             throw new BuilderError('Item creation could not be finished. CannotUseItemResponse was not set.');
         }
 
-        if (this.Item.getMaximumUsages() < 0) {
-            this.Item.setMaximumUsages(1);
-        }
-
-        if (this.Item.getUsagesLeft() < 0) {
-            this.Item.setUsagesLeft(1);
-        }
 
         this.Builder.addItemToBuilder(this.Item);
         return this.Builder;
