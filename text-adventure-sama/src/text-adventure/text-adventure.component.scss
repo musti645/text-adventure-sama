@@ -6,14 +6,17 @@ $padding-small: 8px;
 .text-adventure-root {
   height: 100%;
   margin: 0;
+  display: flex;
+  flex-direction: column;
 
   .row {
     margin: 0;
   }
 
   .output-container-wrapper {
-    height: 95%;
     padding: $padding-small;
+
+    flex: 1 1 auto;
 
     overflow: $overflow-type;
     display: flex;
@@ -30,6 +33,8 @@ $padding-small: 8px;
   }
 
   .input-container-wrapper {
+    flex: 0 0 auto;
+
     .input-container {
       form {
         .form-group {
