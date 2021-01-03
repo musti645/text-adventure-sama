@@ -11,6 +11,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Conditions for `GatewayActions` to pass through to another Scene
 - Name/Trigger collision check when adding new actions or items in a builder
 
+## [0.0.10] - 2021-01-03 ##
+
+### Changed ###
+
+- Updated Styles to use flexbox
+
+### Fixed ###
+
+- Clearing the output window did not work due to a missing parameter
+
 ## [0.0.9] - 2020-12-24 ##
 
 ### Added ###
