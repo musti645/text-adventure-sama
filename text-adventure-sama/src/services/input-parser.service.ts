@@ -161,7 +161,8 @@ export class InputParserService {
             commandsResult = new ParseInputResult(matchingCommand.activate(),
                 matchingCommand.getUseTypeWritingAnimation(),
                 matchingCommand.getEndsGame(),
-                matchingCommand.getResetsGame());
+                matchingCommand.getResetsGame(),
+                matchingCommand.getClearsOutput());
         }
 
         return commandsResult;
