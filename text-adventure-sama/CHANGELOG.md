@@ -11,6 +11,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Conditions for `GatewayActions` to pass through to another Scene
 - Name/Trigger collision check when adding new actions or items in a builder
 
+## [0.0.11] - 2021-01-07 ##
+
+### Changed ###
+
+- Full width for input form
+- Input form border top
+- Output does not get cut off anymore once the height reaches >100%
+
 ## [0.0.10] - 2021-01-03 ##
 
 ### Changed ###
