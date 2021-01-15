@@ -305,6 +305,7 @@ export class TextAdventureComponent implements OnInit, OnChanges, OnDestroy {
    * @param input string to be printed as an input line
    */
   protected printInput(input: string): void {
+    input = '&gt ' + input;
     this.addOutput(input, TextInputType.UserInput);
   }
 
